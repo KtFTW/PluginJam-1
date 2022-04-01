@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     kotlin("jvm") version "1.6.10"
     id("io.papermc.paperweight.userdev") version "1.3.5"
-  //  id("org.jlleitschuh.gradle.ktlint") version "10.2.1"
+    id("org.jlleitschuh.gradle.ktlint") version "10.2.1"
     id("net.minecrell.plugin-yml.bukkit") version "0.5.1"
 }
 

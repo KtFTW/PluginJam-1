@@ -9,7 +9,7 @@ class PostionsConfig(plugin: DevcordJamPlugin) : AbstractConfig(plugin, "postion
 
     fun get(name: String): Location {
         return yaml.getLocation(name)
-            ?: Bukkit.getWorld("world") !!.spawnLocation
+            ?: Bukkit.getWorld("world")!!.spawnLocation
     }
 
     fun modify(name: String, location: Location) {

@@ -6,6 +6,7 @@ import net.stckoverflw.pluginjam.util.Conversation
 import kotlin.time.Duration.Companion.seconds
 
 class StartingPhaseWelcomeAction : Action() {
+
     override fun execute(): Action {
         Conversation(DevcordJamPlugin.instance)
             .addMessage("Guten Tag, Fremder", 1.seconds)

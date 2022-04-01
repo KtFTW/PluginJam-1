@@ -114,7 +114,7 @@ class GamemasterEntity : ListenerHolder {
 
     fun despawn() {
         if (bukkitEntity != null) {
-            bukkitEntity !!.remove()
+            bukkitEntity?.remove()
         }
 
         unegisterAllListeners()
