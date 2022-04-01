@@ -11,6 +11,7 @@ import net.stckoverflw.pluginjam.command.ReloadCommands
 import net.stckoverflw.pluginjam.config.ConfigManager
 import net.stckoverflw.pluginjam.gamephase.GamePhaseManager
 import net.stckoverflw.pluginjam.i18n.TranslationsProvider
+import net.stckoverflw.pluginjam.listener.protectionListener
 import java.util.Locale
 
 class DevcordJamPlugin : KSpigot() {
@@ -38,6 +39,7 @@ class DevcordJamPlugin : KSpigot() {
 
         println(Component.translatable("language").render(Locale.ENGLISH).plainText())
         println(Component.translatable("language").render(Locale.GERMAN).plainText())
+        protectionListener()
     }
 
     override fun shutdown() {
