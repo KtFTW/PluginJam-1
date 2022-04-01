@@ -4,7 +4,7 @@ import net.axay.kspigot.extensions.pluginManager
 import net.kyori.adventure.key.Key
 import net.kyori.adventure.translation.GlobalTranslator
 import net.kyori.adventure.translation.TranslationRegistry
-import net.stckoverflw.pluginjam.ExamplePlugin
+import net.stckoverflw.pluginjam.DevcordJamPlugin
 import java.io.File
 import java.net.MalformedURLException
 import java.net.URLClassLoader
@@ -13,7 +13,7 @@ import java.util.ResourceBundle
 import kotlin.io.path.div
 import kotlin.io.path.notExists
 
-class TranslationsProvider(private val plugin: ExamplePlugin) {
+class TranslationsProvider(private val plugin: DevcordJamPlugin) {
 
     private val key = Key.key("net.stckoverflw.exampleplugin")
 

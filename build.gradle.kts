@@ -7,7 +7,7 @@ plugins {
     id("net.minecrell.plugin-yml.bukkit") version "0.5.1"
 }
 
-group = "org.example"
+group = "net.stckoverflw"
 version = "1.0.0"
 
 repositories {

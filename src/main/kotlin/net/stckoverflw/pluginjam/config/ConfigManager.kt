@@ -1,20 +1,17 @@
 package net.stckoverflw.pluginjam.config
 
-import net.stckoverflw.pluginjam.ExamplePlugin
-import net.stckoverflw.pluginjam.config.impl.ExampleConfig
+import net.stckoverflw.pluginjam.DevcordJamPlugin
 import net.stckoverflw.pluginjam.config.impl.TranslationsConfig
 
-class ConfigManager(private val plugin: ExamplePlugin) {
+class ConfigManager(private val plugin: DevcordJamPlugin) {
 
-    lateinit var exampleConfig: ExampleConfig
     lateinit var translationsConfig: TranslationsConfig
 
     init {
         loadConfigs()
     }
 
-    private fun loadConfigs() {
-        exampleConfig = ExampleConfig(plugin)
+    fun loadConfigs() {
         translationsConfig = TranslationsConfig(plugin)
     }
 }

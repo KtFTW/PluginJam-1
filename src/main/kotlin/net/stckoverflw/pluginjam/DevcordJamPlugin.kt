@@ -1,26 +1,30 @@
 package net.stckoverflw.pluginjam
 
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import net.axay.kspigot.extensions.bukkit.plainText
 import net.axay.kspigot.extensions.bukkit.render
 import net.axay.kspigot.main.KSpigot
 import net.kyori.adventure.text.Component
-import net.stckoverflw.pluginjam.command.ExampleCommand
+import net.stckoverflw.pluginjam.command.ReloadCommands
 import net.stckoverflw.pluginjam.config.ConfigManager
+import net.stckoverflw.pluginjam.gamephase.GamePhaseManager
 import net.stckoverflw.pluginjam.i18n.TranslationsProvider
-import net.stckoverflw.pluginjam.listener.ExampleListener
 import java.util.Locale
 
-class ExamplePlugin : KSpigot() {
+class DevcordJamPlugin : KSpigot() {
+
+    val ioScope = CoroutineScope(Dispatchers.IO)
+    val defaultScope = CoroutineScope(Dispatchers.Default)
 
     lateinit var translationsProvider: TranslationsProvider
     lateinit var configManager: ConfigManager
 
     override fun startup() {
-        // register commands
-        ExampleCommand()
 
-        // register listeners
-        ExampleListener()
+        GamePhaseManager.init()
+
+        ReloadCommands(this)
 
         // load configs
         configManager = ConfigManager(this)

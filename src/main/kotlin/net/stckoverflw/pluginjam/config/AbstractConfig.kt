@@ -1,11 +1,11 @@
 package net.stckoverflw.pluginjam.config
 
 import org.bukkit.configuration.file.YamlConfiguration
-import net.stckoverflw.pluginjam.ExamplePlugin
+import net.stckoverflw.pluginjam.DevcordJamPlugin
 import java.io.File
 import java.io.IOException
 
-abstract class AbstractConfig(plugin: ExamplePlugin, path: String, name: String) {
+abstract class AbstractConfig(plugin: DevcordJamPlugin, path: String, name: String) {
 
     private val file: File
     private val dir: File = File("${plugin.dataFolder.path}/$path")
