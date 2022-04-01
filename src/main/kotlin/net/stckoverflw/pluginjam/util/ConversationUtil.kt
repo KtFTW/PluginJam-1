@@ -9,44 +9,54 @@ import java.util.concurrent.CompletableFuture
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
-
 data class ConversationMessage(
-	val message: String,
-	val delay: Duration = 3.seconds,
-	val makeSound: Boolean = true
+    val message: String,
+    val who: String?,
+    val delay: Duration,
+    val makeSound: Boolean,
 )
 
 class Conversation(private val plugin: DevcordJamPlugin) {
-	private val messages = arrayListOf<ConversationMessage>()
+    private val messages = arrayListOf<ConversationMessage>()
 
-	fun addMessage(text: String, delay: Duration = 3.seconds, makeSound: Boolean = true): Conversation {
-		messages.add(
-			ConversationMessage(
-			message = text,
-			delay = delay,
-			makeSound = makeSound
-		)
-		)
-		return this
-	}
+    fun addMessage(
+        text: String,
+        who: String? = null,
+        delay: Duration = 3.seconds,
+        makeSound: Boolean = true
+    ): Conversation {
+        messages.add(
+            ConversationMessage(
+                message = text,
+                who = who,
+                delay = delay,
+                makeSound = makeSound
+            )
+        )
+        return this
+    }
 
-	fun start(): CompletableFuture<Unit> {
-		val future = CompletableFuture<Unit>()
-		plugin.defaultScope.launch {
-			val iterator = messages.asIterable().iterator()
-			while (iterator.hasNext()) {
-				val current = iterator.next()
-				broadcastMini(current.message)
-				if (current.makeSound) {
-					onlinePlayers.forEach {
-						it.playSound(it.location, Sound.ENTITY_VILLAGER_YES, 1f, 1f)
-					}
-				}
-				delay(current.delay)
-			}
-		}.invokeOnCompletion {
-			future.complete(Unit)
-		}
-		return future
-	}
+    fun start(): CompletableFuture<Unit> {
+        val future = CompletableFuture<Unit>()
+        plugin.defaultScope.launch {
+            val iterator = messages.asIterable().iterator()
+            while (iterator.hasNext()) {
+                val current = iterator.next()
+                if (current.who != null) {
+                    broadcastMini("<green>${current.who}<gray>: <white>${current.message}")
+                } else {
+                    broadcastMini(current.message)
+                }
+                if (current.makeSound) {
+                    onlinePlayers.forEach {
+                        it.playSound(it.location, Sound.ENTITY_VILLAGER_YES, 1f, 1f)
+                    }
+                }
+                delay(current.delay)
+            }
+        }.invokeOnCompletion {
+            future.complete(Unit)
+        }
+        return future
+    }
 }

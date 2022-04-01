@@ -27,7 +27,7 @@ fun Player.teleportAsyncBlind(location: Location) {
         Duration.ofMinutes(1),
         Duration.ofMillis(50)
     )
-    teleportAsync(location).whenComplete { result, error ->
+    teleportAsync(location).whenComplete { result, _ ->
         if (result) {
             removePotionEffect(PotionEffectType.BLINDNESS)
             emptyTitle()

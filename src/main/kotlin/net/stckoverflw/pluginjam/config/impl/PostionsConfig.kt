@@ -13,7 +13,7 @@ class PostionsConfig(plugin: DevcordJamPlugin) : AbstractConfig(plugin, "postion
     }
 
     fun modify(name: String, location: Location) {
-        yaml.set("positions.$name", location)
+        yaml.set(name, location)
         save()
     }
 }
