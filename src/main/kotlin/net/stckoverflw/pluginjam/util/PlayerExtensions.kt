@@ -19,35 +19,35 @@ fun Player.sendMini(message: String) = sendMessage(message.deserializeMini())
 fun String.deserializeMini() = MiniMessage.miniMessage().deserialize(this)
 
 fun Player.teleportAsyncBlind(location: Location) {
-	addPotionEffect(PotionEffect(PotionEffectType.BLINDNESS, Int.MAX_VALUE, 255, false, false, false))
-	title(
-		"<orange>Du wirst gerade teleportiert!</orange>".deserializeMini(),
-		Component.empty(),
-		Duration.ofMillis(50),
-		Duration.ofMinutes(1),
-		Duration.ofMillis(50)
-	)
-	teleportAsync(location).whenComplete { result, error ->
-		if (result) {
-			removePotionEffect(PotionEffectType.BLINDNESS)
-			emptyTitle()
-		}
-	}
+    addPotionEffect(PotionEffect(PotionEffectType.BLINDNESS, Int.MAX_VALUE, 255, false, false, false))
+    title(
+        "<orange>Du wirst gerade teleportiert!</orange>".deserializeMini(),
+        Component.empty(),
+        Duration.ofMillis(50),
+        Duration.ofMinutes(1),
+        Duration.ofMillis(50)
+    )
+    teleportAsync(location).whenComplete { result, error ->
+        if (result) {
+            removePotionEffect(PotionEffectType.BLINDNESS)
+            emptyTitle()
+        }
+    }
 }
 
 fun Player.emptyTitle() = title(
-	Component.empty(),
-	Component.empty(),
-	Duration.ofMillis(1),
-	Duration.ofMillis(1),
-	Duration.ofMillis(1)
+    Component.empty(),
+    Component.empty(),
+    Duration.ofMillis(1),
+    Duration.ofMillis(1),
+    Duration.ofMillis(1)
 )
 
 suspend fun Player.smeltItemInHand() {
-	val item = inventory.itemInMainHand.type
-	if (!item.isBurnable) return
-	val result = Bukkit.recipeIterator().asFlow().filterIsInstance<FurnaceRecipe>().firstOrNull {
-		it.input.type == item
-	}?.result ?: return
-	inventory.setItemInMainHand(result)
+    val item = inventory.itemInMainHand.type
+    if (!item.isBurnable) return
+    val result = Bukkit.recipeIterator().asFlow().filterIsInstance<FurnaceRecipe>().firstOrNull {
+        it.input.type == item
+    }?.result ?: return
+    inventory.setItemInMainHand(result)
 }

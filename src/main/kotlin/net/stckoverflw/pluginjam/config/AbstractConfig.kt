@@ -1,7 +1,7 @@
 package net.stckoverflw.pluginjam.config
 
-import org.bukkit.configuration.file.YamlConfiguration
 import net.stckoverflw.pluginjam.DevcordJamPlugin
+import org.bukkit.configuration.file.YamlConfiguration
 import java.io.File
 import java.io.IOException
 
