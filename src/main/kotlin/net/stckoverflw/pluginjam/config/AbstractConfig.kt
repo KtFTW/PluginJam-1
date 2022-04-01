@@ -1,7 +1,7 @@
-package org.example.exampleplugin.config
+package net.stckoverflw.pluginjam.config
 
 import org.bukkit.configuration.file.YamlConfiguration
-import org.example.exampleplugin.ExamplePlugin
+import net.stckoverflw.pluginjam.ExamplePlugin
 import java.io.File
 import java.io.IOException
 

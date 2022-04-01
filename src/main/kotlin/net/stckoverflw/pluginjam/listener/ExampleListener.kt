@@ -1,4 +1,4 @@
-package org.example.exampleplugin.listener
+package net.stckoverflw.pluginjam.listener
 
 import net.axay.kspigot.event.SingleListener
 import net.axay.kspigot.event.listen

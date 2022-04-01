@@ -1,7 +1,7 @@
-package org.example.exampleplugin.config.impl
+package net.stckoverflw.pluginjam.config.impl
 
-import org.example.exampleplugin.ExamplePlugin
-import org.example.exampleplugin.config.AbstractConfig
+import net.stckoverflw.pluginjam.ExamplePlugin
+import net.stckoverflw.pluginjam.config.AbstractConfig
 import java.util.Locale
 
 class TranslationsConfig(plugin: ExamplePlugin) : AbstractConfig(plugin, "translations", "translations.yml") {

@@ -1,10 +1,10 @@
-package org.example.exampleplugin.i18n
+package net.stckoverflw.pluginjam.i18n
 
 import net.axay.kspigot.extensions.pluginManager
 import net.kyori.adventure.key.Key
 import net.kyori.adventure.translation.GlobalTranslator
 import net.kyori.adventure.translation.TranslationRegistry
-import org.example.exampleplugin.ExamplePlugin
+import net.stckoverflw.pluginjam.ExamplePlugin
 import java.io.File
 import java.net.MalformedURLException
 import java.net.URLClassLoader
@@ -15,7 +15,7 @@ import kotlin.io.path.notExists
 
 class TranslationsProvider(private val plugin: ExamplePlugin) {
 
-    private val key = Key.key("org.example.exampleplugin")
+    private val key = Key.key("net.stckoverflw.exampleplugin")
 
     private var translationRegistry = TranslationRegistry.create(key).apply {
         defaultLocale(Locale.ENGLISH)

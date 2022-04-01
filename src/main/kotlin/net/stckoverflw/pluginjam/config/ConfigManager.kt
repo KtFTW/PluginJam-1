@@ -1,8 +1,8 @@
-package org.example.exampleplugin.config
+package net.stckoverflw.pluginjam.config
 
-import org.example.exampleplugin.ExamplePlugin
-import org.example.exampleplugin.config.impl.ExampleConfig
-import org.example.exampleplugin.config.impl.TranslationsConfig
+import net.stckoverflw.pluginjam.ExamplePlugin
+import net.stckoverflw.pluginjam.config.impl.ExampleConfig
+import net.stckoverflw.pluginjam.config.impl.TranslationsConfig
 
 class ConfigManager(private val plugin: ExamplePlugin) {
 

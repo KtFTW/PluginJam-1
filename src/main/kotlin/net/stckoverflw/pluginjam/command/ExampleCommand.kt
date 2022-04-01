@@ -1,4 +1,4 @@
-package org.example.exampleplugin.command
+package net.stckoverflw.pluginjam.command
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder
 import net.axay.kspigot.commands.command

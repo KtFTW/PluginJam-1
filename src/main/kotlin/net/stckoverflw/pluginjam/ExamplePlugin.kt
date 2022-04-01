@@ -1,13 +1,13 @@
-package org.example.exampleplugin
+package net.stckoverflw.pluginjam
 
 import net.axay.kspigot.extensions.bukkit.plainText
 import net.axay.kspigot.extensions.bukkit.render
 import net.axay.kspigot.main.KSpigot
 import net.kyori.adventure.text.Component
-import org.example.exampleplugin.command.ExampleCommand
-import org.example.exampleplugin.config.ConfigManager
-import org.example.exampleplugin.i18n.TranslationsProvider
-import org.example.exampleplugin.listener.ExampleListener
+import net.stckoverflw.pluginjam.command.ExampleCommand
+import net.stckoverflw.pluginjam.config.ConfigManager
+import net.stckoverflw.pluginjam.i18n.TranslationsProvider
+import net.stckoverflw.pluginjam.listener.ExampleListener
 import java.util.Locale
 
 class ExamplePlugin : KSpigot() {
