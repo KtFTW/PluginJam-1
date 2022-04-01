@@ -5,10 +5,10 @@ import org.example.exampleplugin.ExamplePlugin
 import java.io.File
 import java.io.IOException
 
-abstract class AbstractConfig(plugin: ExamplePlugin, name: String) {
+abstract class AbstractConfig(plugin: ExamplePlugin, path: String, name: String) {
 
     private val file: File
-    private val dir: File = File("${plugin.dataFolder.path}/Settings")
+    private val dir: File = File("${plugin.dataFolder.path}/$path")
     val yaml: YamlConfiguration
 
     init {
@@ -17,7 +17,7 @@ abstract class AbstractConfig(plugin: ExamplePlugin, name: String) {
         }
         file = File(dir, name)
         if (!file.exists()) {
-            plugin.saveResource("settings/$name", false)
+            plugin.saveResource("$path/$name", false)
         }
         yaml = YamlConfiguration()
         try {
