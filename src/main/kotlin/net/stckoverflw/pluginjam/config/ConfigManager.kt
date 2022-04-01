@@ -5,7 +5,6 @@ import net.stckoverflw.pluginjam.config.impl.PostionsConfig
 import net.stckoverflw.pluginjam.config.impl.TranslationsConfig
 
 class ConfigManager(private val plugin: DevcordJamPlugin) {
-
     lateinit var translationsConfig: TranslationsConfig
     lateinit var postionsConfig: PostionsConfig
 
