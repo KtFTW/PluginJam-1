@@ -166,7 +166,7 @@ object TwistPhase : GamePhase(DestroyPhase), TaskHolder, ListenerHolder {
             listen<PlayerAttemptPickupItemEvent> {
                 if (it.item.itemStack.type != Material.AMETHYST_SHARD) return@listen
                 totalAmethysts += it.item.itemStack.amount
-                if (totalAmethysts == 2) {
+                if (totalAmethysts >= 2) {
                     GamePhaseManager.nextPhase()
                 }
             }
@@ -188,7 +188,7 @@ object TwistPhase : GamePhase(DestroyPhase), TaskHolder, ListenerHolder {
                     positionConfig.getLocation("prison_pickaxes").block.location -> {
                         val inventory = Bukkit.createInventory(null, 3 * 9)
                         for (i in 0..26) {
-                            inventory.addItem(ItemStack(Material.WOODEN_PICKAXE))
+                            inventory.setItem(i, ItemStack(Material.WOODEN_PICKAXE))
                         }
                         it.player.openInventory(inventory)
 
@@ -197,7 +197,7 @@ object TwistPhase : GamePhase(DestroyPhase), TaskHolder, ListenerHolder {
                     positionConfig.getLocation("prison_compasses").block.location -> {
                         val inventory = Bukkit.createInventory(null, 3 * 9)
                         for (i in 0..26) {
-                            inventory.addItem(ItemStack(Material.COMPASS))
+                            inventory.setItem(i, ItemStack(Material.COMPASS))
                         }
                         it.player.openInventory(inventory)
 

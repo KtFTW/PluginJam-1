@@ -4,6 +4,8 @@ import net.axay.kspigot.event.listen
 import net.axay.kspigot.extensions.geometry.LocationArea
 import net.axay.kspigot.extensions.onlinePlayers
 import net.stckoverflw.pluginjam.DevcordJamPlugin
+import net.stckoverflw.pluginjam.action.ActionPipeline
+import net.stckoverflw.pluginjam.action.impl.global.WalkingAction
 import net.stckoverflw.pluginjam.action.impl.taskphase.TaskPhaseEndConversationAction
 import net.stckoverflw.pluginjam.entities.GamemasterEntity
 import net.stckoverflw.pluginjam.gamephase.GamePhase
@@ -15,8 +17,8 @@ import net.stckoverflw.pluginjam.task.impl.findmaterial.FindOresTask
 import net.stckoverflw.pluginjam.task.impl.findmaterial.FindWoodTask
 import net.stckoverflw.pluginjam.util.ListenerHolder
 import net.stckoverflw.pluginjam.util.reset
-import net.stckoverflw.pluginjam.util.teleportAsyncBlind
 import org.bukkit.GameMode
+import org.bukkit.Material
 import org.bukkit.event.Listener
 import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.block.BlockPlaceEvent
@@ -40,14 +42,17 @@ object TaskPhase : GamePhase(FightPhase), ListenerHolder {
     )
 
     override fun start() {
-        gamemaster.spawnEntity(DevcordJamPlugin.instance.configManager.postionsConfig.getLocation("task_gamemaster"))
-        onlinePlayers.forEach {
-            it.teleportAsyncBlind(DevcordJamPlugin.instance.configManager.postionsConfig.getLocation("task_start"))
-        }
-        tasks.forEach {
-            taskResults[it] = TaskResult.WAITING
-        }
-        findNewTask()
+        positionsConfig.getLocation("prison_iron_bar").block.type = Material.AIR
+        gamemaster.spawnEntity(positionsConfig.getLocation("prison_gamemaster"))
+        ActionPipeline()
+            .add(WalkingAction(gamemaster, positionsConfig.getLocation("task_gamemaster")))
+            .start()
+            .whenComplete {
+                tasks.forEach {
+                    taskResults[it] = TaskResult.WAITING
+                }
+                findNewTask()
+            }
 
         addListener(
             listen<PlayerInteractEvent> {

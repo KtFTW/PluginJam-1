@@ -7,7 +7,7 @@ import net.axay.kspigot.runnables.task
 import net.stckoverflw.pluginjam.DevcordJamPlugin.Companion.instance
 import net.stckoverflw.pluginjam.action.ActionPipeline
 import net.stckoverflw.pluginjam.action.impl.global.GasPipelineAction
-import net.stckoverflw.pluginjam.action.impl.startingphase.StartingPhaseWalkingAction
+import net.stckoverflw.pluginjam.action.impl.global.WalkingAction
 import net.stckoverflw.pluginjam.action.impl.startingphase.StartingPhaseWelcomeAction
 import net.stckoverflw.pluginjam.entities.GamemasterEntity
 import net.stckoverflw.pluginjam.gamephase.GamePhase
@@ -39,7 +39,7 @@ object StartingPhase : GamePhase(PrisonPhase), ListenerHolder {
 
             ActionPipeline()
                 .add(StartingPhaseWelcomeAction())
-                .add(StartingPhaseWalkingAction(gamemaster, postionsConfig.getLocation("starting_gamemaster_1")))
+                .add(WalkingAction(gamemaster, postionsConfig.getLocation("starting_gamemaster_1")))
                 .start()
                 .whenComplete {
                     val area = LocationArea(

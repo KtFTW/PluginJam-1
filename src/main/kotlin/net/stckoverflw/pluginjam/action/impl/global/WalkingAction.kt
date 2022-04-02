@@ -1,4 +1,4 @@
-package net.stckoverflw.pluginjam.action.impl.startingphase
+package net.stckoverflw.pluginjam.action.impl.global
 
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -9,7 +9,7 @@ import net.stckoverflw.pluginjam.action.Action
 import net.stckoverflw.pluginjam.entities.GamemasterEntity
 import org.bukkit.Location
 
-class StartingPhaseWalkingAction(
+class WalkingAction(
     private val gamemasterEntity: GamemasterEntity,
     private val location: Location,
 ) :

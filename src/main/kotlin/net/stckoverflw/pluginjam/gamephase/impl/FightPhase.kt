@@ -16,6 +16,7 @@ import net.stckoverflw.pluginjam.util.ListenerHolder
 import net.stckoverflw.pluginjam.util.reset
 import net.stckoverflw.pluginjam.util.teleportAsyncBlind
 import org.bukkit.GameRule
+import org.bukkit.Material
 import org.bukkit.event.Listener
 
 object FightPhase : GamePhase(TwistPhase), ListenerHolder {
@@ -23,6 +24,10 @@ object FightPhase : GamePhase(TwistPhase), ListenerHolder {
     override val listeners: MutableList<Listener> = mutableListOf()
 
     override fun start() {
+        positionsConfig.getLocation("prison_iron_bar").block.apply {
+            type = Material.IRON_BARS
+        }
+
         onlinePlayers.forEach {
             it.teleportAsyncBlind(positionsConfig.getLocation("fight_spawn"))
         }

@@ -45,7 +45,7 @@ class FightDeliverAmethystAction : Action() {
             it.player.inventory.clear()
             Conversation(DevcordJamPlugin.instance)
                 .addMessage(
-                    "Wunderbar, nun haben wir beide Kristalle zusammen und können verhindern, dass die <red>Leviatane</red> beide kombinieren.",
+                    "Wunderbar, nun haben wir beide Kristalle zusammen und können verhindern, dass die <red>Leviatanen</red> beide kombinieren.",
                     "Dorfbewohner"
                 )
                 .start()
