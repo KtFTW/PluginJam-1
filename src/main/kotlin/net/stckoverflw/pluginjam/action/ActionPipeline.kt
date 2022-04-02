@@ -3,16 +3,16 @@ package net.stckoverflw.pluginjam.action
 import java.util.LinkedList
 import java.util.Queue
 
-class ActionList {
+class ActionPipeline {
     private val actionQueue: Queue<Action> = LinkedList()
     private var callback: (() -> Unit)? = null
 
-    fun add(action: Action): ActionList {
+    fun add(action: Action): ActionPipeline {
         actionQueue.add(action)
         return this
     }
 
-    fun start(): ActionList {
+    fun start(): ActionPipeline {
         execute()
         return this
     }
@@ -30,7 +30,7 @@ class ActionList {
         callback?.invoke()
     }
 
-    fun whenComplete(function: () -> Unit): ActionList {
+    fun whenComplete(function: () -> Unit): ActionPipeline {
         callback = function
         return this
     }

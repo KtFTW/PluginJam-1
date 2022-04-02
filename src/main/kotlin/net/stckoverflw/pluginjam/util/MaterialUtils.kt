@@ -2,7 +2,6 @@ package net.stckoverflw.pluginjam.util
 
 import org.bukkit.Material
 
-
 /**
  * Checks if this Material is obtainable in survival mode.
  *

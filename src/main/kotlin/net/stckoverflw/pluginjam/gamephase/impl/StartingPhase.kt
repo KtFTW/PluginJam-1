@@ -6,8 +6,9 @@ import net.axay.kspigot.event.unregister
 import net.axay.kspigot.extensions.geometry.LocationArea
 import net.axay.kspigot.extensions.onlinePlayers
 import net.axay.kspigot.runnables.task
+import net.axay.kspigot.structures.fillBlocks
 import net.stckoverflw.pluginjam.DevcordJamPlugin.Companion.instance
-import net.stckoverflw.pluginjam.action.ActionList
+import net.stckoverflw.pluginjam.action.ActionPipeline
 import net.stckoverflw.pluginjam.action.impl.startingphase.StartingPhaseEndAction
 import net.stckoverflw.pluginjam.action.impl.startingphase.StartingPhaseWalkingAction
 import net.stckoverflw.pluginjam.action.impl.startingphase.StartingPhaseWelcomeAction
@@ -16,6 +17,7 @@ import net.stckoverflw.pluginjam.gamephase.GamePhase
 import net.stckoverflw.pluginjam.gamephase.GamePhaseManager
 import net.stckoverflw.pluginjam.listener.GamemasterVelocity
 import net.stckoverflw.pluginjam.util.mini
+import org.bukkit.block.data.Openable
 import org.bukkit.event.player.PlayerJoinEvent
 
 object StartingPhase : GamePhase(PrisonPhase) {
@@ -30,7 +32,7 @@ object StartingPhase : GamePhase(PrisonPhase) {
             if (blocked) return@interactCallback
             blocked = true
 
-            ActionList()
+            ActionPipeline()
                 .add(StartingPhaseWelcomeAction())
                 .add(StartingPhaseWalkingAction(gamemaster, postionsConfig.getLocation("starting_gamemaster_1")))
                 .start()
@@ -43,6 +45,12 @@ object StartingPhase : GamePhase(PrisonPhase) {
                         onlinePlayers.forEach { player -> player.sendActionBar(mini("Gehe in das Haus")) }
                         if (onlinePlayers.all { player -> area.isInArea(player.location) }) {
                             it.cancel()
+                            area.fillBlocks.forEach { block ->
+                                val blockData = block.blockData
+                                if (blockData is Openable) {
+                                    blockData.isOpen = false
+                                }
+                            }
                             StartingPhaseEndAction(
                                 gamemaster,
                                 postionsConfig.getLocation("starting_pipe_0"),

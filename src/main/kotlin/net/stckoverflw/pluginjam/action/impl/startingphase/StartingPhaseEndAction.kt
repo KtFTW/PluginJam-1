@@ -48,7 +48,7 @@ class StartingPhaseEndAction(
         taskRunLater(base) {
             onlinePlayers.forEach {
                 it.addPotionEffect(PotionEffect(PotionEffectType.BLINDNESS, 400, 10, false, false))
-                it.playSound(it.location, Sound.ENTITY_LIGHTNING_BOLT_IMPACT, 1f, 1f)
+                it.playSound(it.location, Sound.ENTITY_LIGHTNING_BOLT_THUNDER, 1f, 1f)
             }
         }
 

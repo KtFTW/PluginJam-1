@@ -7,9 +7,7 @@ import net.axay.kspigot.extensions.onlinePlayers
 import net.stckoverflw.pluginjam.DevcordJamPlugin
 import net.stckoverflw.pluginjam.action.Action
 import net.stckoverflw.pluginjam.entities.GamemasterEntity
-import net.stckoverflw.pluginjam.util.Conversation
 import org.bukkit.Location
-import kotlin.time.Duration.Companion.seconds
 
 class StartingPhaseWalkingAction(
     private val gamemasterEntity: GamemasterEntity,

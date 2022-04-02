@@ -8,7 +8,7 @@ import org.bukkit.Material
 import kotlin.random.Random
 import kotlin.time.Duration.Companion.seconds
 
-class FindWoodTask: FindMaterialTask() {
+class FindWoodTask : FindMaterialTask() {
 
     override fun start() {
         materials[Material.OAK_WOOD] = Random.Default.nextInt(onlinePlayers.size * 12, onlinePlayers.size * 24)

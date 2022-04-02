@@ -2,7 +2,7 @@ package net.stckoverflw.pluginjam.gamephase.impl
 
 import net.stckoverflw.pluginjam.gamephase.GamePhase
 
-object TwistPhase : GamePhase(DestroyPhase) {
+object FightPhase : GamePhase(TwistPhase) {
     override fun start() {
     }
 

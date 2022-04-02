@@ -8,7 +8,7 @@ import org.bukkit.entity.EntityType
 import kotlin.random.Random
 import kotlin.time.Duration.Companion.seconds
 
-class KillPillagersTask: KillEntityTask() {
+class KillPillagersTask : KillEntityTask() {
 
     override fun start() {
         entities[EntityType.PILLAGER] = Random.Default.nextInt(onlinePlayers.size * 4, onlinePlayers.size * 8)

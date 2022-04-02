@@ -12,7 +12,7 @@ import org.bukkit.entity.Player
 import org.bukkit.event.Listener
 import org.bukkit.event.entity.EntityDeathEvent
 
-abstract class KillEntityTask: Task(), ListenerHolder {
+abstract class KillEntityTask : Task(), ListenerHolder {
 
     override val listeners: MutableList<Listener> = mutableListOf()
     protected val entities = hashMapOf<EntityType, Int>()
