@@ -88,7 +88,7 @@ object TwistPhase : GamePhase(DestroyPhase), TaskHolder, ListenerHolder {
                 TwistPhasePrisonTeleportAction(
                     gamemaster,
                     positionConfig.getLocation("prison_prison"),
-                    positionConfig.getLocation("prison_gamemaster_2")
+                    positionConfig.getLocation("prison_gamemaster")
                 )
             )
             .add(WaitAction(50))

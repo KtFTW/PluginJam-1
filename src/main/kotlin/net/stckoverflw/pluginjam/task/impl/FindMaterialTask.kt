@@ -37,6 +37,8 @@ abstract class FindMaterialTask : Task(), ListenerHolder {
         }
         if ((materials[material] ?: 1) <= 0) {
             materials.remove(material)
+        }
+        if (materials.isEmpty()) {
             onlinePlayers.forEach {
                 it.reset()
             }
