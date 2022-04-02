@@ -20,13 +20,6 @@ fun String.deserializeMini() = MiniMessage.miniMessage().deserialize(this)
 
 fun Player.teleportAsyncBlind(location: Location) {
     addPotionEffect(PotionEffect(PotionEffectType.BLINDNESS, Int.MAX_VALUE, 255, false, false, false))
-    title(
-        "<orange>Du wirst gerade teleportiert!</orange>".deserializeMini(),
-        Component.empty(),
-        Duration.ofMillis(50),
-        Duration.ofMinutes(1),
-        Duration.ofMillis(50)
-    )
     teleportAsync(location).whenComplete { result, _ ->
         if (result) {
             removePotionEffect(PotionEffectType.BLINDNESS)
