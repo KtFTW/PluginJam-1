@@ -144,12 +144,10 @@ class GameMasterGoal(private val villager: Villager, private val callback: () ->
 class GamemasterEntity(private val nameKnown: Boolean) : ListenerHolder {
     override val listeners: MutableList<Listener> = mutableListOf()
     private var isPathFinding = false
-    var isExistent: Boolean = false
     var bukkitEntity: Villager? = null
     var interactCallback: (() -> Unit)? = null
 
     fun spawnEntity(location: Location) {
-        isExistent = true
         if (bukkitEntity != null) return
         bukkitEntity =
             location.world.spawnEntity(location, EntityType.VILLAGER, CreatureSpawnEvent.SpawnReason.CUSTOM) as Villager
@@ -211,7 +209,6 @@ class GamemasterEntity(private val nameKnown: Boolean) : ListenerHolder {
     }
 
     fun despawn() {
-        isExistent = false
         if (bukkitEntity != null) {
             bukkitEntity?.remove()
         }

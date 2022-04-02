@@ -1,6 +1,5 @@
 package net.stckoverflw.pluginjam.gamephase.impl
 
-import net.axay.kspigot.extensions.broadcast
 import net.axay.kspigot.extensions.geometry.plus
 import net.axay.kspigot.extensions.geometry.vecY
 import net.axay.kspigot.extensions.geometry.withWorld
@@ -83,7 +82,6 @@ object EndPhase : GamePhase(null), ListenerHolder {
     }
 
     override fun end() {
-        broadcast("Game ended!")
         fireworkLocations.forEach {
             it.block.type = Material.AIR
         }
