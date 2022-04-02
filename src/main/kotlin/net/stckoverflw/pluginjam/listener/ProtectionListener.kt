@@ -10,6 +10,7 @@ import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.block.BlockPlaceEvent
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.EntityDamageEvent
+import org.bukkit.event.entity.FoodLevelChangeEvent
 import org.bukkit.event.player.PlayerInteractEvent
 
 private val listeners = mutableListOf<SingleListener<*>>()
@@ -45,6 +46,9 @@ fun protectionListener() {
         if (it.player.gameMode != GameMode.CREATIVE) {
             it.isCancelled = true
         }
+    }
+    listeners += listen<FoodLevelChangeEvent> {
+        it.isCancelled = true
     }
 }
 

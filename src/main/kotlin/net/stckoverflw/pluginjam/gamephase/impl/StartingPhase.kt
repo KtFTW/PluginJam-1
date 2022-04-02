@@ -70,11 +70,13 @@ object StartingPhase : GamePhase(PrisonPhase), ListenerHolder {
         gamemaster.spawnEntity(postionsConfig.getLocation("starting_gamemaster_0"))
         GamemasterVelocity(gamemaster)
 
-        addListener(listen<PlayerInteractEvent> {
-            if (it.player.gameMode != GameMode.CREATIVE) {
-                it.isCancelled = false
+        addListener(
+            listen<PlayerInteractEvent> {
+                if (it.player.gameMode != GameMode.CREATIVE) {
+                    it.isCancelled = false
+                }
             }
-        })
+        )
     }
 
     override fun end() {

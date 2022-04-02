@@ -8,7 +8,7 @@ abstract class Action {
         completeCallback = callback
     }
 
-    protected fun complete() {
+    open fun complete() {
         completeCallback?.invoke()
     }
 }

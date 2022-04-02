@@ -91,7 +91,7 @@ object TwistPhase : GamePhase(DestroyPhase), TaskHolder, ListenerHolder {
                         .start()
                     return@task
                 }
-            } !!
+            }!!
         )
 
         onlinePlayers.forEach {
@@ -110,7 +110,7 @@ object TwistPhase : GamePhase(DestroyPhase), TaskHolder, ListenerHolder {
                 if (message != null) {
                     onlinePlayers.forEach { it.sendActionBar(mini(message)) }
                 }
-            } !!
+            }!!
         )
 
         addTask(
@@ -126,7 +126,7 @@ object TwistPhase : GamePhase(DestroyPhase), TaskHolder, ListenerHolder {
                         }
                     }
                 }
-            } !!
+            }!!
         )
 
         addTask(
@@ -140,28 +140,34 @@ object TwistPhase : GamePhase(DestroyPhase), TaskHolder, ListenerHolder {
                         player.playSound(player.location, Sound.BLOCK_GLASS_BREAK, 1f, 2f)
                     }
                 }
-            } !!
+            }!!
         )
 
         var totalAmethysts = 0
-        addListener(listen<EntityPickupItemEvent> {
-            if (it.entity !is Player) return@listen
-            if (it.item.itemStack.type != Material.AMETHYST_SHARD) return@listen
-            totalAmethysts ++
-            if (totalAmethysts == 2) {
-                GamePhaseManager.nextPhase()
+        addListener(
+            listen<EntityPickupItemEvent> {
+                if (it.entity !is Player) return@listen
+                if (it.item.itemStack.type != Material.AMETHYST_SHARD) return@listen
+                totalAmethysts ++
+                if (totalAmethysts == 2) {
+                    GamePhaseManager.nextPhase()
+                }
             }
-        })
+        )
 
-        addListener(listen<PlayerInteractEvent> {
-            if (it.player.gameMode != GameMode.CREATIVE) {
-                it.isCancelled = false
+        addListener(
+            listen<PlayerInteractEvent> {
+                if (it.player.gameMode != GameMode.CREATIVE) {
+                    it.isCancelled = false
+                }
             }
-        })
+        )
 
-        addListener(listen<PlayerJoinEvent> {
-            it.player.compassTarget = postionsConfig.getLocation("twist_location")
-        })
+        addListener(
+            listen<PlayerJoinEvent> {
+                it.player.compassTarget = postionsConfig.getLocation("twist_location")
+            }
+        )
     }
 
     override fun end() {

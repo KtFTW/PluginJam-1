@@ -17,7 +17,7 @@ import org.bukkit.GameMode
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerInteractEvent
 
-object TaskPhase : GamePhase(TwistPhase), ListenerHolder {
+object TaskPhase : GamePhase(FightPhase), ListenerHolder {
     override val listeners: MutableList<Listener> = mutableListOf()
     private val gamemaster: GamemasterEntity = GamemasterEntity(true)
     private val taskResults = mutableMapOf<Task, TaskResult>()
@@ -39,11 +39,13 @@ object TaskPhase : GamePhase(TwistPhase), ListenerHolder {
         }
         findNewTask()
 
-        addListener(listen<PlayerInteractEvent> {
-            if (it.player.gameMode != GameMode.CREATIVE) {
-                it.isCancelled = false
+        addListener(
+            listen<PlayerInteractEvent> {
+                if (it.player.gameMode != GameMode.CREATIVE) {
+                    it.isCancelled = false
+                }
             }
-        })
+        )
     }
 
     private fun findNewTask(): Boolean {
@@ -62,7 +64,7 @@ object TaskPhase : GamePhase(TwistPhase), ListenerHolder {
             val activeTask = tasks.find { taskResults[it] == TaskResult.ACTIVE } ?: error("No active task")
             activeTask.stop()
             taskResults[activeTask] = result
-            if (! findNewTask()) {
+            if (!findNewTask()) {
                 GamePhaseManager.nextPhase()
             }
         } else {
