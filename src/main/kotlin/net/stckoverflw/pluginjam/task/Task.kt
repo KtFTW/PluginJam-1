@@ -4,4 +4,6 @@ abstract class Task {
     abstract fun start()
 
     abstract fun stop()
+
+    abstract fun introduce()
 }
