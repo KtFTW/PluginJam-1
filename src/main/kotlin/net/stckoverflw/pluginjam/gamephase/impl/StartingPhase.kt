@@ -18,7 +18,7 @@ object StartingPhase : GamePhase(TaskPhase) {
     private var step = 0
     private var blocked = false
 
-    private val gamemaster: GamemasterEntity = GamemasterEntity()
+    private val gamemaster: GamemasterEntity = GamemasterEntity(false)
 
     override fun start() {
         gamemaster.interactCallback = interactCallback@{
@@ -35,7 +35,7 @@ object StartingPhase : GamePhase(TaskPhase) {
                 }
                 1 -> {
                     blocked = true
-                    StartingPhaseWalkingAction(gamemaster, postionsConfig.get("starting_gamemaster_1"))
+                    StartingPhaseWalkingAction(gamemaster, postionsConfig.getLocation("starting_gamemaster_1"))
                         .execute()
                         .whenComplete {
                             step ++
@@ -52,7 +52,7 @@ object StartingPhase : GamePhase(TaskPhase) {
                 }
             }
         }
-        gamemaster.spawnEntity(postionsConfig.get("starting_gamemaster_0"))
+        gamemaster.spawnEntity(postionsConfig.getLocation("starting_gamemaster_0"))
 
         listeners += listen<PlayerJoinEvent> {
             if (GamePhaseManager.activeGamePhase !is StartingPhase) {

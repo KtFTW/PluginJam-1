@@ -7,7 +7,7 @@ import org.bukkit.Location
 
 class PostionsConfig(plugin: DevcordJamPlugin) : AbstractConfig(plugin, "postions", "postions.yml") {
 
-    fun get(name: String): Location {
+    fun getLocation(name: String): Location {
         return yaml.getLocation(name)
             ?: Bukkit.getWorld("world")!!.spawnLocation
     }
