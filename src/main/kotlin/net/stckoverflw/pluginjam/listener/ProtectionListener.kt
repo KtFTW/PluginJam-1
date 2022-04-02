@@ -17,12 +17,12 @@ fun protectionListener() {
         }
     }
     listeners += listen<BlockBreakEvent> {
-        if (it.player.hasPermission("pluginjam.protection")) {
+        if (!it.player.hasPermission("pluginjam.protection")) {
             it.isCancelled = true
         }
     }
     listeners += listen<BlockPlaceEvent> {
-        if (it.player.hasPermission("pluginjam.protection")) {
+        if (!it.player.hasPermission("pluginjam.protection")) {
             it.isCancelled = true
         }
     }

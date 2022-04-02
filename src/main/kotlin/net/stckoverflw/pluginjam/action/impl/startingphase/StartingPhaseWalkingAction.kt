@@ -18,11 +18,6 @@ class StartingPhaseWalkingAction(
     Action() {
 
     override fun execute(): Action {
-        Conversation(DevcordJamPlugin.instance)
-            .addMessage("Folgt mir!", "Dorfbewohner", 1.seconds)
-            .start()
-            .whenComplete { _, _ ->
-            }
         val job = DevcordJamPlugin.instance.defaultScope.launch {
             while (true) {
                 delay(500)

@@ -114,8 +114,9 @@ class GameMasterGoal(private val villager: Villager, private val callback: () ->
     }
 
     override fun stop() {
+        if (villager.goal == null) return
         villager.pathfinder.stopPathfinding()
-        villager.teleportAsync(villager.goal!!)
+        villager.teleportAsync(villager.goal !!)
         villager.goal = null
         villager.setAI(false)
         callback.invoke()
@@ -131,24 +132,26 @@ class GameMasterGoal(private val villager: Villager, private val callback: () ->
         if (lastDistances.size >= 10) {
             lastDistances.removeAt(0)
         }
-        lastDistances.add(villager.location.distanceSquared(villager.goal!!))
-        if (villager.location.distanceSquared(villager.goal!!) <= 0.5) {
+        lastDistances.add(villager.location.distanceSquared(villager.goal !!))
+        if (villager.location.distanceSquared(villager.goal !!) <= 0.5) {
             stop()
         } else {
-            villager.pathfinder.moveTo(villager.goal!!, 0.6)
+            villager.pathfinder.moveTo(villager.goal !!, 0.6)
         }
     }
 }
 
 class GamemasterEntity(private val nameKnown: Boolean) : ListenerHolder {
-    private var bukkitEntity: Villager? = null
     override val listeners: MutableList<Listener> = mutableListOf()
     private var isPathFinding = false
+    var isExistent: Boolean = false
+    var bukkitEntity: Villager? = null
     var interactCallback: (() -> Unit)? = null
 
     fun spawnEntity(location: Location) {
         if (bukkitEntity != null) return
-        bukkitEntity = location.world.spawnEntity(location, EntityType.VILLAGER, CreatureSpawnEvent.SpawnReason.CUSTOM) as Villager
+        bukkitEntity =
+            location.world.spawnEntity(location, EntityType.VILLAGER, CreatureSpawnEvent.SpawnReason.CUSTOM) as Villager
         bukkitEntity?.apply {
             customName(
                 mini(
@@ -187,7 +190,7 @@ class GamemasterEntity(private val nameKnown: Boolean) : ListenerHolder {
         addListener(
             listen<EntityPathfindEvent> {
                 if (it.entity != bukkitEntity) return@listen
-                if (!isPathFinding) return@listen
+                if (! isPathFinding) return@listen
                 it.isCancelled = true
             }
         )
@@ -199,9 +202,9 @@ class GamemasterEntity(private val nameKnown: Boolean) : ListenerHolder {
 
     fun walkTo(location: Location, callback: () -> Unit) {
         bukkitEntity?.goal = location
-        val goal = GameMasterGoal(bukkitEntity!!, callback)
-        Bukkit.getMobGoals().removeAllGoals(bukkitEntity!!)
-        Bukkit.getMobGoals().addGoal(bukkitEntity!!, 3, goal)
+        val goal = GameMasterGoal(bukkitEntity !!, callback)
+        Bukkit.getMobGoals().removeAllGoals(bukkitEntity !!)
+        Bukkit.getMobGoals().addGoal(bukkitEntity !!, 3, goal)
         bukkitEntity?.setAI(true)
         goal.start()
     }
