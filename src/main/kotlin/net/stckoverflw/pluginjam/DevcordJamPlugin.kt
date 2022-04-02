@@ -14,6 +14,7 @@ import net.stckoverflw.pluginjam.listener.protectionListener
 import org.bukkit.Bukkit
 import org.bukkit.Difficulty
 import org.bukkit.GameRule
+import org.bukkit.entity.Villager
 
 class DevcordJamPlugin : KSpigot() {
 
@@ -54,6 +55,9 @@ class DevcordJamPlugin : KSpigot() {
     }
 
     override fun shutdown() {
+        for (world in Bukkit.getWorlds()) {
+            world.entities.filterIsInstance<Villager>().forEach { it.remove() }
+        }
         GamePhaseManager.activeGamePhase?.end()
     }
 }

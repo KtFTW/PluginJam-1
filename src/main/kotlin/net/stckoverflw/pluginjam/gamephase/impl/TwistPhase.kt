@@ -30,6 +30,7 @@ import org.bukkit.GameMode
 import org.bukkit.Material
 import org.bukkit.Particle
 import org.bukkit.Sound
+import org.bukkit.block.Block
 import org.bukkit.block.BlockFace
 import org.bukkit.entity.ItemFrame
 import org.bukkit.event.EventPriority
@@ -68,7 +69,7 @@ object TwistPhase : GamePhase(DestroyPhase), TaskHolder, ListenerHolder {
             val relative = amethystFrameBlock.getRelative(it)
             if (relative is ItemFrame) {
                 relative.setItem(null)
-                relative.remove()
+                (relative as Block).type = Material.AIR
             } else if (MaterialTags.TORCHES.isTagged(relative.type)) {
                 relative.type = Material.AIR
             }
@@ -164,7 +165,7 @@ object TwistPhase : GamePhase(DestroyPhase), TaskHolder, ListenerHolder {
         addListener(
             listen<PlayerAttemptPickupItemEvent> {
                 if (it.item.itemStack.type != Material.AMETHYST_SHARD) return@listen
-                totalAmethysts++
+                totalAmethysts += it.item.itemStack.amount
                 if (totalAmethysts == 2) {
                     GamePhaseManager.nextPhase()
                 }

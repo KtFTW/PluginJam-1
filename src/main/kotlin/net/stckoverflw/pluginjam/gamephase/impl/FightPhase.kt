@@ -42,14 +42,6 @@ object FightPhase : GamePhase(TwistPhase), ListenerHolder {
             .whenComplete {
                 GamePhaseManager.nextPhase()
             }
-
-//        addListener(
-//            listen<PlayerInteractEvent> {
-//                if (it.player.gameMode != GameMode.CREATIVE) {
-//                    it.isCancelled = false
-//                }
-//            }
-//        )
     }
 
     override fun end() {

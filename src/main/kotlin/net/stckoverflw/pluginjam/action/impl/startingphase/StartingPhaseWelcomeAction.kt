@@ -14,7 +14,7 @@ class StartingPhaseWelcomeAction : Action() {
             .addMessage("Das ganze Dorf braucht dringend eure Hilfe!", "Dorfbewohner")
             .addMessage(
                 "Wir können das nicht auf offener Straße besprechen, folgt mir in mein Haus und ich erkläre euch alles!",
-                "Dorfbewohner"
+                "Dorfbewohner", 0.seconds
             )
             .start()
             .whenComplete { _, _ ->
