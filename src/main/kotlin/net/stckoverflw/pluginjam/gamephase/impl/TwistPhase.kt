@@ -22,14 +22,14 @@ import net.stckoverflw.pluginjam.util.TaskHolder
 import net.stckoverflw.pluginjam.util.mini
 import net.stckoverflw.pluginjam.util.sendMini
 import net.stckoverflw.pluginjam.util.teleportAsyncBlind
+import org.bukkit.Bukkit
 import org.bukkit.Color
 import org.bukkit.GameMode
 import org.bukkit.Material
 import org.bukkit.Particle
 import org.bukkit.Sound
-import org.bukkit.entity.Player
 import org.bukkit.event.Listener
-import org.bukkit.event.entity.EntityPickupItemEvent
+import org.bukkit.event.player.PlayerAttemptPickupItemEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.scheduler.BukkitRunnable
@@ -40,6 +40,7 @@ object TwistPhase : GamePhase(DestroyPhase), TaskHolder, ListenerHolder {
     private val gamemaster: GamemasterEntity = GamemasterEntity(true)
     override val tasks: MutableList<BukkitRunnable> = mutableListOf()
     override val listeners: MutableList<Listener> = mutableListOf()
+    private var totalAmethysts = 0
 
     private val twistLocationArea = LocationArea(
         postionsConfig.getLocation("twist_location_0"),
@@ -58,6 +59,11 @@ object TwistPhase : GamePhase(DestroyPhase), TaskHolder, ListenerHolder {
     private var state = State.NONE
 
     override fun start() {
+        Bukkit.getWorlds().first()
+            .apply {
+                time = 0
+            }
+
         gamemaster.spawnEntity(postionsConfig.getLocation("prison_gamemaster"))
 
         ActionPipeline()
@@ -143,10 +149,8 @@ object TwistPhase : GamePhase(DestroyPhase), TaskHolder, ListenerHolder {
             }!!
         )
 
-        var totalAmethysts = 0
         addListener(
-            listen<EntityPickupItemEvent> {
-                if (it.entity !is Player) return@listen
+            listen<PlayerAttemptPickupItemEvent> {
                 if (it.item.itemStack.type != Material.AMETHYST_SHARD) return@listen
                 totalAmethysts ++
                 if (totalAmethysts == 2) {

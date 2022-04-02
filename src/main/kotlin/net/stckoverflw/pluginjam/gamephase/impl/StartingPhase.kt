@@ -16,6 +16,7 @@ import net.stckoverflw.pluginjam.gamephase.GamePhaseManager
 import net.stckoverflw.pluginjam.listener.GamemasterVelocity
 import net.stckoverflw.pluginjam.util.ListenerHolder
 import net.stckoverflw.pluginjam.util.mini
+import org.bukkit.Bukkit
 import org.bukkit.GameMode
 import org.bukkit.block.data.Openable
 import org.bukkit.event.Listener
@@ -82,5 +83,9 @@ object StartingPhase : GamePhase(PrisonPhase), ListenerHolder {
     override fun end() {
         unregisterAllListeners()
         gamemaster.despawn()
+        Bukkit.getWorlds().first()
+            .apply {
+                time = 0
+            }
     }
 }

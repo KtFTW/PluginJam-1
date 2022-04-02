@@ -1,6 +1,5 @@
 package net.stckoverflw.pluginjam.gamephase.impl
 
-import net.axay.kspigot.event.SingleListener
 import net.axay.kspigot.extensions.onlinePlayers
 import net.axay.kspigot.runnables.taskRunLater
 import net.stckoverflw.pluginjam.DevcordJamPlugin
@@ -13,7 +12,6 @@ import net.stckoverflw.pluginjam.util.teleportAsyncBlind
 
 object PrisonPhase : GamePhase(TaskPhase) {
     private val postionsConfig = DevcordJamPlugin.instance.configManager.postionsConfig
-    private val listeners = mutableListOf<SingleListener<*>>()
     private val gamemaster: GamemasterEntity = GamemasterEntity(true)
 
     override fun start() {

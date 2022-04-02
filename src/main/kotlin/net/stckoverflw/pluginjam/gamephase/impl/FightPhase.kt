@@ -1,6 +1,7 @@
 package net.stckoverflw.pluginjam.gamephase.impl
 
 import net.axay.kspigot.event.listen
+import net.axay.kspigot.extensions.onlinePlayers
 import net.axay.kspigot.main.KSpigotMainInstance
 import net.stckoverflw.pluginjam.DevcordJamPlugin
 import net.stckoverflw.pluginjam.action.ActionPipeline
@@ -49,5 +50,6 @@ object FightPhase : GamePhase(TwistPhase), ListenerHolder {
     }
 
     override fun end() {
+        onlinePlayers.forEach { player -> player.activePotionEffects.forEach { player.removePotionEffect(it.type) } }
     }
 }

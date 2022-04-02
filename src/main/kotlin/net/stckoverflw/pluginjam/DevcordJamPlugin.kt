@@ -48,6 +48,7 @@ class DevcordJamPlugin : KSpigot() {
             time = 0
             setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false)
             setGameRule(GameRule.DO_WEATHER_CYCLE, false)
+            setGameRule(GameRule.DO_MOB_SPAWNING, false)
         }
     }
 
