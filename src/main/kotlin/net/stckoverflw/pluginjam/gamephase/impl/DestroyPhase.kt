@@ -18,11 +18,10 @@ import org.bukkit.Particle
 import org.bukkit.Sound
 import org.bukkit.entity.Item
 import org.bukkit.event.Listener
-import org.bukkit.event.entity.EntityCombustEvent
+import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.util.Vector
 
 object DestroyPhase : GamePhase(EndPhase), ListenerHolder {
-    private val postionsConfig = DevcordJamPlugin.instance.configManager.postionsConfig
     override val listeners: MutableList<Listener> = mutableListOf()
 
     private var amount: Int = 2
@@ -35,10 +34,11 @@ object DestroyPhase : GamePhase(EndPhase), ListenerHolder {
             }
 
         addListener(
-            listen<EntityCombustEvent> { event ->
+            listen<EntityDamageEvent> { event ->
                 if (GamePhaseManager.activeGamePhase !is DestroyPhase) return@listen
                 if (event.entity !is Item) return@listen
                 if ((event.entity as Item).itemStack.type != Material.AMETHYST_SHARD) return@listen
+                if (!(event.cause == EntityDamageEvent.DamageCause.LAVA || event.cause == EntityDamageEvent.DamageCause.FIRE || event.cause == EntityDamageEvent.DamageCause.FIRE_TICK)) return@listen
                 event.entity.remove()
                 event.isCancelled = true
                 amount--

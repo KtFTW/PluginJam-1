@@ -48,10 +48,7 @@ class FightPhaseWavesAction : Action() {
 
             count += 1
 
-            println(count)
-
             if (count >= 50) {
-                println("Completed")
                 complete()
                 return@listen
             }
