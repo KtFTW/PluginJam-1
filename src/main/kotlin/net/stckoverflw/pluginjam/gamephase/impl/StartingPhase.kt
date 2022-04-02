@@ -16,10 +16,9 @@ import net.stckoverflw.pluginjam.listener.GamemasterVelocity
 import net.stckoverflw.pluginjam.util.ListenerHolder
 import net.stckoverflw.pluginjam.util.mini
 import net.stckoverflw.pluginjam.util.reset
+import net.stckoverflw.pluginjam.util.setOpenIfDoor
 import org.bukkit.Bukkit
 import org.bukkit.GameMode
-import org.bukkit.Material
-import org.bukkit.block.BlockFace
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerJoinEvent
@@ -53,10 +52,8 @@ object StartingPhase : GamePhase(PrisonPhase), ListenerHolder {
                             val door0 = postionsConfig.getLocation("starting_door_0").add(0.0, 1.0, 0.0).block
                             val door1 = postionsConfig.getLocation("starting_door_1").add(0.0, 1.0, 0.0).block
 
-                            door0.type = Material.COBBLESTONE
-                            door0.getRelative(BlockFace.UP).type = Material.COBBLESTONE
-                            door1.type = Material.COBBLESTONE
-                            door1.getRelative(BlockFace.UP).type = Material.COBBLESTONE
+                            door0.setOpenIfDoor(false)
+                            door1.setOpenIfDoor(false)
 
                             GasPipelineAction(
                                 gamemaster,

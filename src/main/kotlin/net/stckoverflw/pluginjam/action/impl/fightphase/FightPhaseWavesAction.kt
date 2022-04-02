@@ -35,6 +35,7 @@ class FightPhaseWavesAction : Action(), ListenerHolder {
     override val listeners = mutableListOf<Listener>()
 
     override fun execute(): Action {
+        positionsConfig.getLocation("fight_door").block.setOpenIfDoor(false)
         val spawnPosition = positionsConfig.getLocation("fight_pillager_spawn")
         onlinePlayers.forEach { giveItems(it) }
         sync {
@@ -149,7 +150,6 @@ class FightPhaseWavesAction : Action(), ListenerHolder {
             it.inventory.clear()
             it.reset()
         }
-        positionsConfig.getLocation("fight_door").block.setOpenIfDoor(true)
         super.complete()
     }
 }

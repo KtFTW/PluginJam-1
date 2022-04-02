@@ -6,13 +6,16 @@ import net.axay.kspigot.event.unregister
 import net.stckoverflw.pluginjam.DevcordJamPlugin
 import net.stckoverflw.pluginjam.action.Action
 import net.stckoverflw.pluginjam.util.Conversation
+import net.stckoverflw.pluginjam.util.setOpenIfDoor
 import org.bukkit.Material
 import org.bukkit.event.player.PlayerAttemptPickupItemEvent
 
 class FightPhaseCollectAmethystAction : Action() {
     private var listener: SingleListener<PlayerAttemptPickupItemEvent>? = null
+    private val positionsConfig = DevcordJamPlugin.instance.configManager.postionsConfig
 
     override fun execute(): Action {
+        positionsConfig.getLocation("fight_door").block.setOpenIfDoor(true)
         Conversation(DevcordJamPlugin.instance)
             .addMessage("<i>Du hast alle Monster besiegt. Hole dir jetzt den Amethyst!</i>")
             .start()

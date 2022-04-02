@@ -2,6 +2,7 @@ package net.stckoverflw.pluginjam.util
 
 import net.axay.kspigot.extensions.broadcast
 import net.axay.kspigot.main.KSpigotMainInstance
+import net.axay.kspigot.runnables.sync
 import org.bukkit.Bukkit
 import org.bukkit.World
 import org.bukkit.block.Block
@@ -42,6 +43,9 @@ fun loadSavedWorld(worldName: String) {
 }
 
 fun Block.setOpenIfDoor(open: Boolean) {
-    if (this !is Door) return
-    this.isOpen = open
+    sync {
+        val door = this.blockData as? Door ?: return@sync
+        door.isOpen = open
+        this.setBlockData(door, true)
+    }
 }
