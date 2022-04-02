@@ -1,4 +1,4 @@
-package net.stckoverflw.pluginjam.action.impl.startingphase
+package net.stckoverflw.pluginjam.action.impl.global
 
 import net.axay.kspigot.event.listen
 import net.axay.kspigot.event.unregister
@@ -18,11 +18,11 @@ import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 import org.bukkit.util.Vector
 
-class StartingPhaseEndAction(
+class GasPipelineAction(
     private val gamemasterEntity: GamemasterEntity,
     private val pipelineLocation0: Location,
     private val pipelineLocation1: Location,
-    private val gamemasterTargetLocation: Location
+    private val gamemasterTargetLocation: Location?
 ) :
     Action() {
 
@@ -72,7 +72,9 @@ class StartingPhaseEndAction(
 
         base += 40
         taskRunLater(base) {
-            gamemasterEntity.teleport(gamemasterTargetLocation)
+            if (gamemasterTargetLocation != null) {
+                gamemasterEntity.teleport(gamemasterTargetLocation)
+            }
         }
 
         base += 40
