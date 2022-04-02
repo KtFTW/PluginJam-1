@@ -6,6 +6,7 @@ import net.axay.kspigot.main.KSpigot
 import net.stckoverflw.pluginjam.command.PositionCommand
 import net.stckoverflw.pluginjam.command.PositionTpCommand
 import net.stckoverflw.pluginjam.command.ReloadCommands
+import net.stckoverflw.pluginjam.command.SkipPhaseCommand
 import net.stckoverflw.pluginjam.config.ConfigManager
 import net.stckoverflw.pluginjam.gamephase.GamePhaseManager
 import net.stckoverflw.pluginjam.i18n.TranslationsProvider
@@ -36,6 +37,7 @@ class DevcordJamPlugin : KSpigot() {
         ReloadCommands(this)
         PositionCommand(configManager.postionsConfig)
         PositionTpCommand(configManager.postionsConfig)
+        SkipPhaseCommand()
 
         translationsProvider = TranslationsProvider(this)
 
