@@ -30,7 +30,6 @@ import org.bukkit.GameMode
 import org.bukkit.Material
 import org.bukkit.Particle
 import org.bukkit.Sound
-import org.bukkit.block.Block
 import org.bukkit.block.BlockFace
 import org.bukkit.entity.ItemFrame
 import org.bukkit.event.EventPriority
@@ -67,11 +66,13 @@ object TwistPhase : GamePhase(DestroyPhase), TaskHolder, ListenerHolder {
         val amethystFrameBlock = positionConfig.getLocation("twist_amethyst_frame").block
         listOf(BlockFace.NORTH, BlockFace.EAST, BlockFace.WEST, BlockFace.SOUTH).forEach {
             val relative = amethystFrameBlock.getRelative(it)
-            if (relative is ItemFrame) {
-                relative.setItem(null)
-                (relative as Block).type = Material.AIR
-            } else if (MaterialTags.TORCHES.isTagged(relative.type)) {
+            if (MaterialTags.TORCHES.isTagged(relative.type)) {
                 relative.type = Material.AIR
+            }
+        }
+        amethystFrameBlock.world.getNearbyEntities(amethystFrameBlock.location, 1.0, 1.0, 1.0).forEach {
+            if (it is ItemFrame && it.location.block.getRelative((it.attachedFace)) == amethystFrameBlock) {
+                it.remove()
             }
         }
         amethystFrameBlock.type = Material.AIR
