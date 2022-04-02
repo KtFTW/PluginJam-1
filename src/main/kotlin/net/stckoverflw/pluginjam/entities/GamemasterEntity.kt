@@ -213,6 +213,6 @@ class GamemasterEntity(private val nameKnown: Boolean) : ListenerHolder {
             bukkitEntity?.remove()
         }
 
-        unegisterAllListeners()
+        unregisterAllListeners()
     }
 }

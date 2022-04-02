@@ -1,5 +1,6 @@
 package net.stckoverflw.pluginjam.gamephase.impl
 
+import net.axay.kspigot.event.listen
 import net.axay.kspigot.extensions.onlinePlayers
 import net.stckoverflw.pluginjam.DevcordJamPlugin
 import net.stckoverflw.pluginjam.entities.GamemasterEntity
@@ -10,11 +11,14 @@ import net.stckoverflw.pluginjam.task.TaskResult
 import net.stckoverflw.pluginjam.task.impl.findmaterial.FindFoodTask
 import net.stckoverflw.pluginjam.task.impl.findmaterial.FindOresTask
 import net.stckoverflw.pluginjam.task.impl.findmaterial.FindWoodTask
-import net.stckoverflw.pluginjam.task.impl.killentity.KillPillagersTask
+import net.stckoverflw.pluginjam.util.ListenerHolder
 import net.stckoverflw.pluginjam.util.teleportAsyncBlind
+import org.bukkit.GameMode
+import org.bukkit.event.Listener
+import org.bukkit.event.player.PlayerInteractEvent
 
-object TaskPhase : GamePhase(TwistPhase) {
-
+object TaskPhase : GamePhase(TwistPhase), ListenerHolder {
+    override val listeners: MutableList<Listener> = mutableListOf()
     private val gamemaster: GamemasterEntity = GamemasterEntity(true)
     private val taskResults = mutableMapOf<Task, TaskResult>()
 
@@ -22,7 +26,7 @@ object TaskPhase : GamePhase(TwistPhase) {
         FindWoodTask(),
         FindOresTask(),
         FindFoodTask(),
-        KillPillagersTask(),
+        //  KillPillagersTask(),
     )
 
     override fun start() {
@@ -34,6 +38,12 @@ object TaskPhase : GamePhase(TwistPhase) {
             taskResults[it] = TaskResult.WAITING
         }
         findNewTask()
+
+        addListener(listen<PlayerInteractEvent> {
+            if (it.player.gameMode != GameMode.CREATIVE) {
+                it.isCancelled = false
+            }
+        })
     }
 
     private fun findNewTask(): Boolean {
@@ -52,7 +62,7 @@ object TaskPhase : GamePhase(TwistPhase) {
             val activeTask = tasks.find { taskResults[it] == TaskResult.ACTIVE } ?: error("No active task")
             activeTask.stop()
             taskResults[activeTask] = result
-            if (!findNewTask()) {
+            if (! findNewTask()) {
                 GamePhaseManager.nextPhase()
             }
         } else {

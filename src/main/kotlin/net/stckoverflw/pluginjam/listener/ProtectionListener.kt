@@ -5,10 +5,12 @@ import net.axay.kspigot.event.listen
 import net.axay.kspigot.event.unregister
 import org.bukkit.GameMode
 import org.bukkit.entity.Player
+import org.bukkit.event.EventPriority
 import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.block.BlockPlaceEvent
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.EntityDamageEvent
+import org.bukkit.event.player.PlayerInteractEvent
 
 private val listeners = mutableListOf<SingleListener<*>>()
 
@@ -34,6 +36,12 @@ fun protectionListener() {
         }
     }
     listeners += listen<BlockPlaceEvent> {
+        if (it.player.gameMode != GameMode.CREATIVE) {
+            it.isCancelled = true
+        }
+    }
+
+    listen<PlayerInteractEvent>(EventPriority.LOWEST) {
         if (it.player.gameMode != GameMode.CREATIVE) {
             it.isCancelled = true
         }

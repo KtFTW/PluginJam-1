@@ -14,7 +14,7 @@ interface ListenerHolder {
         listeners.remove(listener)
     }
 
-    fun unegisterAllListeners() {
+    fun unregisterAllListeners() {
         listeners.forEach { it.unregister() }
     }
 }
