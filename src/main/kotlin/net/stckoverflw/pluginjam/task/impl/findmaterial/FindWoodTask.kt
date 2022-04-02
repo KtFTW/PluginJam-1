@@ -10,20 +10,19 @@ import kotlin.time.Duration.Companion.seconds
 
 class FindWoodTask : FindMaterialTask() {
 
+    private var count: Int = 10
+
     override fun start() {
-        materials[Material.OAK_WOOD] = Random.Default.nextInt(onlinePlayers.size * 12, onlinePlayers.size * 24)
+        materials[Material.OAK_LOG] = count
 
         super.start()
     }
 
-    override fun stop() {
-        super.stop()
-    }
-
     override fun introduce() {
+        count = Random.Default.nextInt(onlinePlayers.size * 12, onlinePlayers.size * 24)
         Conversation(DevcordJamPlugin.instance)
-            .addMessage("Wir brauchen auch noch ein wenig Holz.", "Gamemaster", 3.seconds)
-            .addMessage("Am besten bringt ihr mir einfach Eichenholz", "Gamemaster", 3.seconds)
+            .addMessage("Wir brauchen auch noch ein wenig Holz.", "<blue>Dorfbewohner</blue>", 3.seconds)
+            .addMessage("Am besten bringt ihr mir einfach $count Eichenholz-logs", "<blue>Dorfbewohner</blue>", 0.seconds)
             .start()
             .whenComplete { _, _ ->
                 start()

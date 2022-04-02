@@ -2,14 +2,17 @@ package net.stckoverflw.pluginjam.task.impl
 
 import net.axay.kspigot.event.listen
 import net.axay.kspigot.event.unregister
+import net.stckoverflw.pluginjam.DevcordJamPlugin
 import net.stckoverflw.pluginjam.gamephase.GamePhaseManager
 import net.stckoverflw.pluginjam.gamephase.impl.TaskPhase
 import net.stckoverflw.pluginjam.task.Task
 import net.stckoverflw.pluginjam.task.TaskResult
+import net.stckoverflw.pluginjam.util.Conversation
 import net.stckoverflw.pluginjam.util.ListenerHolder
 import org.bukkit.Material
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerInteractEntityEvent
+import kotlin.time.Duration.Companion.seconds
 
 abstract class FindMaterialTask : Task(), ListenerHolder {
 
@@ -26,7 +29,12 @@ abstract class FindMaterialTask : Task(), ListenerHolder {
         }
 
         if (materials.isEmpty()) {
-            TaskPhase.taskDone(TaskResult.SUCCESS)
+            Conversation(DevcordJamPlugin.instance)
+                .addMessage("Perfekt!", "<blue>Dorfbewohner</blue>", 1.seconds)
+                .start()
+                .whenComplete { _, _ ->
+                    TaskPhase.taskDone(TaskResult.SUCCESS)
+                }
         }
     }
 

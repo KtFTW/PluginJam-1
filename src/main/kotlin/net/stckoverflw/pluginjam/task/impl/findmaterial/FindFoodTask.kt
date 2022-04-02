@@ -10,8 +10,10 @@ import kotlin.time.Duration.Companion.seconds
 
 class FindFoodTask : FindMaterialTask() {
 
+    var count = 10
+
     override fun start() {
-        materials[Material.BREAD] = Random.Default.nextInt(onlinePlayers.size * 4, onlinePlayers.size * 8)
+        materials[Material.BREAD] = count
 
         super.start()
     }
@@ -21,9 +23,10 @@ class FindFoodTask : FindMaterialTask() {
     }
 
     override fun introduce() {
+        count = Random.Default.nextInt(onlinePlayers.size * 4, onlinePlayers.size * 8)
         Conversation(DevcordJamPlugin.instance)
-            .addMessage("Wir brauchen auch noch etwas essbares.", "Gamemaster", 3.seconds)
-            .addMessage("Sucht nach Brot und bringt es zu mir!", "Gamemaster", 3.seconds)
+            .addMessage("Wir brauchen auch noch etwas essbares.", "<blue>Dorfbewohner</blue>", 3.seconds)
+            .addMessage("Sucht nach $count Brot und bringt es zu mir!", "<blue>Dorfbewohner</blue>", 3.seconds)
             .start()
             .whenComplete { _, _ ->
                 start()

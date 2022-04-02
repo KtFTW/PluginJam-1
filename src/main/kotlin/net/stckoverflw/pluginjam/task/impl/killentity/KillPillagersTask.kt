@@ -24,8 +24,8 @@ class KillPillagersTask : KillEntityTask() {
 
     override fun introduce() {
         Conversation(DevcordJamPlugin.instance)
-            .addMessage("", "Gamemaster", 3.seconds)
-            .addMessage("", "Gamemaster", 3.seconds)
+            .addMessage("", "<blue>Dorfbewohner</blue>", 3.seconds)
+            .addMessage("", "<blue>Dorfbewohner</blue>", 3.seconds)
             .start()
             .whenComplete { _, _ ->
                 start()

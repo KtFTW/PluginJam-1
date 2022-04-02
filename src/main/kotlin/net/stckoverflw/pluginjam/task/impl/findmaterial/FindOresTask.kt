@@ -14,9 +14,15 @@ import kotlin.time.Duration.Companion.seconds
 
 class FindOresTask : FindMaterialTask() {
 
+    var ironCount = 10
+    var goldCount = 10
+    var coalCount = 10
+
     override fun start() {
-        materials[Material.IRON_INGOT] = Random.nextInt(onlinePlayers.size * 2, onlinePlayers.size * 3)
-        materials[Material.GOLD_INGOT] = Random.nextInt(onlinePlayers.size / 2 + 1, onlinePlayers.size + 1)
+        super.start()
+        materials[Material.IRON_INGOT] = ironCount
+        materials[Material.GOLD_INGOT] = goldCount
+        materials[Material.COAL] = coalCount
 
         addListener(
             listen <PlayerInteractEvent> {
@@ -32,20 +38,20 @@ class FindOresTask : FindMaterialTask() {
             (materials[Material.IRON_INGOT]!! + materials[Material.GOLD_INGOT]!!) / 12,
             (materials[Material.IRON_INGOT]!! + materials[Material.GOLD_INGOT]!!) / 6
         )
-        super.start()
-    }
-
-    override fun stop() {
-
-        super.stop()
     }
 
     override fun introduce() {
+        ironCount = Random.nextInt(onlinePlayers.size * 2, onlinePlayers.size * 4) // 2
+        goldCount = Random.nextInt(onlinePlayers.size / 2 + 2, onlinePlayers.size + 4) // 2
+        coalCount = Random.nextInt(
+            (ironCount + goldCount) / 12 + 1,
+            ((ironCount + goldCount) / 6) + 2
+        )
         Conversation(DevcordJamPlugin.instance)
-            .addMessage("Um eine Chance gegen die Pillager zu haben brauchen wir Waffen und Rüstungen!", "Gamemaster", 3.seconds)
-            .addMessage("Dafür müsst ihr verschiedene Erze finden und abbauen.", "Gamemaster", 3.seconds)
-            .addMessage("Die rohen Erze könnt ihr mit Rechtsklick auf einen Ofen direk schmelzen.", "Gamemaster", 3.seconds)
-            .addMessage("Bringt mir dann die ingots!", "Gamemaster", 3.seconds)
+            .addMessage("Um eine Chance gegen die Pillager zu haben brauchen wir Waffen und Rüstungen!", "<blue>Dorfbewohner</blue>", 3.seconds)
+            .addMessage("Dafür müsst ihr verschiedene Erze finden und abbauen.", "<blue>Dorfbewohner</blue>", 3.seconds)
+            .addMessage("Bringt mir bitte $coalCount Kohle, $ironCount Eisen-Ingots und $goldCount Gold-Ingots", "<blue>Dorfbewohner</blue>", 3.seconds)
+            .addMessage("Die rohen Erze könnt ihr mit Rechtsklick auf einen Ofen direk schmelzen.", "<blue>Dorfbewohner</blue>", 3.seconds)
             .start()
             .whenComplete { _, _ ->
                 start()
