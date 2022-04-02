@@ -1,33 +1,42 @@
 package net.stckoverflw.pluginjam.action.impl.fightphase
 
-import net.axay.kspigot.event.SingleListener
 import net.axay.kspigot.event.listen
-import net.axay.kspigot.event.unregister
+import net.axay.kspigot.extensions.onlinePlayers
 import net.axay.kspigot.items.itemStack
+import net.axay.kspigot.items.meta
 import net.axay.kspigot.main.KSpigotMainInstance
 import net.axay.kspigot.runnables.sync
 import net.stckoverflw.pluginjam.DevcordJamPlugin
 import net.stckoverflw.pluginjam.action.Action
+import net.stckoverflw.pluginjam.util.ListenerHolder
+import net.stckoverflw.pluginjam.util.reset
+import net.stckoverflw.pluginjam.util.setOpenIfDoor
 import org.bukkit.Difficulty
 import org.bukkit.Location
 import org.bukkit.Material
+import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.EntityType
+import org.bukkit.entity.ItemFrame
+import org.bukkit.entity.Player
 import org.bukkit.event.EventPriority
+import org.bukkit.event.Listener
+import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.EntityDeathEvent
+import org.bukkit.event.entity.PlayerDeathEvent
 import org.bukkit.event.player.PlayerDropItemEvent
+import org.bukkit.event.player.PlayerInteractAtEntityEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.ItemStack
 
-class FightPhaseWavesAction : Action() {
-    private var damageListener: SingleListener<EntityDamageByEntityEvent>? = null
-    private var deathListener: SingleListener<EntityDeathEvent>? = null
-    private var dropListener: SingleListener<PlayerDropItemEvent>? = null
-    private var interactListener: SingleListener<PlayerInteractEvent>? = null
+class FightPhaseWavesAction : Action(), ListenerHolder {
+    private val positionsConfig = DevcordJamPlugin.instance.configManager.postionsConfig
+
+    override val listeners = mutableListOf<Listener>()
+
     override fun execute(): Action {
-        val positionsConfig = DevcordJamPlugin.instance.configManager.postionsConfig
         val spawnPosition = positionsConfig.getLocation("fight_pillager_spawn")
-        giveItems()
+        onlinePlayers.forEach { giveItems(it) }
         sync {
             KSpigotMainInstance.server.worlds.forEach {
                 it.difficulty = Difficulty.EASY
@@ -37,70 +46,94 @@ class FightPhaseWavesAction : Action() {
 
         var count = 0
 
-        damageListener = listen(EventPriority.HIGHEST) { event ->
-            event.isCancelled = false
-        }
-
-        deathListener = listen { event ->
-            val entity = event.entity
-
-            if (entity.type != EntityType.PILLAGER) return@listen
-
-            count += 1
-
-            if (count >= 50) {
-                complete()
-                return@listen
+        addListener(
+            listen<BlockBreakEvent>(EventPriority.HIGHEST) {
+                it.isCancelled = true
             }
+        )
 
-            if (count == 10 || count == 20 || count == 30 || count == 40) {
-                spawnPillagers(spawnPosition)
+        addListener(
+            listen<PlayerDeathEvent> {
+                it.player.reset()
+                giveItems(it.player)
+                it.player.teleport(positionsConfig.getLocation("fight_parkour_end"))
+                it.isCancelled = true
             }
-        }
+        )
 
-        dropListener = listen {
-            it.isCancelled = true
-        }
+        addListener(
+            listen<EntityDamageByEntityEvent>(EventPriority.HIGHEST) { event ->
+                event.isCancelled = event.entity is Player && event.damager is Player
+            }
+        )
 
-        interactListener = listen { event ->
-            val type = event.clickedBlock?.type ?: return@listen
-            if (type != Material.SPRUCE_DOOR) return@listen
+        addListener(
+            listen<EntityDeathEvent> { event ->
+                val entity = event.entity
 
-            event.isCancelled = true
-        }
+                if (entity.type != EntityType.PILLAGER) return@listen
+
+                ArrayList(event.drops)
+                    .forEach { item ->
+                        event.drops.remove(item)
+                    }
+
+                count += 1
+
+                if (count >= 50) {
+                    complete()
+                    return@listen
+                }
+
+                if (count == 10 || count == 20 || count == 30 || count == 40) {
+                    spawnPillagers(spawnPosition)
+                }
+            }
+        )
+
+        addListener(
+            listen<PlayerDropItemEvent> {
+                it.isCancelled = true
+            }
+        )
+
+        addListener(
+            listen<PlayerInteractEvent>(EventPriority.HIGHEST) { event ->
+                val type = event.clickedBlock?.type ?: return@listen
+                if (type != Material.SPRUCE_DOOR) return@listen
+
+                event.isCancelled = true
+            }
+        )
+
+        addListener(
+            listen<PlayerInteractAtEntityEvent>(EventPriority.HIGHEST) { event ->
+                if (event.rightClicked is ItemFrame) event.isCancelled = false
+            }
+        )
+
         return this
     }
 
-    private fun giveItems() {
-        KSpigotMainInstance.server.onlinePlayers.forEach {
-            it.inventory.clear()
-
-            it.inventory.addItem(ItemStack(Material.DIAMOND_SWORD))
-
-            it.inventory.addItem(ItemStack(Material.BOW))
-
-            it.inventory.addItem(
-                itemStack(Material.ARROW) {
-                    amount = 64
-                }
+    private fun giveItems(player: Player) {
+        player.inventory.apply {
+            clear()
+            addItem(
+                ItemStack(Material.DIAMOND_SWORD),
+                itemStack(Material.BOW) {
+                    meta {
+                        addEnchant(Enchantment.ARROW_INFINITE, 1, false)
+                    }
+                },
+                ItemStack(Material.ARROW, 1),
+                ItemStack(Material.GOLDEN_APPLE)
             )
 
-            it.inventory.addItem(
-                itemStack(Material.ARROW) {
-                    amount = 64
-                }
-            )
-
-            it.inventory.addItem(
-                itemStack(Material.ARROW) {
-                    amount = 64
-                }
-            )
-
-            it.inventory.helmet = ItemStack(Material.IRON_HELMET)
-            it.inventory.chestplate = ItemStack(Material.IRON_CHESTPLATE)
-            it.inventory.leggings = ItemStack(Material.IRON_LEGGINGS)
-            it.inventory.boots = ItemStack(Material.IRON_BOOTS)
+            setItemInOffHand(ItemStack(Material.SHIELD))
+            helmet = ItemStack(Material.IRON_HELMET)
+            chestplate = ItemStack(Material.IRON_CHESTPLATE)
+            leggings = ItemStack(Material.IRON_LEGGINGS)
+            boots = ItemStack(Material.IRON_BOOTS)
         }
     }
 
@@ -111,14 +144,12 @@ class FightPhaseWavesAction : Action() {
     }
 
     override fun complete() {
+        unregisterAllListeners()
         KSpigotMainInstance.server.onlinePlayers.forEach {
             it.inventory.clear()
+            it.reset()
         }
-
-        damageListener?.unregister()
-        deathListener?.unregister()
-        dropListener?.unregister()
-        interactListener?.unregister()
+        positionsConfig.getLocation("fight_door").block.setOpenIfDoor(true)
         super.complete()
     }
 }

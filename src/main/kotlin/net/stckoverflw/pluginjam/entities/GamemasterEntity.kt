@@ -145,7 +145,7 @@ class GamemasterEntity(private val nameKnown: Boolean) : ListenerHolder {
     override val listeners: MutableList<Listener> = mutableListOf()
     private var isPathFinding = false
     var bukkitEntity: Villager? = null
-    var interactCallback: (() -> Unit)? = null
+    var interactCallback: ((PlayerInteractEntityEvent) -> Unit)? = null
 
     fun spawnEntity(location: Location) {
         if (bukkitEntity != null) return
@@ -167,7 +167,7 @@ class GamemasterEntity(private val nameKnown: Boolean) : ListenerHolder {
             listen<PlayerInteractEntityEvent> {
                 if (it.rightClicked != bukkitEntity) return@listen
                 it.isCancelled = true
-                interactCallback?.invoke()
+                interactCallback?.invoke(it)
             }
         )
 
@@ -206,6 +206,7 @@ class GamemasterEntity(private val nameKnown: Boolean) : ListenerHolder {
         Bukkit.getMobGoals().addGoal(bukkitEntity !!, 3, goal)
         bukkitEntity?.setAI(true)
         goal.start()
+        println("walkTo")
     }
 
     fun despawn() {

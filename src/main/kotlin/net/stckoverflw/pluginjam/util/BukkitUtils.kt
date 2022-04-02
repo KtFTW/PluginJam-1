@@ -4,6 +4,8 @@ import net.axay.kspigot.extensions.broadcast
 import net.axay.kspigot.main.KSpigotMainInstance
 import org.bukkit.Bukkit
 import org.bukkit.World
+import org.bukkit.block.Block
+import org.bukkit.block.data.type.Door
 import java.nio.file.Files
 import kotlin.io.path.div
 
@@ -37,4 +39,9 @@ fun loadSavedWorld(worldName: String) {
         KSpigotMainInstance.logger.warning("Couldn't copy ${file.name}")
         OnErrorAction.SKIP
     }
+}
+
+fun Block.setOpenIfDoor(open: Boolean) {
+    if (this !is Door) return
+    this.isOpen = open
 }

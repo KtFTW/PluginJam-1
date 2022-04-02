@@ -9,13 +9,12 @@ class StartingPhaseWelcomeAction : Action() {
 
     override fun execute(): Action {
         Conversation(DevcordJamPlugin.instance)
-            .addMessage("Guten Tag, <green>Fremde", "Dorfbewohner", 2.seconds)
-            .addMessage("Es spricht sich herum, dass ihr gute Krieger seid.", "Dorfbewohner", 3.seconds)
-            .addMessage("Das ganze Dorf braucht dringend eure Hilfe!", "Dorfbewohner", 3.seconds)
+            .addMessage("Guten Tag, <green>Fremde.", "Dorfbewohner", 2.seconds)
+            .addMessage("Es spricht sich herum, dass ihr gute Krieger seid.", "Dorfbewohner")
+            .addMessage("Das ganze Dorf braucht dringend eure Hilfe!", "Dorfbewohner")
             .addMessage(
                 "Wir können das nicht auf offener Straße besprechen, folgt mir in mein Haus und ich erkläre euch alles!",
-                "Dorfbewohner",
-                5.seconds
+                "Dorfbewohner"
             )
             .start()
             .whenComplete { _, _ ->

@@ -3,7 +3,6 @@ package net.stckoverflw.pluginjam.listener
 import net.axay.kspigot.runnables.task
 import net.stckoverflw.pluginjam.entities.GamemasterEntity
 import org.bukkit.entity.EntityType
-import org.bukkit.util.Vector
 
 class GamemasterVelocity(private val gamemaster: GamemasterEntity) {
     init {
@@ -15,7 +14,7 @@ class GamemasterVelocity(private val gamemaster: GamemasterEntity) {
 
             gamemasterLocation.getNearbyEntities(0.5, 0.5, 0.5).forEach {
                 if (it.type == EntityType.PLAYER) {
-                    it.velocity = Vector(0.5, 0.5, 0.5)
+                    it.velocity = it.velocity.multiply(-1)
                 }
             }
         }

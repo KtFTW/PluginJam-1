@@ -1,15 +1,18 @@
 package net.stckoverflw.pluginjam.gamephase.impl
 
+import com.destroystokyo.paper.MaterialTags
 import net.axay.kspigot.event.listen
 import net.axay.kspigot.extensions.geometry.LocationArea
+import net.axay.kspigot.extensions.geometry.blockLoc
 import net.axay.kspigot.extensions.geometry.vec
 import net.axay.kspigot.extensions.onlinePlayers
 import net.axay.kspigot.particles.particle
 import net.axay.kspigot.runnables.task
 import net.stckoverflw.pluginjam.DevcordJamPlugin
 import net.stckoverflw.pluginjam.action.ActionPipeline
-import net.stckoverflw.pluginjam.action.impl.global.GasPipelineAction
+import net.stckoverflw.pluginjam.action.impl.global.FastGasPipelineAction
 import net.stckoverflw.pluginjam.action.impl.global.WaitAction
+import net.stckoverflw.pluginjam.action.impl.prisionphase.TwistPhasePrisonTeleportAction
 import net.stckoverflw.pluginjam.action.impl.twistphase.TwistPhaseGamemasterAction
 import net.stckoverflw.pluginjam.action.impl.twistphase.TwistPhaseGamemasterDespawnAction
 import net.stckoverflw.pluginjam.action.impl.twistphase.TwistPhaseHelperAction
@@ -21,58 +24,71 @@ import net.stckoverflw.pluginjam.util.ListenerHolder
 import net.stckoverflw.pluginjam.util.TaskHolder
 import net.stckoverflw.pluginjam.util.mini
 import net.stckoverflw.pluginjam.util.sendMini
-import net.stckoverflw.pluginjam.util.teleportAsyncBlind
 import org.bukkit.Bukkit
 import org.bukkit.Color
 import org.bukkit.GameMode
 import org.bukkit.Material
 import org.bukkit.Particle
 import org.bukkit.Sound
+import org.bukkit.block.BlockFace
+import org.bukkit.entity.ItemFrame
+import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
+import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.player.PlayerAttemptPickupItemEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerJoinEvent
+import org.bukkit.inventory.ItemStack
 import org.bukkit.scheduler.BukkitRunnable
 import org.bukkit.util.BoundingBox
 
 object TwistPhase : GamePhase(DestroyPhase), TaskHolder, ListenerHolder {
-    private val postionsConfig = DevcordJamPlugin.instance.configManager.postionsConfig
+    private val positionConfig = DevcordJamPlugin.instance.configManager.postionsConfig
     private val gamemaster: GamemasterEntity = GamemasterEntity(true)
     override val tasks: MutableList<BukkitRunnable> = mutableListOf()
     override val listeners: MutableList<Listener> = mutableListOf()
     private var totalAmethysts = 0
 
     private val twistLocationArea = LocationArea(
-        postionsConfig.getLocation("twist_location_0"),
-        postionsConfig.getLocation("twist_location_1")
+        positionConfig.getLocation("twist_location_0"), positionConfig.getLocation("twist_location_1")
     )
 
-    private val laserLocations = (0..6).map { postionsConfig.getLocation("twist_laser_$it") }
+    private val laserLocations = (0..6).map { positionConfig.getLocation("twist_laser_$it") }
     private val laserBoundingBoxes = laserLocations.map { BoundingBox.of(it, 10.0, 0.1, 0.1) }
 
     enum class State {
-        NONE,
-        FIND_GAMEMASTER,
-        GET_AMETHYST
+        NONE, FIND_GAMEMASTER, GET_AMETHYST
     }
 
     private var state = State.NONE
 
     override fun start() {
-        Bukkit.getWorlds().first()
-            .apply {
-                time = 0
+        val amethystFrameBlock = positionConfig.getLocation("twist_amethyst_frame").block
+        listOf(BlockFace.NORTH, BlockFace.EAST, BlockFace.WEST, BlockFace.SOUTH).forEach {
+            val relative = amethystFrameBlock.getRelative(it)
+            if (relative is ItemFrame) {
+                relative.setItem(null)
+                relative.remove()
+            } else if (MaterialTags.TORCHES.isTagged(relative.type)) {
+                relative.type = Material.AIR
             }
+        }
+        amethystFrameBlock.type = Material.AIR
+        amethystFrameBlock.getRelative(BlockFace.DOWN).type = Material.AIR
 
-        gamemaster.spawnEntity(postionsConfig.getLocation("prison_gamemaster"))
+        gamemaster.spawnEntity(positionConfig.getLocation("prison_gamemaster_2"))
 
-        ActionPipeline()
+        ActionPipeline().add(
+            FastGasPipelineAction(
+                positionConfig.getLocation("prison_pipe_0"),
+                positionConfig.getLocation("prison_pipe_1")
+            )
+        )
             .add(
-                GasPipelineAction(
+                TwistPhasePrisonTeleportAction(
                     gamemaster,
-                    postionsConfig.getLocation("prison_pipe_0"),
-                    postionsConfig.getLocation("prison_pipe_1"),
-                    null
+                    positionConfig.getLocation("prison_prison"),
+                    positionConfig.getLocation("prison_gamemaster_2")
                 )
             )
             .add(WaitAction(50))
@@ -91,18 +107,14 @@ object TwistPhase : GamePhase(DestroyPhase), TaskHolder, ListenerHolder {
                 if (onlinePlayers.any { twistLocationArea.isInArea(it.location) }) {
                     state = State.GET_AMETHYST
 
-                    ActionPipeline()
-                        .add(WaitAction(100))
-                        .add(TwistPhaseTwistLocationHelperAction())
-                        .start()
+                    ActionPipeline().add(WaitAction(100)).add(TwistPhaseTwistLocationHelperAction()).start()
                     return@task
                 }
             }!!
         )
 
         onlinePlayers.forEach {
-            it.teleportAsyncBlind(postionsConfig.getLocation("prison_prison"))
-            it.compassTarget = postionsConfig.getLocation("twist_location")
+            it.compassTarget = positionConfig.getLocation("twist_location")
         }
 
         addTask(
@@ -140,7 +152,7 @@ object TwistPhase : GamePhase(DestroyPhase), TaskHolder, ListenerHolder {
                 onlinePlayers.forEach { player ->
                     if (player.gameMode == GameMode.CREATIVE) return@forEach
                     if (laserBoundingBoxes.any { it.overlaps(player.boundingBox) }) {
-                        player.teleport(postionsConfig.getLocation("twist_location"))
+                        player.teleport(positionConfig.getLocation("twist_location"))
                         player.sendMini("<red>Aua! Du darfst die Laser nicht berühren!")
                         player.playSound(player.location, Sound.BLOCK_RESPAWN_ANCHOR_DEPLETE, 1f, 2f)
                         player.playSound(player.location, Sound.BLOCK_GLASS_BREAK, 1f, 2f)
@@ -152,7 +164,7 @@ object TwistPhase : GamePhase(DestroyPhase), TaskHolder, ListenerHolder {
         addListener(
             listen<PlayerAttemptPickupItemEvent> {
                 if (it.item.itemStack.type != Material.AMETHYST_SHARD) return@listen
-                totalAmethysts ++
+                totalAmethysts++
                 if (totalAmethysts == 2) {
                     GamePhaseManager.nextPhase()
                 }
@@ -160,16 +172,47 @@ object TwistPhase : GamePhase(DestroyPhase), TaskHolder, ListenerHolder {
         )
 
         addListener(
+            listen<PlayerJoinEvent> {
+                it.player.compassTarget = positionConfig.getLocation("twist_location")
+            }
+        )
+
+        addListener(
             listen<PlayerInteractEvent> {
-                if (it.player.gameMode != GameMode.CREATIVE) {
-                    it.isCancelled = false
+                it.isCancelled = false
+
+                val block = it.clickedBlock ?: return@listen
+
+                when (block.location.blockLoc) {
+                    positionConfig.getLocation("prison_pickaxes").block.location -> {
+                        val inventory = Bukkit.createInventory(null, 3 * 9)
+                        for (i in 0..26) {
+                            inventory.addItem(ItemStack(Material.WOODEN_PICKAXE))
+                        }
+                        it.player.openInventory(inventory)
+
+                        it.isCancelled = true
+                    }
+                    positionConfig.getLocation("prison_compasses").block.location -> {
+                        val inventory = Bukkit.createInventory(null, 3 * 9)
+                        for (i in 0..26) {
+                            inventory.addItem(ItemStack(Material.COMPASS))
+                        }
+                        it.player.openInventory(inventory)
+
+                        it.isCancelled = true
+                    }
                 }
             }
         )
 
         addListener(
-            listen<PlayerJoinEvent> {
-                it.player.compassTarget = postionsConfig.getLocation("twist_location")
+            listen<BlockBreakEvent>(EventPriority.HIGHEST) {
+                if (it.player.gameMode == GameMode.CREATIVE) return@listen
+
+                if (it.player.inventory.itemInMainHand.type == Material.WOODEN_PICKAXE && it.block.type == Material.IRON_BARS) {
+                    it.isCancelled = false
+                }
             }
         )
     }
@@ -177,5 +220,6 @@ object TwistPhase : GamePhase(DestroyPhase), TaskHolder, ListenerHolder {
     override fun end() {
         gamemaster.despawn()
         removeAllTasks()
+        unregisterAllListeners()
     }
 }

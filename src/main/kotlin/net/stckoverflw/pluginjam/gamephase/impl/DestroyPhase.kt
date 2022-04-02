@@ -5,6 +5,8 @@ import kotlinx.coroutines.launch
 import net.axay.kspigot.event.listen
 import net.axay.kspigot.event.unregister
 import net.axay.kspigot.extensions.broadcast
+import net.axay.kspigot.extensions.onlinePlayers
+import net.axay.kspigot.extensions.worlds
 import net.axay.kspigot.particles.particle
 import net.axay.kspigot.sound.sound
 import net.stckoverflw.pluginjam.DevcordJamPlugin
@@ -13,6 +15,7 @@ import net.stckoverflw.pluginjam.gamephase.GamePhase
 import net.stckoverflw.pluginjam.gamephase.GamePhaseManager
 import net.stckoverflw.pluginjam.util.Conversation
 import net.stckoverflw.pluginjam.util.ListenerHolder
+import net.stckoverflw.pluginjam.util.reset
 import org.bukkit.Material
 import org.bukkit.Particle
 import org.bukkit.Sound
@@ -24,9 +27,12 @@ import org.bukkit.util.Vector
 object DestroyPhase : GamePhase(EndPhase), ListenerHolder {
     override val listeners: MutableList<Listener> = mutableListOf()
 
-    private var amount: Int = 2
+    private var amethystsLeft: Int = 2
 
     override fun start() {
+        worlds.forEach {
+            it.time = 0
+        }
         DestroyPhaseWelcomeAction()
             .execute()
             .whenComplete {
@@ -41,10 +47,10 @@ object DestroyPhase : GamePhase(EndPhase), ListenerHolder {
                 if (!(event.cause == EntityDamageEvent.DamageCause.LAVA || event.cause == EntityDamageEvent.DamageCause.FIRE || event.cause == EntityDamageEvent.DamageCause.FIRE_TICK)) return@listen
                 event.entity.remove()
                 event.isCancelled = true
-                amount--
+                amethystsLeft -= (event.entity as Item).itemStack.amount
                 DevcordJamPlugin.instance.defaultScope.launch {
-                    repeat(10) {
-                        delay(200)
+                    repeat(20) {
+                        delay(100)
                         particle(Particle.ELECTRIC_SPARK) {
                             amount = 100
                             offset = Vector(1.0, 1.0, 1.0)
@@ -77,19 +83,23 @@ object DestroyPhase : GamePhase(EndPhase), ListenerHolder {
                         pitch = 1.0f
                         playAt(event.entity.location)
                     }
-                    if (amount > 0) return@launch
-                    Conversation(DevcordJamPlugin.instance)
-                        .addMessage("<i>Ihr habt die Kristalle zerstört!</i>")
-                        .start()
-                        .whenComplete { _, _ ->
-                            GamePhaseManager.nextPhase()
-                        }
+                    if (amethystsLeft <= 0) {
+                        Conversation(DevcordJamPlugin.instance)
+                            .addMessage("<i>Ihr habt die Kristalle zerstört, gut gemacht!</i>")
+                            .start()
+                            .whenComplete { _, _ ->
+                                GamePhaseManager.nextPhase()
+                            }
+                    }
                 }
             }
         )
     }
 
     override fun end() {
+        onlinePlayers.forEach {
+            it.reset()
+        }
         listeners.forEach {
             it.unregister()
         }

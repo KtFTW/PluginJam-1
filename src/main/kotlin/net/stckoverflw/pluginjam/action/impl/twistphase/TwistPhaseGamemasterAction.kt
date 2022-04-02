@@ -7,6 +7,7 @@ import kotlin.time.Duration.Companion.seconds
 
 class TwistPhaseGamemasterAction : Action() {
     override fun execute(): Action {
+        println("prision converation")
         Conversation(DevcordJamPlugin.instance)
             .addMessage("Ihr seid schon wieder darauf reingefallen!", "Gamemaster")
             .addMessage("Ihr habt doch nicht wirklich geglaubt, dass Frieden mein Ziel ist.", "Gamemaster", 4.seconds)

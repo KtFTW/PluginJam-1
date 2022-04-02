@@ -4,7 +4,6 @@ import net.axay.kspigot.event.listen
 import net.axay.kspigot.extensions.geometry.LocationArea
 import net.axay.kspigot.extensions.onlinePlayers
 import net.axay.kspigot.runnables.task
-import net.axay.kspigot.structures.fillBlocks
 import net.stckoverflw.pluginjam.DevcordJamPlugin.Companion.instance
 import net.stckoverflw.pluginjam.action.ActionPipeline
 import net.stckoverflw.pluginjam.action.impl.global.GasPipelineAction
@@ -16,11 +15,14 @@ import net.stckoverflw.pluginjam.gamephase.GamePhaseManager
 import net.stckoverflw.pluginjam.listener.GamemasterVelocity
 import net.stckoverflw.pluginjam.util.ListenerHolder
 import net.stckoverflw.pluginjam.util.mini
+import net.stckoverflw.pluginjam.util.reset
 import org.bukkit.Bukkit
 import org.bukkit.GameMode
-import org.bukkit.block.data.Openable
+import org.bukkit.Material
+import org.bukkit.block.BlockFace
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerInteractEvent
+import org.bukkit.event.player.PlayerJoinEvent
 
 object StartingPhase : GamePhase(PrisonPhase), ListenerHolder {
     private val postionsConfig = instance.configManager.postionsConfig
@@ -33,6 +35,7 @@ object StartingPhase : GamePhase(PrisonPhase), ListenerHolder {
         gamemaster.interactCallback = interactCallback@{
             if (blocked) return@interactCallback
             blocked = true
+            onlinePlayers.reset()
 
             ActionPipeline()
                 .add(StartingPhaseWelcomeAction())
@@ -46,13 +49,15 @@ object StartingPhase : GamePhase(PrisonPhase), ListenerHolder {
                     task(period = 5) {
                         onlinePlayers.forEach { player -> player.sendActionBar(mini("Gehe in das Haus")) }
                         if (onlinePlayers.all { player -> area.isInArea(player.location) }) {
-                            it.cancel()
-                            area.fillBlocks.forEach { block ->
-                                val blockData = block.blockData
-                                if (blockData is Openable) {
-                                    blockData.isOpen = false
-                                }
-                            }
+
+                            val door0 = postionsConfig.getLocation("starting_door_0").add(0.0, 1.0, 0.0).block
+                            val door1 = postionsConfig.getLocation("starting_door_1").add(0.0, 1.0, 0.0).block
+
+                            door0.type = Material.COBBLESTONE
+                            door0.getRelative(BlockFace.UP).type = Material.COBBLESTONE
+                            door1.type = Material.COBBLESTONE
+                            door1.getRelative(BlockFace.UP).type = Material.COBBLESTONE
+
                             GasPipelineAction(
                                 gamemaster,
                                 postionsConfig.getLocation("starting_pipe_0"),
@@ -63,6 +68,7 @@ object StartingPhase : GamePhase(PrisonPhase), ListenerHolder {
                                 .whenComplete {
                                     GamePhaseManager.nextPhase()
                                 }
+                            it.cancel()
                         }
                     }
                 }
@@ -70,6 +76,15 @@ object StartingPhase : GamePhase(PrisonPhase), ListenerHolder {
 
         gamemaster.spawnEntity(postionsConfig.getLocation("starting_gamemaster_0"))
         GamemasterVelocity(gamemaster)
+
+        addListener(
+            listen<PlayerJoinEvent> {
+                it.player.reset()
+                // it.player.sendMini("<i>Wilkommen auf unserem PluginJam Server.")
+                // it.player.sendMini("<i>Klicke auf den Villager um das Spiel zu starten.")
+                // it.player.sendMini("<i>Viel Spaß!")
+            }
+        )
 
         addListener(
             listen<PlayerInteractEvent> {

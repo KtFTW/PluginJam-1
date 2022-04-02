@@ -11,11 +11,13 @@ import net.stckoverflw.pluginjam.DevcordJamPlugin
 import net.stckoverflw.pluginjam.gamephase.GamePhase
 import net.stckoverflw.pluginjam.gamephase.GamePhaseManager
 import net.stckoverflw.pluginjam.util.ListenerHolder
+import net.stckoverflw.pluginjam.util.broadcastMini
 import net.stckoverflw.pluginjam.util.teleportAsyncBlind
 import org.bukkit.Color
 import org.bukkit.FireworkEffect
 import org.bukkit.Location
 import org.bukkit.Material
+import org.bukkit.Sound
 import org.bukkit.entity.EntityType
 import org.bukkit.entity.Firework
 import org.bukkit.event.Listener
@@ -30,7 +32,11 @@ object EndPhase : GamePhase(null), ListenerHolder {
         val world = onlinePlayers.first().world
         onlinePlayers.forEach {
             it.teleportAsyncBlind(world.spawnLocation.plus(vecY(1)))
+            it.playSound(it.location, Sound.UI_TOAST_CHALLENGE_COMPLETE, 1f, 1f)
+            // TODO: Timer
         }
+
+        broadcastMini("<i>Ihr habt es geschafft! Ihr konntet den Gamemaster davon abhalten euer Dorf auszuschöschen.")
 
         MaterialCircle(10, Material.AIR).edgeStructure.structureData
             .map { it.location.withWorld(world).plus(world.spawnLocation.toVector().plus(vecY(1))) }

@@ -4,10 +4,8 @@ import net.axay.kspigot.event.listen
 import net.axay.kspigot.event.unregister
 import net.axay.kspigot.extensions.onlinePlayers
 import net.axay.kspigot.particles.particle
-import net.axay.kspigot.runnables.task
 import net.axay.kspigot.runnables.taskRunLater
 import net.stckoverflw.pluginjam.action.Action
-import net.stckoverflw.pluginjam.entities.GamemasterEntity
 import org.bukkit.Bukkit
 import org.bukkit.GameMode
 import org.bukkit.Location
@@ -18,11 +16,9 @@ import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 import org.bukkit.util.Vector
 
-class GasPipelineAction(
-    private val gamemasterEntity: GamemasterEntity,
+class FastGasPipelineAction(
     private val pipelineLocation0: Location,
     private val pipelineLocation1: Location,
-    private val gamemasterTargetLocation: Location?
 ) :
     Action() {
 
@@ -33,29 +29,26 @@ class GasPipelineAction(
             it.isCancelled = true
         }
         val world = Bukkit.getWorlds().first()
-        var base = 70.toLong()
+        var base = 40.toLong()
 
-        task(howOften = 20, period = 4) {
-            world.time += 900
-        }
-
-        taskRunLater(50) {
+        taskRunLater(base) {
             onlinePlayers.forEach {
                 it.playSound(it.location, Sound.ENTITY_LIGHTNING_BOLT_IMPACT, 1f, 1f)
             }
         }
 
+        base += 20
         taskRunLater(base) {
             onlinePlayers.forEach {
-                it.addPotionEffect(PotionEffect(PotionEffectType.BLINDNESS, 200, 10, false, false))
+                it.addPotionEffect(PotionEffect(PotionEffectType.BLINDNESS, 400, 10, false, false))
                 it.playSound(it.location, Sound.ENTITY_LIGHTNING_BOLT_THUNDER, 1f, 1f)
             }
         }
 
-        base += 40
+        base += 10
         taskRunLater(base) {
             onlinePlayers.forEach {
-                it.addPotionEffect(PotionEffect(PotionEffectType.CONFUSION, 200, 10, false, false))
+                it.addPotionEffect(PotionEffect(PotionEffectType.CONFUSION, 120, 10, false, false))
             }
             pipelineLocation0.particle(Particle.CAMPFIRE_COSY_SMOKE) {
                 amount = 5000
@@ -70,14 +63,7 @@ class GasPipelineAction(
             }
         }
 
-        base += 40
-        taskRunLater(base) {
-            if (gamemasterTargetLocation != null) {
-                gamemasterEntity.teleport(gamemasterTargetLocation)
-            }
-        }
-
-        base += 40
+        base += 10
         taskRunLater(base) {
             listener.unregister()
             complete()

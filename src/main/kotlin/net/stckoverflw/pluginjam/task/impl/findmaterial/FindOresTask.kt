@@ -1,6 +1,5 @@
 package net.stckoverflw.pluginjam.task.impl.findmaterial
 
-import kotlinx.coroutines.launch
 import net.axay.kspigot.event.listen
 import net.axay.kspigot.extensions.onlinePlayers
 import net.stckoverflw.pluginjam.DevcordJamPlugin
@@ -26,11 +25,12 @@ class FindOresTask : FindMaterialTask() {
 
         addListener(
             listen <PlayerInteractEvent> {
+                println("smelt interact hasBlock: ${it.hasBlock()}")
+                println("smelt interact clickedBlock type: ${it.clickedBlock?.type}")
                 if (!it.hasBlock()) return@listen
                 if (it.clickedBlock!!.type != Material.FURNACE) return@listen
-                DevcordJamPlugin.instance.defaultScope.launch {
-                    it.player.smeltItemInHand()
-                }
+                it.isCancelled = true
+                it.player.smeltItemInHand()
             }
         )
 
@@ -48,10 +48,10 @@ class FindOresTask : FindMaterialTask() {
             ((ironCount + goldCount) / 6) + 2
         )
         Conversation(DevcordJamPlugin.instance)
-            .addMessage("Um eine Chance gegen die Pillager zu haben brauchen wir Waffen und Rüstungen!", "<blue>Dorfbewohner</blue>", 3.seconds)
+            .addMessage("Um eine Chance gegen die <red>Leviatanen</red> zu haben brauchen wir Waffen und Rüstungen!", "<blue>Dorfbewohner</blue>", 3.seconds)
             .addMessage("Dafür müsst ihr verschiedene Erze finden und abbauen.", "<blue>Dorfbewohner</blue>", 3.seconds)
             .addMessage("Bringt mir bitte $coalCount Kohle, $ironCount Eisen-Ingots und $goldCount Gold-Ingots", "<blue>Dorfbewohner</blue>", 3.seconds)
-            .addMessage("Die rohen Erze könnt ihr mit Rechtsklick auf einen Ofen direk schmelzen.", "<blue>Dorfbewohner</blue>", 3.seconds)
+            .addMessage("Die rohen Erze könnt ihr mit Rechtsklick auf einen Ofen direkt schmelzen.", "<blue>Dorfbewohner</blue>", 3.seconds)
             .start()
             .whenComplete { _, _ ->
                 start()

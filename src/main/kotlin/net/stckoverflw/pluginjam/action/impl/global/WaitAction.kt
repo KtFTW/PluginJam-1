@@ -8,7 +8,9 @@ class WaitAction(
 ) : Action() {
 
     override fun execute(): Action {
+        println("wait")
         taskRunLater(ticks) {
+            println("completed")
             complete()
         }
         return this

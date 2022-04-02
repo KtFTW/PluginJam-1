@@ -8,18 +8,18 @@ import net.stckoverflw.pluginjam.action.impl.prisionphase.PrisonPhaseWelcomeActi
 import net.stckoverflw.pluginjam.entities.GamemasterEntity
 import net.stckoverflw.pluginjam.gamephase.GamePhase
 import net.stckoverflw.pluginjam.gamephase.GamePhaseManager
+import net.stckoverflw.pluginjam.util.reset
 import net.stckoverflw.pluginjam.util.teleportAsyncBlind
 
 object PrisonPhase : GamePhase(TaskPhase) {
     private val postionsConfig = DevcordJamPlugin.instance.configManager.postionsConfig
-    private val gamemaster: GamemasterEntity = GamemasterEntity(true)
+    private val gamemaster: GamemasterEntity = GamemasterEntity(false)
 
     override fun start() {
         gamemaster.spawnEntity(postionsConfig.getLocation("prison_gamemaster"))
         onlinePlayers.forEach {
             it.teleportAsyncBlind(postionsConfig.getLocation("prison_prison"))
         }
-
         taskRunLater(100) {
             ActionPipeline()
                 .add(PrisonPhaseWelcomeAction())
@@ -33,6 +33,7 @@ object PrisonPhase : GamePhase(TaskPhase) {
     }
 
     override fun end() {
+        onlinePlayers.reset()
         gamemaster.despawn()
     }
 }
