@@ -19,7 +19,7 @@ class FindOresTask : FindMaterialTask() {
         materials[Material.GOLD_INGOT] = Random.nextInt(onlinePlayers.size / 2 + 1, onlinePlayers.size + 1)
 
         addListener(
-            listen <PlayerInteractEvent>{
+            listen <PlayerInteractEvent> {
                 if (!it.hasBlock()) return@listen
                 if (it.clickedBlock!!.type != Material.FURNACE) return@listen
                 DevcordJamPlugin.instance.defaultScope.launch {

@@ -6,13 +6,16 @@ import net.axay.kspigot.event.listen
 import net.axay.kspigot.event.unregister
 import net.axay.kspigot.extensions.broadcast
 import net.axay.kspigot.particles.particle
+import net.axay.kspigot.sound.sound
 import net.stckoverflw.pluginjam.DevcordJamPlugin
 import net.stckoverflw.pluginjam.action.impl.destroyphase.DestroyPhaseWelcomeAction
 import net.stckoverflw.pluginjam.gamephase.GamePhase
 import net.stckoverflw.pluginjam.gamephase.GamePhaseManager
+import net.stckoverflw.pluginjam.util.Conversation
 import net.stckoverflw.pluginjam.util.ListenerHolder
 import org.bukkit.Material
 import org.bukkit.Particle
+import org.bukkit.Sound
 import org.bukkit.entity.Item
 import org.bukkit.event.Listener
 import org.bukkit.event.entity.EntityCombustEvent
@@ -21,6 +24,8 @@ import org.bukkit.util.Vector
 object DestroyPhase : GamePhase(EndPhase), ListenerHolder {
     private val postionsConfig = DevcordJamPlugin.instance.configManager.postionsConfig
     override val listeners: MutableList<Listener> = mutableListOf()
+
+    private var amount: Int = 2
 
     override fun start() {
         DestroyPhaseWelcomeAction()
@@ -36,6 +41,7 @@ object DestroyPhase : GamePhase(EndPhase), ListenerHolder {
                 if ((event.entity as Item).itemStack.type != Material.AMETHYST_SHARD) return@listen
                 event.entity.remove()
                 event.isCancelled = true
+                amount--
                 DevcordJamPlugin.instance.defaultScope.launch {
                     repeat(10) {
                         delay(200)
@@ -54,6 +60,11 @@ object DestroyPhase : GamePhase(EndPhase), ListenerHolder {
                             offset = Vector(1.0, 1.0, 1.0)
                             spawnAt(event.entity.location)
                         }
+                        sound(Sound.BLOCK_CAMPFIRE_CRACKLE) {
+                            volume = 1.0f
+                            pitch = 1.0f
+                            playAt(event.entity.location)
+                        }
                     }
                     delay(200)
                     particle(Particle.FLASH) {
@@ -61,7 +72,18 @@ object DestroyPhase : GamePhase(EndPhase), ListenerHolder {
                         offset = Vector(.1, .1, .1)
                         spawnAt(event.entity.location)
                     }
-                    GamePhaseManager.nextPhase()
+                    sound(Sound.ENTITY_DRAGON_FIREBALL_EXPLODE) {
+                        volume = 1.0f
+                        pitch = 1.0f
+                        playAt(event.entity.location)
+                    }
+                    if (amount > 0) return@launch
+                    Conversation(DevcordJamPlugin.instance)
+                        .addMessage("<i>Ihr habt die Kristalle zerstört!</i>")
+                        .start()
+                        .whenComplete { _, _ ->
+                            GamePhaseManager.nextPhase()
+                        }
                 }
             }
         )
