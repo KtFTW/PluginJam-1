@@ -1,5 +1,6 @@
 package net.stckoverflw.pluginjam.gamephase.impl
 
+import net.stckoverflw.pluginjam.entities.GamemasterEntity
 import net.stckoverflw.pluginjam.gamephase.GamePhase
 import net.stckoverflw.pluginjam.gamephase.GamePhaseManager
 import net.stckoverflw.pluginjam.task.Task
@@ -7,9 +8,12 @@ import net.stckoverflw.pluginjam.task.TaskResult
 
 object TaskPhase : GamePhase(TwistPhase) {
 
-    private val tasks = listOf<Task>()
+    private val tasks = listOf<Task>(
+
+    )
 
     private val taskResults = mutableMapOf<Task, TaskResult>()
+    private val gamemaster: GamemasterEntity = GamemasterEntity(true)
 
     override fun start() {
         tasks.forEach {
