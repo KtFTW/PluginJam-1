@@ -149,6 +149,7 @@ class GamemasterEntity(private val nameKnown: Boolean) : ListenerHolder {
     var interactCallback: (() -> Unit)? = null
 
     fun spawnEntity(location: Location) {
+        isExistent = true
         if (bukkitEntity != null) return
         bukkitEntity =
             location.world.spawnEntity(location, EntityType.VILLAGER, CreatureSpawnEvent.SpawnReason.CUSTOM) as Villager
@@ -210,6 +211,7 @@ class GamemasterEntity(private val nameKnown: Boolean) : ListenerHolder {
     }
 
     fun despawn() {
+        isExistent = false
         if (bukkitEntity != null) {
             bukkitEntity?.remove()
         }
