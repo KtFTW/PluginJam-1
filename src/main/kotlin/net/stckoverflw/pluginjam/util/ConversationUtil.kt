@@ -46,7 +46,7 @@ class Conversation(private val plugin: DevcordJamPlugin) {
                 } else {
                     broadcastMini(current.message)
                 }
-                if (current.makeSound) {
+                if (current.makeSound && current.who != null) {
                     pluginJamPlayers.forEach {
                         it.playSound(it.location, Sound.ENTITY_VILLAGER_YES, 1f, 1f)
                     }
