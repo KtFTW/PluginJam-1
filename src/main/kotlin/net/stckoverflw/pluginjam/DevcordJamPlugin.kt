@@ -23,6 +23,7 @@ import net.stckoverflw.pluginjam.listener.protectionListener
 import net.stckoverflw.pluginjam.util.deserializeMini
 import net.stckoverflw.pluginjam.util.loadSavedWorld
 import net.stckoverflw.pluginjam.util.repopulateWorld
+import net.stckoverflw.pluginjam.util.sendMini
 import org.bukkit.Bukkit
 import org.bukkit.Difficulty
 import org.bukkit.GameMode
@@ -120,7 +121,7 @@ class DevcordJamPlugin : KSpigot() {
             val world = if (allowWorldJoin) {
                 Bukkit.createWorld(WorldCreator("pluginjam")) ?: Bukkit.getWorld("world")
             } else {
-                it.player.sendMessage(
+                it.player.sendMini(
                     "<red>The game is already in progress, </red>" +
                         "<click:run_command:/spectate-game><blue><u>click here to spectate</u></blue></click>" +
                         "<red> or wait for the next round (you'll get teleported automatically).".deserializeMini()
