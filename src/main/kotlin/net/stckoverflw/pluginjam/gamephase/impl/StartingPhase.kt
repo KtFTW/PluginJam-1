@@ -14,6 +14,7 @@ import net.stckoverflw.pluginjam.gamephase.GamePhaseManager
 import net.stckoverflw.pluginjam.listener.GamemasterVelocity
 import net.stckoverflw.pluginjam.util.ListenerHolder
 import net.stckoverflw.pluginjam.util.mini
+import net.stckoverflw.pluginjam.util.playersWithoutSpectators
 import net.stckoverflw.pluginjam.util.pluginJamPlayers
 import net.stckoverflw.pluginjam.util.reset
 import net.stckoverflw.pluginjam.util.setOpenIfDoor
@@ -49,8 +50,8 @@ object StartingPhase : GamePhase(PrisonPhase), ListenerHolder {
                         postionsConfig.getLocation("starting_gamemaster_house_1")
                     )
                     task(period = 5) {
-                        pluginJamPlayers.forEach { player -> player.sendActionBar(mini("Gehe in das Haus")) }
-                        if (pluginJamPlayers.all { player -> area.isInArea(player.location) }) {
+                        playersWithoutSpectators.forEach { player -> player.sendActionBar(mini("Gehe in das Haus")) }
+                        if (playersWithoutSpectators.all { player -> area.isInArea(player.location) }) {
 
                             val door0 = postionsConfig.getLocation("starting_door_0").add(0.0, 1.0, 0.0).block
                             val door1 = postionsConfig.getLocation("starting_door_1").add(0.0, 1.0, 0.0).block

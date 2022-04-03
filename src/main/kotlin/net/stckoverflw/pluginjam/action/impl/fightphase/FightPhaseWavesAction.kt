@@ -10,6 +10,7 @@ import net.stckoverflw.pluginjam.DevcordJamPlugin
 import net.stckoverflw.pluginjam.action.Action
 import net.stckoverflw.pluginjam.util.ListenerHolder
 import net.stckoverflw.pluginjam.util.mini
+import net.stckoverflw.pluginjam.util.playersWithoutSpectators
 import net.stckoverflw.pluginjam.util.pluginJamPlayers
 import net.stckoverflw.pluginjam.util.reset
 import net.stckoverflw.pluginjam.util.setOpenIfDoor
@@ -38,7 +39,7 @@ class FightPhaseWavesAction : Action(), ListenerHolder {
     private val positionsConfig = DevcordJamPlugin.instance.configManager.postionsConfig
 
     override val listeners = mutableListOf<Listener>()
-    private var totalWaves: Int = max(2, min(pluginJamPlayers.size, 4))
+    private var totalWaves: Int = max(2, min(playersWithoutSpectators.size, 5))
     private var currentWave: Int = 1
     private val bossbar: BossBar = BossBar.bossBar(
         mini("<green> Wave <red>$currentWave<gray>/<red>$totalWaves"),

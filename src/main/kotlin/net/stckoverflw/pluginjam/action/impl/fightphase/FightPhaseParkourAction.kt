@@ -6,7 +6,7 @@ import net.axay.kspigot.runnables.KSpigotRunnable
 import net.axay.kspigot.runnables.task
 import net.stckoverflw.pluginjam.DevcordJamPlugin
 import net.stckoverflw.pluginjam.action.Action
-import net.stckoverflw.pluginjam.util.pluginJamPlayers
+import net.stckoverflw.pluginjam.util.playersWithoutSpectators
 import org.bukkit.entity.EntityType
 import org.bukkit.event.entity.EntityDamageEvent
 
@@ -27,7 +27,7 @@ class FightPhaseParkourAction : Action() {
 
         task = task(period = 2) {
             val position = positionsConfig.getLocation("fight_parkour_end").block.location
-            pluginJamPlayers.forEach {
+            playersWithoutSpectators.forEach {
                 if (it.location.block.location != position) return@forEach
                 listener.unregister()
                 complete()

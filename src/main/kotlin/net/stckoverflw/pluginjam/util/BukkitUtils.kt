@@ -23,6 +23,9 @@ import kotlin.io.path.div
 val pluginJamPlayers: List<Player>
     get() = onlinePlayers.filter { it.world.name == "pluginjam" && it.gameMode == GameMode.SURVIVAL }
 
+val playersWithoutSpectators: List<Player>
+    get() = onlinePlayers.filter { it.world.name == "pluginjam" && it.gameMode != GameMode.SPECTATOR }
+
 fun broadcastToPluginJamPlayers(message: Component) {
     pluginJamPlayers.forEach { it.sendMessage(message) }
 }
