@@ -82,6 +82,21 @@ class DevcordJamPlugin : KSpigot() {
                         }
                     }
                 }
+                instance = this
+                configManager = ConfigManager(this)
+
+                GamePhaseManager.init()
+
+                ReloadCommands(this)
+                PositionCommand(configManager.postionsConfig)
+                PositionTpCommand(configManager.postionsConfig)
+                SkipPhaseCommand()
+                ResetCommand()
+                SpectateCommand()
+
+                translationsProvider = TranslationsProvider(this)
+
+                protectionListener()
             }
         } else {
             Bukkit.createWorld(WorldCreator("pluginjam"))
@@ -100,23 +115,23 @@ class DevcordJamPlugin : KSpigot() {
                 it.teleport(Bukkit.getWorld("pluginjam") !!.spawnLocation)
                 it.sendMini("<green><tr:new_game_started>")
             }
+
+            instance = this
+            configManager = ConfigManager(this)
+
+            GamePhaseManager.init()
+
+            ReloadCommands(this)
+            PositionCommand(configManager.postionsConfig)
+            PositionTpCommand(configManager.postionsConfig)
+            SkipPhaseCommand()
+            ResetCommand()
+            SpectateCommand()
+
+            translationsProvider = TranslationsProvider(this)
+
+            protectionListener()
         }
-
-        instance = this
-        configManager = ConfigManager(this)
-
-        GamePhaseManager.init()
-
-        ReloadCommands(this)
-        PositionCommand(configManager.postionsConfig)
-        PositionTpCommand(configManager.postionsConfig)
-        SkipPhaseCommand()
-        ResetCommand()
-        SpectateCommand()
-
-        translationsProvider = TranslationsProvider(this)
-
-        protectionListener()
 
         listen<PlayerJoinEvent> {
             val world = if (allowWorldJoin) {

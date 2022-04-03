@@ -23,6 +23,9 @@ dependencies {
 }
 
 tasks {
+    build {
+        dependsOn(reobfJar)
+    }
     withType<KotlinCompile> {
         kotlinOptions {
             jvmTarget = "17"
