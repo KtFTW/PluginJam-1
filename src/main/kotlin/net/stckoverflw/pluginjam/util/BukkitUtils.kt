@@ -5,6 +5,7 @@ import kotlinx.coroutines.launch
 import net.axay.kspigot.event.listen
 import net.axay.kspigot.event.unregister
 import net.axay.kspigot.extensions.broadcast
+import net.axay.kspigot.extensions.server
 import net.axay.kspigot.main.KSpigotMainInstance
 import net.axay.kspigot.runnables.sync
 import net.stckoverflw.pluginjam.DevcordJamPlugin
@@ -27,10 +28,10 @@ fun resetWorld(worldName: String) {
         val listener = listen<PlayerLoginEvent> {
             it.disallow(PlayerLoginEvent.Result.KICK_OTHER, "<red>World is resetting".deserializeMini())
         }
-        println("Making empty $worldName")
+        println("Depopulating $worldName")
         var players = mutableListOf<UUID>()
         sync {
-            players = makeWorldEmpty(worldName)
+            players = depopulateWorld(worldName)
         }
         delay(5000)
         println("Unloading $worldName")
@@ -40,6 +41,7 @@ fun resetWorld(worldName: String) {
             println("Could not unload $worldName, trying again in 3 second")
 //            System.gc()
             delay(3000)
+            println("Unloading $worldName")
             sync { isUnloaded = unloadWorld(worldName) }
         }
         delay(10000)
@@ -60,6 +62,11 @@ fun resetWorld(worldName: String) {
         sync {
             repopulateWorld(worldName, players)
         }
+        delay(5000)
+        println("Reloading server")
+        sync {
+            server.reload()
+        }
     }
 }
 
@@ -69,9 +76,10 @@ fun repopulateWorld(worldName: String, players: List<UUID>) {
     }
 }
 
-fun makeWorldEmpty(worldName: String): MutableList<UUID> {
+fun depopulateWorld(worldName: String): MutableList<UUID> {
     val players = mutableListOf<UUID>()
     Bukkit.getWorld(worldName)?.entities?.filterIsInstance<Player>()?.forEach {
+        it.reset()
         players.add(it.uniqueId)
         Bukkit.getWorld("world")?.spawnLocation?.let { it1 -> it.teleportAsync(it1) }
     }

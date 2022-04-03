@@ -50,7 +50,7 @@ class DevcordJamPlugin : KSpigot() {
 
         protectionListener()
 
-        Bukkit.getWorlds().first().apply {
+        Bukkit.getWorld("pluginjam")?.apply {
             difficulty = Difficulty.PEACEFUL
             time = 0
             setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false)
