@@ -10,6 +10,7 @@ import net.stckoverflw.pluginjam.gamephase.impl.FightPhase
 import net.stckoverflw.pluginjam.gamephase.impl.TwistPhase
 import org.bukkit.GameMode
 import org.bukkit.entity.ItemFrame
+import org.bukkit.entity.Painting
 import org.bukkit.entity.Player
 import org.bukkit.event.EventPriority
 import org.bukkit.event.block.BlockBreakEvent
@@ -17,17 +18,27 @@ import org.bukkit.event.block.BlockPlaceEvent
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.event.entity.FoodLevelChangeEvent
+import org.bukkit.event.hanging.HangingBreakByEntityEvent
+import org.bukkit.event.hanging.HangingBreakEvent
 import org.bukkit.event.player.PlayerInteractEvent
 
 private val listeners = mutableListOf<SingleListener<*>>()
 
 fun protectionListener() {
 
+    listeners += listen<HangingBreakEvent> {
+        it.isCancelled = true
+    }
+
+    listeners += listen<HangingBreakByEntityEvent> {
+        it.isCancelled = true
+    }
+
     listeners += listen<PlayerItemFrameChangeEvent> {
         if (it.action == ItemFrameChangeAction.REMOVE && (
-            GamePhaseManager.activeGamePhase is FightPhase ||
-                GamePhaseManager.activeGamePhase is TwistPhase
-            )
+                    GamePhaseManager.activeGamePhase is FightPhase ||
+                            GamePhaseManager.activeGamePhase is TwistPhase
+                    )
         ) {
             it.isCancelled = false
             return@listen
@@ -41,6 +52,17 @@ fun protectionListener() {
             it.isCancelled = false
             return@listen
         }
+    }
+
+    listeners += listen<EntityDamageByEntityEvent>(EventPriority.LOWEST) {
+        if (it.entity is ItemFrame) {
+            it.isCancelled = true
+            return@listen
+        } else if (it.entity is Painting) {
+            it.isCancelled = true
+            return@listen
+        }
+        it.isCancelled = true
     }
 
     listeners += listen<EntityDamageEvent> {

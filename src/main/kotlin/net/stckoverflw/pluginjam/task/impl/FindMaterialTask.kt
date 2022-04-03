@@ -128,6 +128,7 @@ abstract class FindMaterialTask : Task(), ListenerHolder {
             }
             println(scoreboard.entries)
         }
+
         addListener(
             listen<PlayerInteractEntityEvent> {
                 if (GamePhaseManager.activeGamePhase !is TaskPhase) return@listen

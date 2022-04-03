@@ -25,16 +25,19 @@ import org.bukkit.Material
 import org.bukkit.Particle
 import org.bukkit.Sound
 import org.bukkit.entity.Item
+import org.bukkit.event.Event
+import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.entity.EntityDamageEvent
+import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.scheduler.BukkitRunnable
 import org.bukkit.util.BoundingBox
 import org.bukkit.util.Vector
 
 object DestroyPhase : GamePhase(EndPhase), ListenerHolder, TaskHolder {
-    private val positionConfig = DevcordJamPlugin.instance.configManager.postionsConfig
     override val listeners: MutableList<Listener> = mutableListOf()
     override val tasks: MutableList<BukkitRunnable> = mutableListOf()
+    private val positionConfig = DevcordJamPlugin.instance.configManager.postionsConfig
 
     private var amethystsLeft: Int = 2
 
@@ -96,13 +99,20 @@ object DestroyPhase : GamePhase(EndPhase), ListenerHolder, TaskHolder {
                     }
                     if (amethystsLeft <= 0) {
                         Conversation(DevcordJamPlugin.instance)
-                            .addMessage("<i><tr:crystals_destroyed></i>")
+                            .addMessage("<i>Ihr habt die Kristalle zerstört, gut gemacht!</i>")
                             .start()
                             .whenComplete { _, _ ->
                                 GamePhaseManager.nextPhase()
                             }
                     }
                 }
+            }
+        )
+
+        addListener(
+            listen<PlayerInteractEvent>(EventPriority.HIGHEST) {
+                it.setUseInteractedBlock(Event.Result.ALLOW)
+                it.setUseItemInHand(Event.Result.DENY)
             }
         )
 
