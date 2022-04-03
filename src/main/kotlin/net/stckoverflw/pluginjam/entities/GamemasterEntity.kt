@@ -206,7 +206,6 @@ class GamemasterEntity(private val nameKnown: Boolean) : ListenerHolder {
         Bukkit.getMobGoals().addGoal(bukkitEntity !!, 3, goal)
         bukkitEntity?.setAI(true)
         goal.start()
-        println("walkTo")
     }
 
     fun despawn() {

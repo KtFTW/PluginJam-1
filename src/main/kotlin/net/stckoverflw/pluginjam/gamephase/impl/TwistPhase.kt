@@ -11,10 +11,10 @@ import net.stckoverflw.pluginjam.DevcordJamPlugin
 import net.stckoverflw.pluginjam.action.ActionPipeline
 import net.stckoverflw.pluginjam.action.impl.global.FastGasPipelineAction
 import net.stckoverflw.pluginjam.action.impl.global.WaitAction
-import net.stckoverflw.pluginjam.action.impl.prisionphase.TwistPhasePrisonTeleportAction
 import net.stckoverflw.pluginjam.action.impl.twistphase.TwistPhaseGamemasterAction
 import net.stckoverflw.pluginjam.action.impl.twistphase.TwistPhaseGamemasterDespawnAction
 import net.stckoverflw.pluginjam.action.impl.twistphase.TwistPhaseHelperAction
+import net.stckoverflw.pluginjam.action.impl.twistphase.TwistPhasePrisonTeleportAction
 import net.stckoverflw.pluginjam.action.impl.twistphase.TwistPhaseTwistLocationHelperAction
 import net.stckoverflw.pluginjam.entities.GamemasterEntity
 import net.stckoverflw.pluginjam.gamephase.GamePhase

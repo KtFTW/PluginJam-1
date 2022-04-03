@@ -1,4 +1,4 @@
-package net.stckoverflw.pluginjam.action.impl.prisionphase
+package net.stckoverflw.pluginjam.action.impl.twistphase
 
 import net.stckoverflw.pluginjam.action.Action
 import net.stckoverflw.pluginjam.entities.GamemasterEntity
@@ -12,13 +12,9 @@ class TwistPhasePrisonTeleportAction(
 ) : Action() {
 
     override fun execute(): Action {
-        println("prison teleport")
         pluginJamPlayers.forEach { it.teleport(location) }
-        println("teleported")
         gamemaster.walkTo(gamemasterLocation) {
-            println("walked")
             complete()
-            println("completed")
         }
         return this
     }

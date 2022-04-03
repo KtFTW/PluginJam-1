@@ -20,7 +20,7 @@ class WalkingAction(
             while (true) {
                 delay(500)
                 pluginJamPlayers.forEach {
-                    it.sendActionBar("<green>Folge dem Dorfbewohner!".deserializeMini())
+                    it.sendActionBar("Folge dem Dorfbewohner".deserializeMini())
                 }
             }
         }
