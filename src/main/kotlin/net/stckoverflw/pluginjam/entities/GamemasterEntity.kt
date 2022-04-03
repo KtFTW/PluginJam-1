@@ -154,7 +154,7 @@ class GamemasterEntity(private val nameKnown: Boolean) : ListenerHolder {
         bukkitEntity?.apply {
             customName(
                 mini(
-                    if (nameKnown) "<blue>Gamemaster" else "<#FF5733>Dorfbewohner"
+                    if (nameKnown) "<#FF5733>Gamemaster" else "<#FF5733>Dorfbewohner"
                 )
             )
             profession = Villager.Profession.LIBRARIAN

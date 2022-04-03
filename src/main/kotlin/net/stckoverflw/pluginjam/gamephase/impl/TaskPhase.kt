@@ -82,6 +82,7 @@ object TaskPhase : GamePhase(FightPhase), ListenerHolder {
     }
 
     override fun end() {
+        unregisterAllListeners()
         pluginJamPlayers.forEach {
             it.reset()
         }

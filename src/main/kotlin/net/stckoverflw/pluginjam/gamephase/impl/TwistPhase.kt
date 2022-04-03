@@ -1,6 +1,5 @@
 package net.stckoverflw.pluginjam.gamephase.impl
 
-import com.destroystokyo.paper.MaterialTags
 import net.axay.kspigot.event.listen
 import net.axay.kspigot.extensions.geometry.LocationArea
 import net.axay.kspigot.extensions.geometry.blockLoc
@@ -30,8 +29,6 @@ import org.bukkit.GameMode
 import org.bukkit.Material
 import org.bukkit.Particle
 import org.bukkit.Sound
-import org.bukkit.block.BlockFace
-import org.bukkit.entity.ItemFrame
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.block.BlockBreakEvent
@@ -63,21 +60,6 @@ object TwistPhase : GamePhase(DestroyPhase), TaskHolder, ListenerHolder {
     private var state = State.NONE
 
     override fun start() {
-        val amethystFrameBlock = positionConfig.getLocation("twist_amethyst_frame").block
-        listOf(BlockFace.NORTH, BlockFace.EAST, BlockFace.WEST, BlockFace.SOUTH).forEach {
-            val relative = amethystFrameBlock.getRelative(it)
-            if (MaterialTags.TORCHES.isTagged(relative.type)) {
-                relative.type = Material.AIR
-            }
-        }
-        amethystFrameBlock.world.getNearbyEntities(amethystFrameBlock.location, 1.0, 1.0, 1.0).forEach {
-            if (it is ItemFrame && it.location.block.getRelative((it.attachedFace)) == amethystFrameBlock) {
-                it.remove()
-            }
-        }
-        amethystFrameBlock.type = Material.AIR
-        amethystFrameBlock.getRelative(BlockFace.DOWN).type = Material.AIR
-
         gamemaster.spawnEntity(positionConfig.getLocation("prison_gamemaster_2"))
 
         ActionPipeline().add(
@@ -86,6 +68,7 @@ object TwistPhase : GamePhase(DestroyPhase), TaskHolder, ListenerHolder {
                 positionConfig.getLocation("prison_pipe_1")
             )
         )
+            .add(WaitAction(40))
             .add(
                 TwistPhasePrisonTeleportAction(
                     gamemaster,
@@ -214,7 +197,10 @@ object TwistPhase : GamePhase(DestroyPhase), TaskHolder, ListenerHolder {
 
                 if (it.player.inventory.itemInMainHand.type == Material.WOODEN_PICKAXE && it.block.type == Material.IRON_BARS) {
                     it.isCancelled = false
+                    return@listen
                 }
+
+                it.isCancelled = true
             }
         )
     }

@@ -21,7 +21,7 @@ import java.nio.file.Files
 import kotlin.io.path.div
 
 val pluginJamPlayers: List<Player>
-    get() = onlinePlayers.filter { it.world.name == "pluginjam" && it.gameMode == GameMode.SURVIVAL }
+    get() = onlinePlayers.filter { it.world.name == "pluginjam" }
 
 val playersWithoutSpectators: List<Player>
     get() = onlinePlayers.filter { it.world.name == "pluginjam" && it.gameMode != GameMode.SPECTATOR }

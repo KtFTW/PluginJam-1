@@ -25,8 +25,8 @@ class FindFoodTask : FindMaterialTask() {
     override fun introduce() {
         count = Random.Default.nextInt(playersWithoutSpectators.size * 4, playersWithoutSpectators.size * 8)
         Conversation(DevcordJamPlugin.instance)
-            .addMessage("Wir brauchen auch noch etwas essbares.", "<blue>Dorfbewohner</blue>", 3.seconds)
-            .addMessage("Sucht nach $count Brot und bringt es zu mir!", "<blue>Dorfbewohner</blue>", 3.seconds)
+            .addMessage("Wir brauchen auch noch etwas essbares.", "Dorfbewohner", 3.seconds)
+            .addMessage("Sucht nach $count Brot und bringt es zu mir!", "Dorfbewohner", 3.seconds)
             .start()
             .whenComplete { _, _ ->
                 start()

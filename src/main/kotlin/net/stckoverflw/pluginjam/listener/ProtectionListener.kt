@@ -5,6 +5,9 @@ import io.papermc.paper.event.player.PlayerItemFrameChangeEvent.ItemFrameChangeA
 import net.axay.kspigot.event.SingleListener
 import net.axay.kspigot.event.listen
 import net.axay.kspigot.event.unregister
+import net.stckoverflw.pluginjam.gamephase.GamePhaseManager
+import net.stckoverflw.pluginjam.gamephase.impl.FightPhase
+import net.stckoverflw.pluginjam.gamephase.impl.TwistPhase
 import org.bukkit.GameMode
 import org.bukkit.entity.ItemFrame
 import org.bukkit.entity.Player
@@ -21,7 +24,11 @@ private val listeners = mutableListOf<SingleListener<*>>()
 fun protectionListener() {
 
     listeners += listen<PlayerItemFrameChangeEvent> {
-        if (it.action == ItemFrameChangeAction.REMOVE) {
+        if (it.action == ItemFrameChangeAction.REMOVE && (
+            GamePhaseManager.activeGamePhase is FightPhase ||
+                GamePhaseManager.activeGamePhase is TwistPhase
+            )
+        ) {
             it.isCancelled = false
             return@listen
         } else {
@@ -46,6 +53,10 @@ fun protectionListener() {
     }
 
     listeners += listen<EntityDamageByEntityEvent> {
+        if (it.entity is ItemFrame) {
+            it.isCancelled = false
+            return@listen
+        }
         if (it.damager is Player) {
             if ((it.damager as Player).gameMode == GameMode.CREATIVE) return@listen
             it.isCancelled = true

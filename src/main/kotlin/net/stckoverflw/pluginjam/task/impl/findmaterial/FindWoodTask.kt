@@ -21,8 +21,8 @@ class FindWoodTask : FindMaterialTask() {
     override fun introduce() {
         count = Random.Default.nextInt(playersWithoutSpectators.size * 12, playersWithoutSpectators.size * 24)
         Conversation(DevcordJamPlugin.instance)
-            .addMessage("Wir brauchen auch noch ein wenig Holz.", "<blue>Dorfbewohner</blue>", 3.seconds)
-            .addMessage("Am besten bringt ihr mir einfach $count Eichenholz-logs", "<blue>Dorfbewohner</blue>", 0.seconds)
+            .addMessage("Wir brauchen auch noch ein wenig Holz.", "Dorfbewohner", 3.seconds)
+            .addMessage("Am besten bringt ihr mir einfach $count Eichenholz-logs", "Dorfbewohner", 0.seconds)
             .start()
             .whenComplete { _, _ ->
                 start()

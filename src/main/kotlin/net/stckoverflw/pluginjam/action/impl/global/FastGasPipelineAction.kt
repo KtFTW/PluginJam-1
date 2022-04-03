@@ -35,18 +35,15 @@ class FastGasPipelineAction(
             }
         }
 
-        base += 20
+        base += 30
         taskRunLater(base) {
             pluginJamPlayers.forEach {
                 it.addPotionEffect(PotionEffect(PotionEffectType.BLINDNESS, 120, 10, false, false))
                 it.playSound(it.location, Sound.ENTITY_LIGHTNING_BOLT_THUNDER, 1f, 1f)
-            }
-        }
 
-        base += 10
-        taskRunLater(base) {
-            pluginJamPlayers.forEach {
-                it.addPotionEffect(PotionEffect(PotionEffectType.CONFUSION, 100, 10, false, false))
+                taskRunLater(20) {
+                    it.addPotionEffect(PotionEffect(PotionEffectType.CONFUSION, 100, 10, false, false))
+                }
             }
             pipelineLocation0.particle(Particle.CAMPFIRE_COSY_SMOKE) {
                 amount = 5000

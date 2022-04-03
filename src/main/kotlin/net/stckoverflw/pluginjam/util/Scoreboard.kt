@@ -10,14 +10,14 @@ import org.bukkit.scoreboard.Team
 import org.bukkit.scoreboard.Scoreboard as BukkitScoreboard
 
 fun scoreboard(
-    scoreboard: BukkitScoreboard = Bukkit.getScoreboardManager().mainScoreboard,
+    scoreboard: BukkitScoreboard = Bukkit.getScoreboardManager().newScoreboard,
     function: Scoreboard.() -> Unit
 ): Scoreboard {
     return Scoreboard(scoreboard).apply(function)
 }
 
-class Scoreboard(private val scoreboard: BukkitScoreboard = Bukkit.getScoreboardManager().mainScoreboard) {
-    private val entries = hashMapOf<Int, Component>()
+class Scoreboard(private val scoreboard: BukkitScoreboard = Bukkit.getScoreboardManager().newScoreboard) {
+    val entries = hashMapOf<Int, Component>()
     var displayName: Component = Component.text("Scoreboard")
     private val objective: Objective = scoreboard.registerNewObjective("sidebar", "dummy", displayName)
         .apply { displaySlot = DisplaySlot.SIDEBAR }

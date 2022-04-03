@@ -20,7 +20,7 @@ class PrisonPhaseWelcomeAction : Action() {
             .addMessage("Wenn diese Vorbereitungen getroffen sind, können wir einen Gegenangriff vorbereiten, womit sie nicht rechnen. Das ist unsere einzige Chance", "Dorfbewohner", 5.seconds)
             .addMessage("Ich entschuldige mich noch einmal für meine harschen Methoden, doch dieses Thema ist echt wichtig und es geht um uns alle.", "Dorfbewohner", 4.seconds)
             .addMessage("Ich sah mich gezwungen auf solche Methoden zurückzugreifen um uns alle zu schützen.", "Dorfbewohner", 4.seconds)
-            .addMessage("Um die <red>Leviatanen</red> zu besiegen, müssen wir ein paar Ressourcen besorgen. Also los gehts!", "Dorfbewohner", 4.seconds)
+            .addMessage("Um die <red>Leviatanen</red> zu besiegen, müssen wir ein paar Ressourcen besorgen. Also los gehts!", "Dorfbewohner", 1.seconds)
             .start()
             .whenComplete { _, _ ->
                 complete()

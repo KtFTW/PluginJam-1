@@ -10,6 +10,7 @@ import net.stckoverflw.pluginjam.gamephase.GamePhaseManager
 import net.stckoverflw.pluginjam.util.pluginJamPlayers
 import net.stckoverflw.pluginjam.util.reset
 import net.stckoverflw.pluginjam.util.teleportAsyncBlind
+import org.bukkit.potion.PotionEffectType
 
 object PrisonPhase : GamePhase(TaskPhase) {
     private val postionsConfig = DevcordJamPlugin.instance.configManager.postionsConfig
@@ -19,6 +20,7 @@ object PrisonPhase : GamePhase(TaskPhase) {
         gamemaster.spawnEntity(postionsConfig.getLocation("prison_gamemaster"))
         pluginJamPlayers.forEach {
             it.teleportAsyncBlind(postionsConfig.getLocation("prison_prison"))
+            it.removePotionEffect(PotionEffectType.CONFUSION)
         }
         taskRunLater(100) {
             ActionPipeline()

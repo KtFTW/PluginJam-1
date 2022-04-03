@@ -42,7 +42,7 @@ class Conversation(private val plugin: DevcordJamPlugin) {
             while (iterator.hasNext()) {
                 val current = iterator.next()
                 if (current.who != null) {
-                    broadcastMini("<blue>${current.who}</blue><gray>: <white>${current.message}")
+                    broadcastMini("<#FF5733>${current.who}</#FF5733><gray>: <white>${current.message}")
                 } else {
                     broadcastMini(current.message)
                 }

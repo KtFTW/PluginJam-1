@@ -69,14 +69,14 @@ class GasPipelineAction(
             }
         }
 
-        base += 40
+        base += 10
         taskRunLater(base) {
             if (gamemasterTargetLocation != null) {
                 gamemasterEntity.teleport(gamemasterTargetLocation)
             }
         }
 
-        base += 40
+        base += 70
         taskRunLater(base) {
             listener.unregister()
             complete()

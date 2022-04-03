@@ -1,6 +1,8 @@
 package net.stckoverflw.pluginjam.task.impl
 
 import net.axay.kspigot.event.listen
+import net.axay.kspigot.runnables.sync
+import net.kyori.adventure.text.Component
 import net.stckoverflw.pluginjam.DevcordJamPlugin
 import net.stckoverflw.pluginjam.gamephase.GamePhaseManager
 import net.stckoverflw.pluginjam.gamephase.impl.TaskPhase
@@ -10,6 +12,7 @@ import net.stckoverflw.pluginjam.util.Conversation
 import net.stckoverflw.pluginjam.util.ListenerHolder
 import net.stckoverflw.pluginjam.util.Scoreboard
 import net.stckoverflw.pluginjam.util.mini
+import net.stckoverflw.pluginjam.util.playersWithoutSpectators
 import net.stckoverflw.pluginjam.util.pluginJamPlayers
 import net.stckoverflw.pluginjam.util.reset
 import net.stckoverflw.pluginjam.util.scoreboard
@@ -33,12 +36,12 @@ abstract class FindMaterialTask : Task(), ListenerHolder {
     lateinit var scoreboard: Scoreboard
 
     private fun foundMaterial(player: Player, material: Material, amount: Int) {
-        if (! materials.containsKey(material)) {
+        if (!materials.containsKey(material)) {
             return
         }
-        materials[material] = materials[material] !! - amount
+        materials[material] = materials[material]!! - amount
         player.inventory.contents = player.inventory.contents?.filter { it?.type != material }?.toTypedArray()
-        val addBack = player.inventory.contents !!.filter { it?.type == material }.sumOf { it?.amount ?: 0 }
+        val addBack = player.inventory.contents!!.filter { it?.type == material }.sumOf { it?.amount ?: 0 }
         if (addBack - amount > 0) {
             player.inventory.addItem(ItemStack(material, addBack - amount))
         }
@@ -51,21 +54,11 @@ abstract class FindMaterialTask : Task(), ListenerHolder {
             }
         }
 
-        val count = total[material] !! - (materials[material] ?: 0)
-        scoreboard.set(
-            indices[material] !!,
-            mini(
-                "<red>${
-                    WordUtils.capitalize(
-                        material.name.lowercase().replace("_", "")
-                    )
-                } <gray>- <red>$count<gray>/<red>${total[material] !!}"
-            )
-        )
+        scoreboard.set(indices[material]!!, createScoreboardEntry(material))
 
         if (materials.isEmpty()) {
             Conversation(DevcordJamPlugin.instance)
-                .addMessage("Perfekt!", "<blue>Dorfbewohner</blue>", 1.seconds)
+                .addMessage("Perfekt!", "Dorfbewohner", 1.seconds)
                 .start()
                 .whenComplete { _, _ ->
                     TaskPhase.taskDone(TaskResult.SUCCESS)
@@ -80,39 +73,60 @@ abstract class FindMaterialTask : Task(), ListenerHolder {
         )
     }
 
-    override fun start() {
+    private fun createScoreboardEntry(material: Material): Component {
+        val count = total[material]!! - (materials[material] ?: 0)
 
-        var i = 1
-        scoreboard = scoreboard {
-            displayName = mini("<green>Aufgabe")
-            set(0, "")
+        return mini(
+            "<green>${
+            WordUtils.capitalize(
+                material.name.lowercase().replace("_", " ")
+            )
+            } <gray>- <red>$count<gray>/<red>${total[material]!!}"
+        )
+    }
+
+    override fun start() {
+        sync {
+            var i = 1
 
             materials.forEach {
+                total[it.key] = it.value
+            }
+
+            scoreboard = scoreboard {
+                displayName = mini("<green>Aufgabe")
+                set(0, "")
+
+                materials.forEach {
+                    indices[it.key] = i
+                    set(i, createScoreboardEntry(it.key))
+                    i++
+                }
+
                 set(
                     i,
-                    mini(
-                        "<green>${
-                            WordUtils.capitalize(
-                                it.key.name.lowercase().replace("_", "")
-                            )
-                        } <gray>- <red>0<gray>/<red>${it.value}"
-                    )
+                    when (materials.size) {
+                        1 -> "<green>Besorge dieses Item:"
+                        else -> "<green>Besorge diese Items:"
+                    }
                 )
-                indices[it.key] = i
-                total[it.key] = it.value
-                i ++
-            }
-            if (materials.size <= 1) {
-                set(i, "<green>Besorge dieses Item:")
-            } else {
-                set(i, "<blue>Besorge diese Items:")
-            }
-            set(i + 1, "")
-        }
 
-        pluginJamPlayers.forEach {
-            it.giveItems()
-            scoreboard.applyScoreboard(it)
+                if (materials.size <= 1) {
+                    println("1")
+                } else {
+                    println("2")
+                }
+                set(i + 1, "")
+            }
+
+            playersWithoutSpectators.forEach {
+                it.giveItems()
+            }
+
+            pluginJamPlayers.forEach {
+                scoreboard.applyScoreboard(it)
+            }
+            println(scoreboard.entries)
         }
         addListener(
             listen<PlayerInteractEntityEvent> {

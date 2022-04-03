@@ -32,11 +32,6 @@ class FindOresTask : FindMaterialTask() {
                 it.player.smeltItemInHand()
             }
         )
-
-        materials[Material.COAL] = Random.nextInt(
-            (materials[Material.IRON_INGOT] !! + materials[Material.GOLD_INGOT] !!) / 12,
-            (materials[Material.IRON_INGOT] !! + materials[Material.GOLD_INGOT] !!) / 6
-        )
         super.start()
     }
 

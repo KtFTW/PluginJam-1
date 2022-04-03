@@ -4,8 +4,10 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import net.axay.kspigot.event.listen
 import net.axay.kspigot.event.unregister
+import net.axay.kspigot.extensions.geometry.vec
 import net.axay.kspigot.extensions.worlds
 import net.axay.kspigot.particles.particle
+import net.axay.kspigot.runnables.task
 import net.axay.kspigot.sound.sound
 import net.stckoverflw.pluginjam.DevcordJamPlugin
 import net.stckoverflw.pluginjam.action.impl.destroyphase.DestroyPhaseWelcomeAction
@@ -13,20 +15,31 @@ import net.stckoverflw.pluginjam.gamephase.GamePhase
 import net.stckoverflw.pluginjam.gamephase.GamePhaseManager
 import net.stckoverflw.pluginjam.util.Conversation
 import net.stckoverflw.pluginjam.util.ListenerHolder
+import net.stckoverflw.pluginjam.util.TaskHolder
 import net.stckoverflw.pluginjam.util.pluginJamPlayers
 import net.stckoverflw.pluginjam.util.reset
+import net.stckoverflw.pluginjam.util.sendMini
+import org.bukkit.Color
+import org.bukkit.GameMode
 import org.bukkit.Material
 import org.bukkit.Particle
 import org.bukkit.Sound
 import org.bukkit.entity.Item
 import org.bukkit.event.Listener
 import org.bukkit.event.entity.EntityDamageEvent
+import org.bukkit.scheduler.BukkitRunnable
+import org.bukkit.util.BoundingBox
 import org.bukkit.util.Vector
 
-object DestroyPhase : GamePhase(EndPhase), ListenerHolder {
+object DestroyPhase : GamePhase(EndPhase), ListenerHolder, TaskHolder {
+    private val positionConfig = DevcordJamPlugin.instance.configManager.postionsConfig
     override val listeners: MutableList<Listener> = mutableListOf()
+    override val tasks: MutableList<BukkitRunnable> = mutableListOf()
 
     private var amethystsLeft: Int = 2
+
+    private val laserLocations = (0..6).map { positionConfig.getLocation("twist_laser_$it") }
+    private val laserBoundingBoxes = laserLocations.map { BoundingBox.of(it, 10.0, 0.1, 0.1) }
 
     override fun start() {
         worlds.forEach {
@@ -91,6 +104,34 @@ object DestroyPhase : GamePhase(EndPhase), ListenerHolder {
                     }
                 }
             }
+        )
+
+        addTask(
+            task(period = 2) {
+                laserLocations.forEach {
+                    particle(Particle.REDSTONE) {
+                        amount = 200
+                        extra = 1
+                        offset = vec(4, 0, 0)
+                        data = Particle.DustOptions(Color.RED, 0.6f)
+                        spawnAt(it)
+                    }
+                }
+            }!!
+        )
+
+        addTask(
+            task(period = 3) {
+                pluginJamPlayers.forEach { player ->
+                    if (player.gameMode == GameMode.CREATIVE) return@forEach
+                    if (laserBoundingBoxes.any { it.overlaps(player.boundingBox) }) {
+                        player.teleport(positionConfig.getLocation("twist_location"))
+                        player.sendMini("<red>Aua! Du darfst die Laser nicht berühren!")
+                        player.playSound(player.location, Sound.BLOCK_RESPAWN_ANCHOR_DEPLETE, 1f, 2f)
+                        player.playSound(player.location, Sound.BLOCK_GLASS_BREAK, 1f, 2f)
+                    }
+                }
+            }!!
         )
     }
 

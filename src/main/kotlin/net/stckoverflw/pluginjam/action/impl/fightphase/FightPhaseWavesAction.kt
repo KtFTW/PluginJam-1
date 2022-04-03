@@ -19,7 +19,6 @@ import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.EntityType
-import org.bukkit.entity.ItemFrame
 import org.bukkit.entity.Player
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
@@ -28,7 +27,6 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.EntityDeathEvent
 import org.bukkit.event.entity.PlayerDeathEvent
 import org.bukkit.event.player.PlayerDropItemEvent
-import org.bukkit.event.player.PlayerInteractAtEntityEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.inventory.ItemStack
@@ -58,7 +56,7 @@ class FightPhaseWavesAction : Action(), ListenerHolder {
             KSpigotMainInstance.server.worlds.forEach {
                 it.difficulty = Difficulty.EASY
             }
-            spawnPillagers(spawnPosition)
+            spawnEntities(spawnPosition)
         }
 
         var count = 0
@@ -88,7 +86,7 @@ class FightPhaseWavesAction : Action(), ListenerHolder {
             listen<EntityDeathEvent> { event ->
                 val entity = event.entity
 
-                if (entity.type != EntityType.PILLAGER) return@listen
+                if (entity.type != EntityType.PILLAGER && entity.type != EntityType.VINDICATOR && entity.type != EntityType.EVOKER) return@listen
 
                 ArrayList(event.drops)
                     .forEach { item ->
@@ -104,7 +102,7 @@ class FightPhaseWavesAction : Action(), ListenerHolder {
                         return@listen
                     }
                     currentWave += 1
-                    spawnPillagers(spawnPosition)
+                    spawnEntities(spawnPosition)
                     updateBossbar()
                 }
             }
@@ -118,16 +116,11 @@ class FightPhaseWavesAction : Action(), ListenerHolder {
 
         addListener(
             listen<PlayerInteractEvent>(EventPriority.HIGHEST) { event ->
+                event.isCancelled = false
                 val type = event.clickedBlock?.type ?: return@listen
                 if (type != Material.SPRUCE_DOOR) return@listen
 
                 event.isCancelled = true
-            }
-        )
-
-        addListener(
-            listen<PlayerInteractAtEntityEvent>(EventPriority.HIGHEST) { event ->
-                if (event.rightClicked is ItemFrame) event.isCancelled = false
             }
         )
 
@@ -167,9 +160,21 @@ class FightPhaseWavesAction : Action(), ListenerHolder {
         }
     }
 
-    private fun spawnPillagers(location: Location) {
-        for (i in 1..10) {
+    private fun spawnEntities(location: Location) {
+        for (i in 1..5) {
             location.world.spawnEntity(location, EntityType.PILLAGER)
+        }
+
+        if (currentWave == totalWaves - 1) {
+            for (i in 1..4) {
+                location.world.spawnEntity(location, EntityType.VINDICATOR)
+            }
+            location.world.spawnEntity(location, EntityType.EVOKER)
+            return
+        }
+
+        for (i in 1..5) {
+            location.world.spawnEntity(location, EntityType.VINDICATOR)
         }
     }
 
