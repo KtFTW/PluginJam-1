@@ -73,6 +73,7 @@ class DevcordJamPlugin : KSpigot() {
                             setGameRule(GameRule.DO_WEATHER_CYCLE, false)
                             setGameRule(GameRule.DO_MOB_SPAWNING, false)
                             setGameRule(GameRule.KEEP_INVENTORY, true)
+                            setGameRule(GameRule.ANNOUNCE_ADVANCEMENTS, false)
                         }
                         onlinePlayers.forEach { it.gameMode = GameMode.SURVIVAL }
                         onlinePlayers.filter { it.world.name != "pluginjam" }.forEach {
@@ -91,6 +92,7 @@ class DevcordJamPlugin : KSpigot() {
                 setGameRule(GameRule.DO_WEATHER_CYCLE, false)
                 setGameRule(GameRule.DO_MOB_SPAWNING, false)
                 setGameRule(GameRule.KEEP_INVENTORY, true)
+                setGameRule(GameRule.ANNOUNCE_ADVANCEMENTS, false)
             }
 
             onlinePlayers.forEach { it.gameMode = GameMode.SURVIVAL }

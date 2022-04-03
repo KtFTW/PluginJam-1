@@ -61,6 +61,8 @@ fun protectionListener() {
             if ((it.damager as Player).gameMode == GameMode.CREATIVE) return@listen
             it.isCancelled = true
         }
+
+        it.isCancelled = true
     }
 
     listeners += listen<BlockBreakEvent>(EventPriority.LOWEST) {

@@ -28,6 +28,7 @@ class FightPhaseParkourAction : Action() {
                 }
 
             pluginJamPlayers.forEach {
+                it.scoreboard = scoreboard
                 team.addPlayer(it)
             }
         }
