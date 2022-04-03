@@ -166,7 +166,7 @@ class FightPhaseWavesAction : Action(), ListenerHolder {
             location.world.spawnEntity(location, EntityType.PILLAGER)
         }
 
-        if (currentWave == totalWaves - 1) {
+        if (currentWave == totalWaves) {
             for (i in 1..4) {
                 location.world.spawnEntity(location, EntityType.VINDICATOR)
             }
