@@ -57,7 +57,9 @@ fun resetWorld(worldName: String) {
         println("Unregistering PlayerLoginEvent listener")
         listener.unregister()
         println("Repopulating $worldName")
-        repopulateWorld(worldName, players)
+        sync {
+            repopulateWorld(worldName, players)
+        }
     }
 }
 
