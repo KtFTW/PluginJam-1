@@ -45,7 +45,7 @@ class FightDeliverAmethystAction : Action() {
             it.player.inventory.clear()
             Conversation(DevcordJamPlugin.instance)
                 .addMessage(
-                    "<tr:fight_deliver_2:<red><tr:leviatans></red>>",
+                    "<tr:fight_deliver_2:'<red><tr:leviatans></red>'>",
                     "<tr:villager>"
                 )
                 .start()

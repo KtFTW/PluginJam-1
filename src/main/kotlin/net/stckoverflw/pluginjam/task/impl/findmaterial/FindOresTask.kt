@@ -42,7 +42,7 @@ class FindOresTask : FindMaterialTask() {
         )
         Conversation(DevcordJamPlugin.instance)
             .addMessage(
-                "<tr:task_ores_1:<red><tr:leviatans></red>>",
+                "<tr:task_ores_1:'<red><tr:leviatans></red>'>",
                 "<tr:villager>",
                 3.seconds
             )
