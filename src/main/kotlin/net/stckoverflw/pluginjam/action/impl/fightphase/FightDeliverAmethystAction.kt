@@ -23,7 +23,7 @@ class FightDeliverAmethystAction : Action() {
     private val gamemaster: GamemasterEntity = GamemasterEntity(false)
 
     override fun execute(): Action {
-        val world = Bukkit.getWorld("world")!!
+        val world = Bukkit.getWorld("pluginjam")!!
         world.entities.forEach {
             if (it.type != EntityType.ARROW) return@forEach
 
