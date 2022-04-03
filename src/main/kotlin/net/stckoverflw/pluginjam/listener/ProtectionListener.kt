@@ -36,9 +36,9 @@ fun protectionListener() {
 
     listeners += listen<PlayerItemFrameChangeEvent> {
         if (it.action == ItemFrameChangeAction.REMOVE && (
-                    GamePhaseManager.activeGamePhase is FightPhase ||
-                            GamePhaseManager.activeGamePhase is TwistPhase
-                    )
+            GamePhaseManager.activeGamePhase is FightPhase ||
+                GamePhaseManager.activeGamePhase is TwistPhase
+            )
         ) {
             it.isCancelled = false
             return@listen

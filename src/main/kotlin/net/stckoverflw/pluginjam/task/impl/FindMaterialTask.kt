@@ -111,11 +111,6 @@ abstract class FindMaterialTask : Task(), ListenerHolder {
                     }
                 )
 
-                if (materials.size <= 1) {
-                    println("1")
-                } else {
-                    println("2")
-                }
                 set(i + 1, "")
             }
 
@@ -126,7 +121,6 @@ abstract class FindMaterialTask : Task(), ListenerHolder {
             pluginJamPlayers.forEach {
                 scoreboard.applyScoreboard(it)
             }
-            println(scoreboard.entries)
         }
 
         addListener(
