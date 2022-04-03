@@ -5,9 +5,11 @@ import net.axay.kspigot.items.itemStack
 import net.axay.kspigot.items.meta
 import net.axay.kspigot.main.KSpigotMainInstance
 import net.axay.kspigot.runnables.sync
+import net.kyori.adventure.bossbar.BossBar
 import net.stckoverflw.pluginjam.DevcordJamPlugin
 import net.stckoverflw.pluginjam.action.Action
 import net.stckoverflw.pluginjam.util.ListenerHolder
+import net.stckoverflw.pluginjam.util.mini
 import net.stckoverflw.pluginjam.util.pluginJamPlayers
 import net.stckoverflw.pluginjam.util.reset
 import net.stckoverflw.pluginjam.util.setOpenIfDoor
@@ -27,17 +29,30 @@ import org.bukkit.event.entity.PlayerDeathEvent
 import org.bukkit.event.player.PlayerDropItemEvent
 import org.bukkit.event.player.PlayerInteractAtEntityEvent
 import org.bukkit.event.player.PlayerInteractEvent
+import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.inventory.ItemStack
+import kotlin.math.max
+import kotlin.math.min
 
 class FightPhaseWavesAction : Action(), ListenerHolder {
     private val positionsConfig = DevcordJamPlugin.instance.configManager.postionsConfig
 
     override val listeners = mutableListOf<Listener>()
+    private var totalWaves: Int = max(2, min(pluginJamPlayers.size, 4))
+    private var currentWave: Int = 1
+    private val bossbar: BossBar = BossBar.bossBar(
+        mini("<green> Wave <red>$currentWave<gray>/<red>$totalWaves"),
+        0f, BossBar.Color.GREEN, BossBar.Overlay.PROGRESS
+    )
 
     override fun execute(): Action {
         positionsConfig.getLocation("fight_door").block.setOpenIfDoor(false)
         val spawnPosition = positionsConfig.getLocation("fight_pillager_spawn")
-        pluginJamPlayers.forEach { giveItems(it) }
+        pluginJamPlayers.forEach {
+            giveItems(it)
+            it.showBossBar(bossbar)
+        }
+
         sync {
             KSpigotMainInstance.server.worlds.forEach {
                 it.difficulty = Difficulty.EASY
@@ -81,13 +96,15 @@ class FightPhaseWavesAction : Action(), ListenerHolder {
 
                 count += 1
 
-                if (count >= 50) {
-                    complete()
-                    return@listen
-                }
-
-                if (count == 10 || count == 20 || count == 30 || count == 40) {
+                if (count == 10) {
+                    count = 0
+                    if (currentWave == totalWaves) {
+                        complete()
+                        return@listen
+                    }
+                    currentWave += 1
                     spawnPillagers(spawnPosition)
+                    updateBossbar()
                 }
             }
         )
@@ -113,7 +130,18 @@ class FightPhaseWavesAction : Action(), ListenerHolder {
             }
         )
 
+        addListener(
+            listen<PlayerQuitEvent> {
+                it.player.hideBossBar(bossbar)
+            }
+        )
+
         return this
+    }
+
+    private fun updateBossbar() {
+        bossbar.progress((currentWave - 1).toFloat() / totalWaves.toFloat())
+        bossbar.name(mini("<green> Wave <red>$currentWave<gray>/<red>$totalWaves"))
     }
 
     private fun giveItems(player: Player) {
@@ -149,6 +177,7 @@ class FightPhaseWavesAction : Action(), ListenerHolder {
         pluginJamPlayers.forEach {
             it.inventory.clear()
             it.reset()
+            it.hideBossBar(bossbar)
         }
         super.complete()
     }
