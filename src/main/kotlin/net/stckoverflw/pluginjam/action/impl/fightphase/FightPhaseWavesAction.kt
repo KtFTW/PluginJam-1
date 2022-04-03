@@ -35,7 +35,6 @@ import kotlin.math.min
 
 class FightPhaseWavesAction : Action(), ListenerHolder {
     private val positionsConfig = DevcordJamPlugin.instance.configManager.postionsConfig
-
     override val listeners = mutableListOf<Listener>()
     private var totalWaves: Int = max(2, min(playersWithoutSpectators.size, 5))
     private var currentWave: Int = 1
@@ -47,12 +46,14 @@ class FightPhaseWavesAction : Action(), ListenerHolder {
     override fun execute(): Action {
         positionsConfig.getLocation("fight_door").block.setOpenIfDoor(false)
         val spawnPosition = positionsConfig.getLocation("fight_pillager_spawn")
-        pluginJamPlayers.forEach {
-            giveItems(it)
-            it.showBossBar(bossbar)
-        }
 
         sync {
+
+            pluginJamPlayers.forEach {
+                giveItems(it)
+                it.showBossBar(bossbar)
+            }
+
             KSpigotMainInstance.server.worlds.forEach {
                 it.difficulty = Difficulty.EASY
             }

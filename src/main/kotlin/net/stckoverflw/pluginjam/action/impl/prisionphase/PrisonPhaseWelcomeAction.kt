@@ -11,7 +11,7 @@ class PrisonPhaseWelcomeAction : Action() {
             .addMessage("Ihr fragt euch jetzt bestimmt, warum ihr hier seid.", "Dorfbewohner")
             .addMessage("Nunja, <red>das Leben</red> von uns und von unseren Familien steht auf dem Spiel und muss gerettet werden.", "Dorfbewohner", 4.seconds)
             .addMessage("Die <red>Leviatanen</red> greifen uns seit Jahren im Untergrund an und bereiten gerade einen Überfall auf uns vor.", "Dorfbewohner", 4.seconds)
-            .addMessage("Es gibt 2 Teile vom <light_purple>magischen Amethyst</light_purple>. Vereinzelt sind diese wertlos, doch vereint besitzen sie unvorstellbare Macht.", "Dorfbewohner", 6.seconds)
+            .addMessage("Es gibt 2 Teile vom <light_purple>magischen Amethyst</light_purple>. Vereinzelt sind diese wertlos, doch vereint besitzen sie unvorstellbare Macht.", "Dorfbewohner", 7.seconds)
             .addMessage("Den einen Teil haben wir, der andere ist im Besitz der <red>Leviatanen</red>.", "Dorfbewohner", 4.seconds)
             .addMessage("Wir müssen unbedingt verhindern, dass sie diesen Teil bekommen.", "Dorfbewohner", 4.seconds)
             .addMessage("Bei der Macht, die diese besitzen würden, würde dies das Leben <red>ALLER</red> Dorfbewohner kosten.", "Dorfbewohner", 4.seconds)

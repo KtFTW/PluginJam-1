@@ -125,7 +125,7 @@ object DestroyPhase : GamePhase(EndPhase), ListenerHolder, TaskHolder {
                 pluginJamPlayers.forEach { player ->
                     if (player.gameMode == GameMode.CREATIVE) return@forEach
                     if (laserBoundingBoxes.any { it.overlaps(player.boundingBox) }) {
-                        player.teleport(positionConfig.getLocation("twist_location"))
+                        player.teleport(positionConfig.getLocation("twist_location_crystal"))
                         player.sendMini("<red>Aua! Du darfst die Laser nicht berühren!")
                         player.playSound(player.location, Sound.BLOCK_RESPAWN_ANCHOR_DEPLETE, 1f, 2f)
                         player.playSound(player.location, Sound.BLOCK_GLASS_BREAK, 1f, 2f)

@@ -8,13 +8,30 @@ import net.axay.kspigot.runnables.task
 import net.stckoverflw.pluginjam.DevcordJamPlugin
 import net.stckoverflw.pluginjam.action.Action
 import net.stckoverflw.pluginjam.util.playersWithoutSpectators
+import net.stckoverflw.pluginjam.util.pluginJamPlayers
+import org.bukkit.Bukkit
 import org.bukkit.entity.EntityType
 import org.bukkit.event.entity.EntityDamageEvent
+import org.bukkit.scoreboard.Team
 
 class FightPhaseParkourAction : Action() {
     private lateinit var task: KSpigotRunnable
+    private val scoreboard = Bukkit.getScoreboardManager().newScoreboard
 
     override fun execute(): Action {
+
+        sync {
+            val team = scoreboard
+                .registerNewTeam("no_collision")
+                .apply {
+                    setOption(Team.Option.COLLISION_RULE, Team.OptionStatus.NEVER)
+                }
+
+            pluginJamPlayers.forEach {
+                team.addPlayer(it)
+            }
+        }
+
         val positionsConfig = DevcordJamPlugin.instance.configManager.postionsConfig
         val listener = listen<EntityDamageEvent> { event ->
             if (event.entityType != EntityType.PLAYER) return@listen
@@ -39,6 +56,8 @@ class FightPhaseParkourAction : Action() {
     }
 
     override fun complete() {
+        scoreboard.getTeam("no_collision")
+            ?.unregister()
         task.cancel()
         super.complete()
     }

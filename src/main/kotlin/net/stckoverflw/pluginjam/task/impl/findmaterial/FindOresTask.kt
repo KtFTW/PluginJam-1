@@ -45,18 +45,18 @@ class FindOresTask : FindMaterialTask() {
         Conversation(DevcordJamPlugin.instance)
             .addMessage(
                 "Um eine Chance gegen die <red>Leviatanen</red> zu haben brauchen wir Waffen und Rüstungen!",
-                "<blue>Dorfbewohner</blue>",
+                "Dorfbewohner",
                 3.seconds
             )
             .addMessage("Dafür müsst ihr verschiedene Erze finden und abbauen.", "<blue>Dorfbewohner</blue>", 3.seconds)
             .addMessage(
                 "Bringt mir bitte $coalCount Kohle, $ironCount Eisen-Ingots und $goldCount Gold-Ingots",
-                "<blue>Dorfbewohner</blue>",
+                "Dorfbewohner",
                 3.seconds
             )
             .addMessage(
                 "Die rohen Erze könnt ihr mit Rechtsklick auf einen Ofen direkt schmelzen.",
-                "<blue>Dorfbewohner</blue>",
+                "Dorfbewohner",
                 3.seconds
             )
             .start()
