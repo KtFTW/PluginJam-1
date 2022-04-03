@@ -58,7 +58,7 @@ abstract class FindMaterialTask : Task(), ListenerHolder {
 
         if (materials.isEmpty()) {
             Conversation(DevcordJamPlugin.instance)
-                .addMessage("Perfekt!", "Dorfbewohner", 1.seconds)
+                .addMessage("<tr:task_finished>", "<tr:villager>", 1.seconds)
                 .start()
                 .whenComplete { _, _ ->
                     TaskPhase.taskDone(TaskResult.SUCCESS)
@@ -94,7 +94,7 @@ abstract class FindMaterialTask : Task(), ListenerHolder {
             }
 
             scoreboard = scoreboard {
-                displayName = mini("<green>Aufgabe")
+                displayName = mini("<green><tr:task>")
                 set(0, "")
 
                 materials.forEach {
@@ -106,8 +106,8 @@ abstract class FindMaterialTask : Task(), ListenerHolder {
                 set(
                     i,
                     when (materials.size) {
-                        1 -> "<green>Besorge dieses Item:"
-                        else -> "<green>Besorge diese Items:"
+                        1 -> "<green><tr:task_get_item>"
+                        else -> "<green><tr:task_get_items>"
                     }
                 )
 

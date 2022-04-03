@@ -15,7 +15,7 @@ class PositionTpCommand(val postionsConfig: PostionsConfig) {
                 runs {
                     val name = getArgument<String>("name")
                     val location = postionsConfig.getLocation(name)
-                    player.teleport(location)
+                    player.teleportAsync(location)
                 }
             }
         }

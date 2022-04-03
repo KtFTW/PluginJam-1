@@ -17,7 +17,7 @@ class FightPhaseCollectAmethystAction : Action() {
     override fun execute(): Action {
         positionsConfig.getLocation("fight_door").block.setOpenIfDoor(true)
         Conversation(DevcordJamPlugin.instance)
-            .addMessage("<i>Du hast alle Monster besiegt. Hole dir jetzt den Amethyst!</i>")
+            .addMessage("<i><tr:fight_collect></i>")
             .start()
 
         listener = listen { event ->

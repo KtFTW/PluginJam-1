@@ -39,7 +39,7 @@ class FightPhaseWavesAction : Action(), ListenerHolder {
     private var totalWaves: Int = max(2, min(playersWithoutSpectators.size, 5))
     private var currentWave: Int = 1
     private val bossbar: BossBar = BossBar.bossBar(
-        mini("<green> Wave <red>$currentWave<gray>/<red>$totalWaves"),
+        mini("<green><tr:wave_bossbar:<red>$currentWave:<red>$totalWaves>"),
         0f, BossBar.Color.GREEN, BossBar.Overlay.PROGRESS
     )
 
@@ -136,7 +136,7 @@ class FightPhaseWavesAction : Action(), ListenerHolder {
 
     private fun updateBossbar() {
         bossbar.progress((currentWave - 1).toFloat() / totalWaves.toFloat())
-        bossbar.name(mini("<green> Wave <red>$currentWave<gray>/<red>$totalWaves"))
+        bossbar.name(mini("<green><tr:wave_bossbar:<red>$currentWave:<red>$totalWaves>"))
     }
 
     private fun giveItems(player: Player) {

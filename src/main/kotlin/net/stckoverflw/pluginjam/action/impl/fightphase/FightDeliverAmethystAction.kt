@@ -36,7 +36,7 @@ class FightDeliverAmethystAction : Action() {
             it.teleportAsync(positionsConfig.getLocation("prison_spawn_2"))
         }
 
-        broadcastMini("<i>Gebt dem Dorfbewohner den Amethyst.")
+        broadcastMini("<i><tr:fight_deliver_1></i>")
 
         interactListener = listen {
             if (it.rightClicked != gamemaster.bukkitEntity) return@listen
@@ -45,8 +45,8 @@ class FightDeliverAmethystAction : Action() {
             it.player.inventory.clear()
             Conversation(DevcordJamPlugin.instance)
                 .addMessage(
-                    "Wunderbar, nun haben wir beide Kristalle zusammen und können verhindern, dass die <red>Leviatanen</red> beide kombinieren.",
-                    "Dorfbewohner"
+                    "<tr:fight_deliver_2:<red><tr:leviatans></red>>",
+                    "<tr:villager>"
                 )
                 .start()
                 .whenComplete { _, _ ->

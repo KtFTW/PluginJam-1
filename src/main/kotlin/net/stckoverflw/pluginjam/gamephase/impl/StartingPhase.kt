@@ -50,7 +50,7 @@ object StartingPhase : GamePhase(PrisonPhase), ListenerHolder {
                         postionsConfig.getLocation("starting_gamemaster_house_1")
                     )
                     task(period = 5) {
-                        playersWithoutSpectators.forEach { player -> player.sendActionBar(mini("Gehe in das Haus")) }
+                        playersWithoutSpectators.forEach { player -> player.sendActionBar(mini("<tr:go_to_house>")) }
                         if (playersWithoutSpectators.all { player -> area.isInArea(player.location) }) {
 
                             val door0 = postionsConfig.getLocation("starting_door_0").add(0.0, 1.0, 0.0).block
@@ -81,9 +81,6 @@ object StartingPhase : GamePhase(PrisonPhase), ListenerHolder {
         addListener(
             listen<PlayerJoinEvent> {
                 it.player.reset()
-                // it.player.sendMini("<i>Wilkommen auf unserem PluginJam Server.")
-                // it.player.sendMini("<i>Klicke auf den Villager um das Spiel zu starten.")
-                // it.player.sendMini("<i>Viel Spaß!")
             }
         )
 

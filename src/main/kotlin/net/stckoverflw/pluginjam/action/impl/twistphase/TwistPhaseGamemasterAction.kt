@@ -9,15 +9,15 @@ class TwistPhaseGamemasterAction : Action() {
     override fun execute(): Action {
         println("prision converation")
         Conversation(DevcordJamPlugin.instance)
-            .addMessage("Ihr seid schon wieder darauf reingefallen!", "Gamemaster")
-            .addMessage("Ihr habt doch nicht wirklich geglaubt, dass Frieden mein Ziel ist.", "Gamemaster", 4.seconds)
-            .addMessage("Ich werde euch und eure Familien nicht beschützen, ich werde sie töten.", "Gamemaster")
+            .addMessage("<tr:twist_gamemaster_1>", "<tr:gamemaster>")
+            .addMessage("<tr:twist_gamemaster_2>", "<tr:gamemaster>", 4.seconds)
+            .addMessage("<tr:twist_gamemaster_3>", "<tr:gamemaster>")
             .addMessage(
-                "Da ich jetzt beide Teile des Amethysten habe, kann mich keiner mehr aufhalten.",
-                "Gamemaster",
+                "<tr:twist_gamemaster_4>",
+                "<tr:gamemaster>",
                 2.seconds
             )
-            .addMessage("Niemand! MUHAHAHA", "Gamemaster", 0.seconds)
+            .addMessage("<tr:twist_gamemaster_5>", "<tr:gamemaster>", 0.seconds)
             .start()
             .whenComplete { _, _ ->
                 complete()

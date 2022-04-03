@@ -20,7 +20,6 @@ import net.stckoverflw.pluginjam.config.ConfigManager
 import net.stckoverflw.pluginjam.gamephase.GamePhaseManager
 import net.stckoverflw.pluginjam.i18n.TranslationsProvider
 import net.stckoverflw.pluginjam.listener.protectionListener
-import net.stckoverflw.pluginjam.util.deserializeMini
 import net.stckoverflw.pluginjam.util.loadSavedWorld
 import net.stckoverflw.pluginjam.util.repopulateWorld
 import net.stckoverflw.pluginjam.util.sendMini
@@ -64,8 +63,8 @@ class DevcordJamPlugin : KSpigot() {
                 sync {
                     repopulateWorld(worldName)
                 }
-            }.invokeOnCompletion {
-                if (it == null || it is CancellationException) {
+            }.invokeOnCompletion { e ->
+                if (e == null || e is CancellationException) {
                     sync {
                         Bukkit.getWorld("pluginjam")?.apply {
                             difficulty = Difficulty.PEACEFUL
@@ -78,7 +77,7 @@ class DevcordJamPlugin : KSpigot() {
                         onlinePlayers.forEach { it.gameMode = GameMode.SURVIVAL }
                         onlinePlayers.filter { it.world.name != "pluginjam" }.forEach {
                             it.teleport(Bukkit.getWorld("pluginjam") !!.spawnLocation)
-                            it.sendMessage("<green>A new game started. You are in the lobby now.".deserializeMini())
+                            it.sendMini("<green><tr:new_game_started>")
                         }
                     }
                 }
@@ -97,7 +96,7 @@ class DevcordJamPlugin : KSpigot() {
             onlinePlayers.forEach { it.gameMode = GameMode.SURVIVAL }
             onlinePlayers.filter { it.world.name != "pluginjam" }.forEach {
                 it.teleport(Bukkit.getWorld("pluginjam") !!.spawnLocation)
-                it.sendMessage("<green>A new game started. You are in the lobby now.".deserializeMini())
+                it.sendMini("<green><tr:new_game_started>")
             }
         }
 
@@ -121,7 +120,7 @@ class DevcordJamPlugin : KSpigot() {
             val world = if (allowWorldJoin) {
                 Bukkit.createWorld(WorldCreator("pluginjam")) ?: Bukkit.getWorld("world")
             } else {
-                it.player.sendMini("<green>Das Spiel läuft bereits, klicke <click:run_command:/spectate-game><red>hier</click> um zuzuschauen oder warte auf eine neue Runde.")
+                it.player.sendMini("<green><tr:game_already_running:<click:run_command:/spectate-game><red>hier</click>>")
                 Bukkit.getWorld("world")
             }
             world?.spawnLocation?.let { it1 -> it.player.teleportAsync(it1) }

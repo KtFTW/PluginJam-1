@@ -22,7 +22,7 @@ class Conversation(private val plugin: DevcordJamPlugin) {
         text: String,
         who: String? = null,
         delay: Duration = 3.seconds,
-        makeSound: Boolean = true
+        makeSound: Boolean = true,
     ): Conversation {
         messages.add(
             ConversationMessage(

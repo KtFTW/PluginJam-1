@@ -36,8 +36,6 @@ object TaskPhase : GamePhase(FightPhase), ListenerHolder {
     private val tasks = listOf<Task>(
         FindWoodTask(),
         FindOresTask(),
-//        FindFoodTask(),
-//        KillPillagersTask(),
     )
 
     override fun start() {

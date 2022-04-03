@@ -19,16 +19,13 @@ class ReloadCommands(private val plugin: DevcordJamPlugin) {
             }.invokeOnCompletion {
                 player.sendMini(
                     when (it) {
-                        null -> { // job done
-                            "<green>Konfigurationen wurden neu geladen.</green>"
-                        }
-                        is CancellationException -> { // job cancelled normally
-                            "<orange>Der Job zum Neuladen der Konfigurationen wurde abgebrochen.</orange>"
+                        null, is CancellationException -> { // job done
+                            "<green><tr:configs_reloaded></green>"
                         }
                         else -> { // job failed
-                            plugin.logger.warning("Konfigurationen konnten nicht neu geladen werden")
+                            plugin.logger.warning("<red><tr:configs_not_reloaded_1></red>")
                             plugin.logger.warning(it.stackTraceToString())
-                            "<red>Konfigurationen konnten nicht neu geladen werden (mehr Informationen in der Console)</red>"
+                            "<red><tr:configs_not_reloaded_2></red>"
                         }
                     }
                 )

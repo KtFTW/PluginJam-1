@@ -15,7 +15,7 @@ class PositionCommand(val postionsConfig: PostionsConfig) {
                 runs {
                     val name = getArgument<String>("name")
                     postionsConfig.modify(name, player.location)
-                    player.sendMessage("Position saved!")
+                    player.sendMessage("<tr:position_saved>")
                 }
             }
         }

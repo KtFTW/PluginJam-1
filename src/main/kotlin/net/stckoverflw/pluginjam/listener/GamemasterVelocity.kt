@@ -14,7 +14,7 @@ class GamemasterVelocity(private val gamemaster: GamemasterEntity) {
 
             gamemasterLocation.getNearbyEntities(0.5, 0.5, 0.5).forEach {
                 if (it.type == EntityType.PLAYER) {
-                    it.velocity = it.velocity.multiply(-1)
+                    it.velocity = it.velocity.multiply(-2)
                 }
             }
         }

@@ -8,12 +8,12 @@ import kotlin.time.Duration.Companion.seconds
 class TwistPhaseTwistLocationHelperAction : Action() {
     override fun execute(): Action {
         Conversation(DevcordJamPlugin.instance)
-            .addMessage("<i>Ihr habt die geheime Basis des Gamemasters gefunden.")
+            .addMessage("<i><tr:twist_location_helper_1></i>")
             .addMessage(
-                "<i>Der Gamemaster scheint nicht hier zu sein, aber vielleicht findet ihr hier die Kristalle.",
+                "<i><tr:twist_location_helper_2></i>",
                 delay = 4.seconds
             )
-            .addMessage("<i>Aber passt auf! Der Gamemaster darf auf gar keinen Fall erfahren, dass ihr hier seit.")
+            .addMessage("<i><tr:twist_location_helper_3></i>", delay = 0.seconds)
             .start()
             .whenComplete { _, _ ->
                 complete()

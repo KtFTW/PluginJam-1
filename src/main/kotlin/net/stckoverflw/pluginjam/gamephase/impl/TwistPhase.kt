@@ -105,8 +105,8 @@ object TwistPhase : GamePhase(DestroyPhase), TaskHolder, ListenerHolder {
         addTask(
             task(period = 5) {
                 val message = when (state) {
-                    State.FIND_GAMEMASTER -> "Finde den Gamemaster"
-                    State.GET_AMETHYST -> "Klaue die Amethysten"
+                    State.FIND_GAMEMASTER -> "<tr:twist_find_gamemaster>"
+                    State.GET_AMETHYST -> "<tr:twist_steal_amethysts"
                     else -> null
                 }
 
@@ -138,7 +138,7 @@ object TwistPhase : GamePhase(DestroyPhase), TaskHolder, ListenerHolder {
                     if (player.gameMode == GameMode.CREATIVE) return@forEach
                     if (laserBoundingBoxes.any { it.overlaps(player.boundingBox) }) {
                         player.teleport(positionConfig.getLocation("twist_location"))
-                        player.sendMini("<red>Aua! Du darfst die Laser nicht berühren!")
+                        player.sendMini("<red><tr:twist_laser>")
                         player.playSound(player.location, Sound.BLOCK_RESPAWN_ANCHOR_DEPLETE, 1f, 2f)
                         player.playSound(player.location, Sound.BLOCK_GLASS_BREAK, 1f, 2f)
                     }

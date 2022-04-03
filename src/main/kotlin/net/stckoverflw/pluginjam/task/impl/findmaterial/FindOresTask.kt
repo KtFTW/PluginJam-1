@@ -24,8 +24,6 @@ class FindOresTask : FindMaterialTask() {
 
         addListener(
             listen<PlayerInteractEvent> {
-                println("smelt interact hasBlock: ${it.hasBlock()}")
-                println("smelt interact clickedBlock type: ${it.clickedBlock?.type}")
                 if (! it.hasBlock()) return@listen
                 if (it.clickedBlock !!.type != Material.FURNACE) return@listen
                 it.isCancelled = true
@@ -44,19 +42,19 @@ class FindOresTask : FindMaterialTask() {
         )
         Conversation(DevcordJamPlugin.instance)
             .addMessage(
-                "Um eine Chance gegen die <red>Leviatanen</red> zu haben brauchen wir Waffen und Rüstungen!",
-                "Dorfbewohner",
+                "<tr:task_ores_1:<red><tr:leviatans></red>>",
+                "<tr:villager>",
                 3.seconds
             )
-            .addMessage("Dafür müsst ihr verschiedene Erze finden und abbauen.", "<blue>Dorfbewohner</blue>", 3.seconds)
+            .addMessage("<tr:task_ores_2>", "<tr:villager>", 3.seconds)
             .addMessage(
-                "Bringt mir bitte $coalCount Kohle, $ironCount Eisen-Ingots und $goldCount Gold-Ingots",
-                "Dorfbewohner",
+                "<tr:task_ores_3:$coalCount:$ironCount:$goldCount>",
+                "<tr:villager>",
                 3.seconds
             )
             .addMessage(
-                "Die rohen Erze könnt ihr mit Rechtsklick auf einen Ofen direkt schmelzen.",
-                "Dorfbewohner",
+                "<tr:task_ores_4>",
+                "<tr:villager>",
                 3.seconds
             )
             .start()

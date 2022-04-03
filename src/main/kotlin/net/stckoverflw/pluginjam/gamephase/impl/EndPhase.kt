@@ -37,7 +37,7 @@ object EndPhase : GamePhase(null), ListenerHolder {
             // TODO: Timer
         }
 
-        broadcastMini("<i>Ihr habt es geschafft! Ihr konntet den Gamemaster davon abhalten euer Dorf auszuschöschen.")
+        broadcastMini("<i><tr:end_broadcast>")
 
         MaterialCircle(10, Material.AIR).edgeStructure.structureData
             .map { it.location.withWorld(world).plus(world.spawnLocation.toVector().plus(vecY(1))) }

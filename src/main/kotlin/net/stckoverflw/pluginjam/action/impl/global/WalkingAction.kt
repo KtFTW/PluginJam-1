@@ -5,7 +5,7 @@ import kotlinx.coroutines.launch
 import net.stckoverflw.pluginjam.DevcordJamPlugin
 import net.stckoverflw.pluginjam.action.Action
 import net.stckoverflw.pluginjam.entities.GamemasterEntity
-import net.stckoverflw.pluginjam.util.deserializeMini
+import net.stckoverflw.pluginjam.util.mini
 import net.stckoverflw.pluginjam.util.pluginJamPlayers
 import org.bukkit.Location
 
@@ -20,7 +20,7 @@ class WalkingAction(
             while (true) {
                 delay(500)
                 pluginJamPlayers.forEach {
-                    it.sendActionBar("Folge dem Dorfbewohner".deserializeMini())
+                    it.sendActionBar(mini("<green><tr:walking_follow>"))
                 }
             }
         }

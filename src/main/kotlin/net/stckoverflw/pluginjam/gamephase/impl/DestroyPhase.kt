@@ -96,7 +96,7 @@ object DestroyPhase : GamePhase(EndPhase), ListenerHolder, TaskHolder {
                     }
                     if (amethystsLeft <= 0) {
                         Conversation(DevcordJamPlugin.instance)
-                            .addMessage("<i>Ihr habt die Kristalle zerstört, gut gemacht!</i>")
+                            .addMessage("<i><tr:crystals_destroyed></i>")
                             .start()
                             .whenComplete { _, _ ->
                                 GamePhaseManager.nextPhase()
@@ -126,7 +126,7 @@ object DestroyPhase : GamePhase(EndPhase), ListenerHolder, TaskHolder {
                     if (player.gameMode == GameMode.CREATIVE) return@forEach
                     if (laserBoundingBoxes.any { it.overlaps(player.boundingBox) }) {
                         player.teleport(positionConfig.getLocation("twist_location_crystal"))
-                        player.sendMini("<red>Aua! Du darfst die Laser nicht berühren!")
+                        player.sendMini("<red><tr:twist_laser>")
                         player.playSound(player.location, Sound.BLOCK_RESPAWN_ANCHOR_DEPLETE, 1f, 2f)
                         player.playSound(player.location, Sound.BLOCK_GLASS_BREAK, 1f, 2f)
                     }

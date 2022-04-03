@@ -7,8 +7,8 @@ import net.stckoverflw.pluginjam.util.Conversation
 class DestroyPhaseWelcomeAction : Action() {
     override fun execute(): Action {
         Conversation(DevcordJamPlugin.instance)
-            .addMessage("<i>Der sicherste Weg um sicherzustellen, dass die Kristalle nicht in falschen Händen landen, ist es, sie zu zerstören.</i>")
-            .addMessage("<i>Findet Lava und zerstört die Kristalle in dieser!</i>")
+            .addMessage("<i><tr:destroy_1></i>")
+            .addMessage("<i><tr:destroy_2></i>")
             .start()
             .whenComplete { _, _ ->
                 complete()
