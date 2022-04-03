@@ -3,6 +3,7 @@ package net.stckoverflw.pluginjam.action.impl.fightphase
 import net.axay.kspigot.event.listen
 import net.axay.kspigot.event.unregister
 import net.axay.kspigot.runnables.KSpigotRunnable
+import net.axay.kspigot.runnables.sync
 import net.axay.kspigot.runnables.task
 import net.stckoverflw.pluginjam.DevcordJamPlugin
 import net.stckoverflw.pluginjam.action.Action
