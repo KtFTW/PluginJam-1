@@ -18,26 +18,26 @@ class FindOresTask : FindMaterialTask() {
     var coalCount = 10
 
     override fun start() {
-        super.start()
         materials[Material.IRON_INGOT] = ironCount
         materials[Material.GOLD_INGOT] = goldCount
         materials[Material.COAL] = coalCount
 
         addListener(
-            listen <PlayerInteractEvent> {
+            listen<PlayerInteractEvent> {
                 println("smelt interact hasBlock: ${it.hasBlock()}")
                 println("smelt interact clickedBlock type: ${it.clickedBlock?.type}")
-                if (!it.hasBlock()) return@listen
-                if (it.clickedBlock!!.type != Material.FURNACE) return@listen
+                if (! it.hasBlock()) return@listen
+                if (it.clickedBlock !!.type != Material.FURNACE) return@listen
                 it.isCancelled = true
                 it.player.smeltItemInHand()
             }
         )
 
         materials[Material.COAL] = Random.nextInt(
-            (materials[Material.IRON_INGOT]!! + materials[Material.GOLD_INGOT]!!) / 12,
-            (materials[Material.IRON_INGOT]!! + materials[Material.GOLD_INGOT]!!) / 6
+            (materials[Material.IRON_INGOT] !! + materials[Material.GOLD_INGOT] !!) / 12,
+            (materials[Material.IRON_INGOT] !! + materials[Material.GOLD_INGOT] !!) / 6
         )
+        super.start()
     }
 
     override fun introduce() {
@@ -48,10 +48,22 @@ class FindOresTask : FindMaterialTask() {
             ((ironCount + goldCount) / 6) + 2
         )
         Conversation(DevcordJamPlugin.instance)
-            .addMessage("Um eine Chance gegen die <red>Leviatanen</red> zu haben brauchen wir Waffen und Rüstungen!", "<blue>Dorfbewohner</blue>", 3.seconds)
+            .addMessage(
+                "Um eine Chance gegen die <red>Leviatanen</red> zu haben brauchen wir Waffen und Rüstungen!",
+                "<blue>Dorfbewohner</blue>",
+                3.seconds
+            )
             .addMessage("Dafür müsst ihr verschiedene Erze finden und abbauen.", "<blue>Dorfbewohner</blue>", 3.seconds)
-            .addMessage("Bringt mir bitte $coalCount Kohle, $ironCount Eisen-Ingots und $goldCount Gold-Ingots", "<blue>Dorfbewohner</blue>", 3.seconds)
-            .addMessage("Die rohen Erze könnt ihr mit Rechtsklick auf einen Ofen direkt schmelzen.", "<blue>Dorfbewohner</blue>", 3.seconds)
+            .addMessage(
+                "Bringt mir bitte $coalCount Kohle, $ironCount Eisen-Ingots und $goldCount Gold-Ingots",
+                "<blue>Dorfbewohner</blue>",
+                3.seconds
+            )
+            .addMessage(
+                "Die rohen Erze könnt ihr mit Rechtsklick auf einen Ofen direkt schmelzen.",
+                "<blue>Dorfbewohner</blue>",
+                3.seconds
+            )
             .start()
             .whenComplete { _, _ ->
                 start()

@@ -8,8 +8,12 @@ import net.stckoverflw.pluginjam.task.Task
 import net.stckoverflw.pluginjam.task.TaskResult
 import net.stckoverflw.pluginjam.util.Conversation
 import net.stckoverflw.pluginjam.util.ListenerHolder
+import net.stckoverflw.pluginjam.util.Scoreboard
+import net.stckoverflw.pluginjam.util.mini
 import net.stckoverflw.pluginjam.util.pluginJamPlayers
 import net.stckoverflw.pluginjam.util.reset
+import net.stckoverflw.pluginjam.util.scoreboard
+import org.apache.commons.lang.WordUtils
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.EventPriority
@@ -24,14 +28,17 @@ abstract class FindMaterialTask : Task(), ListenerHolder {
 
     override val listeners: MutableList<Listener> = mutableListOf()
     protected val materials = hashMapOf<Material, Int>()
+    private val indices = hashMapOf<Material, Int>()
+    private val total = hashMapOf<Material, Int>()
+    lateinit var scoreboard: Scoreboard
 
     private fun foundMaterial(player: Player, material: Material, amount: Int) {
-        if (!materials.containsKey(material)) {
+        if (! materials.containsKey(material)) {
             return
         }
-        materials[material] = materials[material]!! - amount
+        materials[material] = materials[material] !! - amount
         player.inventory.contents = player.inventory.contents?.filter { it?.type != material }?.toTypedArray()
-        val addBack = player.inventory.contents!!.filter { it?.type == material }.sumOf { it?.amount ?: 0 }
+        val addBack = player.inventory.contents !!.filter { it?.type == material }.sumOf { it?.amount ?: 0 }
         if (addBack - amount > 0) {
             player.inventory.addItem(ItemStack(material, addBack - amount))
         }
@@ -43,6 +50,18 @@ abstract class FindMaterialTask : Task(), ListenerHolder {
                 it.reset()
             }
         }
+
+        val count = total[material] !! - (materials[material] ?: 0)
+        scoreboard.set(
+            indices[material] !!,
+            mini(
+                "<red>${
+                    WordUtils.capitalize(
+                        material.name.lowercase().replace("_", "")
+                    )
+                } <gray>- <red>$count<gray>/<red>${total[material] !!}"
+            )
+        )
 
         if (materials.isEmpty()) {
             Conversation(DevcordJamPlugin.instance)
@@ -56,17 +75,44 @@ abstract class FindMaterialTask : Task(), ListenerHolder {
 
     private fun Player.giveItems() {
         inventory.addItem(
-            ItemStack(Material.STONE_SWORD),
-            ItemStack(Material.STONE_PICKAXE),
-            ItemStack(Material.STONE_AXE),
-            ItemStack(Material.STONE_SHOVEL),
-            ItemStack(Material.STONE_HOE)
+            ItemStack(Material.IRON_PICKAXE),
+            ItemStack(Material.IRON_AXE),
         )
     }
 
     override fun start() {
+
+        var i = 1
+        scoreboard = scoreboard {
+            displayName = mini("<green>Aufgabe")
+            set(0, "")
+
+            materials.forEach {
+                set(
+                    i,
+                    mini(
+                        "<green>${
+                            WordUtils.capitalize(
+                                it.key.name.lowercase().replace("_", "")
+                            )
+                        } <gray>- <red>0<gray>/<red>${it.value}"
+                    )
+                )
+                indices[it.key] = i
+                total[it.key] = it.value
+                i ++
+            }
+            if (materials.size <= 1) {
+                set(i, "<green>Besorge dieses Item:")
+            } else {
+                set(i, "<blue>Besorge diese Items:")
+            }
+            set(i + 1, "")
+        }
+
         pluginJamPlayers.forEach {
             it.giveItems()
+            scoreboard.applyScoreboard(it)
         }
         addListener(
             listen<PlayerInteractEntityEvent> {
@@ -90,5 +136,6 @@ abstract class FindMaterialTask : Task(), ListenerHolder {
 
     override fun stop() {
         unregisterAllListeners()
+        scoreboard.removeScoreboard()
     }
 }

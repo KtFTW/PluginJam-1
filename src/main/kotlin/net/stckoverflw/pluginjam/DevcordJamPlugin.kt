@@ -51,7 +51,7 @@ class DevcordJamPlugin : KSpigot() {
     override fun startup() {
         val worldName = "pluginjam"
         val path = Bukkit.getWorldContainer().toPath() / worldName
-        if (!path.toFile().exists()) {
+        if (! path.toFile().exists()) {
             ioScope.launch {
                 loadSavedWorld(worldName)
                 delay(10000)
@@ -77,7 +77,7 @@ class DevcordJamPlugin : KSpigot() {
                         }
                         onlinePlayers.forEach { it.gameMode = GameMode.SURVIVAL }
                         onlinePlayers.filter { it.world.name != "pluginjam" }.forEach {
-                            it.teleport(Bukkit.getWorld("pluginjam")!!.spawnLocation)
+                            it.teleport(Bukkit.getWorld("pluginjam") !!.spawnLocation)
                             it.sendMessage("<green>A new game started. You are in the lobby now.".deserializeMini())
                         }
                     }
@@ -96,7 +96,7 @@ class DevcordJamPlugin : KSpigot() {
 
             onlinePlayers.forEach { it.gameMode = GameMode.SURVIVAL }
             onlinePlayers.filter { it.world.name != "pluginjam" }.forEach {
-                it.teleport(Bukkit.getWorld("pluginjam")!!.spawnLocation)
+                it.teleport(Bukkit.getWorld("pluginjam") !!.spawnLocation)
                 it.sendMessage("<green>A new game started. You are in the lobby now.".deserializeMini())
             }
         }
@@ -121,11 +121,7 @@ class DevcordJamPlugin : KSpigot() {
             val world = if (allowWorldJoin) {
                 Bukkit.createWorld(WorldCreator("pluginjam")) ?: Bukkit.getWorld("world")
             } else {
-                it.player.sendMini(
-                    "<red>The game is already in progress, </red>" +
-                        "<click:run_command:/spectate-game><blue><u>click here to spectate</u></blue></click>" +
-                        "<red> or wait for the next round (you'll get teleported automatically).".deserializeMini()
-                )
+                it.player.sendMini("<green>Das Spiel läuft bereits, klicke <click:run_command:/spectate-game><red>hier</click> um zuzuschauen oder warte auf eine neue Runde.")
                 Bukkit.getWorld("world")
             }
             world?.spawnLocation?.let { it1 -> it.player.teleportAsync(it1) }

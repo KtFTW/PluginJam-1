@@ -11,6 +11,7 @@ import net.axay.kspigot.runnables.sync
 import net.kyori.adventure.text.Component
 import net.stckoverflw.pluginjam.DevcordJamPlugin
 import org.bukkit.Bukkit
+import org.bukkit.GameMode
 import org.bukkit.WorldCreator
 import org.bukkit.block.Block
 import org.bukkit.block.data.type.Door
@@ -20,7 +21,7 @@ import java.nio.file.Files
 import kotlin.io.path.div
 
 val pluginJamPlayers: List<Player>
-    get() = onlinePlayers.filter { it.world.name == "pluginjam" }
+    get() = onlinePlayers.filter { it.world.name == "pluginjam" && it.gameMode == GameMode.SURVIVAL }
 
 fun broadcastToPluginJamPlayers(message: Component) {
     pluginJamPlayers.forEach { it.sendMessage(message) }
