@@ -82,21 +82,10 @@ class DevcordJamPlugin : KSpigot() {
                         }
                     }
                 }
-                instance = this
-                configManager = ConfigManager(this)
-
-                GamePhaseManager.init()
-
-                ReloadCommands(this)
-                PositionCommand(configManager.postionsConfig)
-                PositionTpCommand(configManager.postionsConfig)
-                SkipPhaseCommand()
-                ResetCommand()
-                SpectateCommand()
-
-                translationsProvider = TranslationsProvider(this)
-
-                protectionListener()
+                sync {
+                    println("Reloading server")
+                    server.reload()
+                }
             }
         } else {
             Bukkit.createWorld(WorldCreator("pluginjam"))
