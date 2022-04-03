@@ -3,6 +3,7 @@ package net.stckoverflw.pluginjam.command
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
 import net.axay.kspigot.commands.command
+import net.axay.kspigot.commands.requiresPermission
 import net.axay.kspigot.commands.runs
 import net.stckoverflw.pluginjam.DevcordJamPlugin
 import net.stckoverflw.pluginjam.util.sendMini
@@ -11,6 +12,7 @@ class ReloadCommands(private val plugin: DevcordJamPlugin) {
 
     @Suppress("unused")
     val reloadConfig = command("reload-configs") {
+        requiresPermission("pluginjam.reload-configs")
         runs {
             plugin.ioScope.launch {
                 plugin.configManager.loadConfigs()
