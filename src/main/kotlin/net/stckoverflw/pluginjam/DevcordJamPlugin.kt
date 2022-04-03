@@ -122,7 +122,7 @@ class DevcordJamPlugin : KSpigot() {
             val world = if (allowWorldJoin) {
                 Bukkit.createWorld(WorldCreator("pluginjam")) ?: Bukkit.getWorld("world")
             } else {
-                it.player.sendMini("<green><tr:game_already_running:'<click:run_command:/spectate-game><red>hier</click>'>")
+                it.player.sendMini("<green><tr:game_already_running:'<click:run_command:/spectate-game><red><tr:here></click>'>")
                 Bukkit.getWorld("world")
             }
             world?.spawnLocation?.let { it1 -> it.player.teleportAsync(it1) }
