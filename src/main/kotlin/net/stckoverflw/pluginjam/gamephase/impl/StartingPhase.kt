@@ -50,7 +50,7 @@ object StartingPhase : GamePhase(PrisonPhase), ListenerHolder {
                         postionsConfig.getLocation("starting_gamemaster_house_1")
                     )
                     task(period = 5) {
-                        playersWithoutSpectators.forEach { player -> player.sendActionBar(mini("<tr:go_to_house>")) }
+                        playersWithoutSpectators.forEach { player -> player.sendActionBar(mini("<green><tr:go_to_house>")) }
                         if (playersWithoutSpectators.all { player -> area.isInArea(player.location) }) {
 
                             val door0 = postionsConfig.getLocation("starting_door_0").add(0.0, 1.0, 0.0).block

@@ -105,8 +105,8 @@ object TwistPhase : GamePhase(DestroyPhase), TaskHolder, ListenerHolder {
         addTask(
             task(period = 5) {
                 val message = when (state) {
-                    State.FIND_GAMEMASTER -> "<tr:twist_find_gamemaster>"
-                    State.GET_AMETHYST -> "<tr:twist_steal_amethysts>"
+                    State.FIND_GAMEMASTER -> "<green><tr:twist_find_gamemaster>"
+                    State.GET_AMETHYST -> "<green><tr:twist_steal_amethysts>"
                     else -> null
                 }
 

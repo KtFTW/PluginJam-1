@@ -1,0 +1,456 @@
+starting_gamemaster_0:
+  ==: org.bukkit.Location
+  world: pluginjam
+  x: 56.57138669791193
+  y: 63.0
+  z: 329.9090300346128
+  pitch: 6.5996447
+  yaw: 1.5993652
+starting_gamemaster_1:
+  ==: org.bukkit.Location
+  world: pluginjam
+  x: 37.68386410343115
+  y: 63.0
+  z: 325.4486371154147
+  pitch: 11.250286
+  yaw: -84.766235
+starting_gamemaster_house_0:
+  ==: org.bukkit.Location
+  world: pluginjam
+  x: 36.69999998807907
+  y: 63.0
+  z: 323.69999998807907
+  pitch: 14.699898
+  yaw: -39.277374
+starting_gamemaster_house_1:
+  ==: org.bukkit.Location
+  world: pluginjam
+  x: 42.41718424463465
+  y: 67.0
+  z: 327.30000001192093
+  pitch: 79.7999
+  yaw: -177.87146
+starting_particle_pipeline:
+  ==: org.bukkit.Location
+  world: pluginjam
+  x: 37.51009325207569
+  y: 63.0
+  z: 324.45466129562897
+  pitch: -89.7
+  yaw: -1.0606995
+gas_pipline_1:
+  ==: org.bukkit.Location
+  world: pluginjam
+  x: 41.69999998807907
+  y: 66.0
+  z: 326.69999998807907
+  pitch: 77.86145
+  yaw: 133.56067
+gas_pipline_0:
+  ==: org.bukkit.Location
+  world: pluginjam
+  x: 37.30000001192093
+  y: 66.0
+  z: 324.4211507380951
+  pitch: 79.54489
+  yaw: -80.93408
+starting_pipeline_0:
+  ==: org.bukkit.Location
+  world: pluginjam
+  x: 41.69999998807907
+  y: 63.0
+  z: 326.69999998807907
+  pitch: 2.8499932
+  yaw: 117.2948
+starting_pipeline_1:
+  ==: org.bukkit.Location
+  world: pluginjam
+  x: 37.30000001192093
+  y: 63.0
+  z: 324.30000001192093
+  pitch: 13.04999
+  yaw: -51.598877
+starting_gamemaster_target:
+  ==: org.bukkit.Location
+  world: pluginjam
+  x: 35.69999998807907
+  y: 63.0
+  z: 325.46986169004174
+  pitch: 3.9010625
+  yaw: -89.26758
+starting_pipe_0:
+  ==: org.bukkit.Location
+  world: pluginjam
+  x: 37.520965033591445
+  y: 65.9375
+  z: 324.4971207927458
+  pitch: 90.0
+  yaw: -47.816387
+starting_pipe_1:
+  ==: org.bukkit.Location
+  world: pluginjam
+  x: 41.49761020842827
+  y: 66.0
+  z: 326.4760641698137
+  pitch: 90.0
+  yaw: 149.7426
+prision_prison:
+  ==: org.bukkit.Location
+  world: pluginjam
+  x: 568.8113955302476
+  y: 66.0
+  z: 593.9734903660724
+  pitch: 3.9641647
+  yaw: -22.034027
+prison_prison:
+  ==: org.bukkit.Location
+  world: pluginjam
+  x: 568.8113955302476
+  y: 66.0
+  z: 593.9734903660724
+  pitch: 3.9641647
+  yaw: -22.034027
+prison_gamemaster:
+  ==: org.bukkit.Location
+  world: pluginjam
+  x: 568.547701549519
+  y: 66.0
+  z: 597.5678792597558
+  pitch: 1.7130585
+  yaw: 179.5268
+task_entrance_0:
+  ==: org.bukkit.Location
+  world: pluginjam
+  x: 563.6899205902243
+  y: 68.20000004768372
+  z: 594.6999999880791
+  pitch: 68.67997
+  yaw: 0.4296875
+task_entrance_1:
+  ==: org.bukkit.Location
+  world: pluginjam
+  x: 563.6067627875858
+  y: 66.0
+  z: 593.3000000119209
+  pitch: 73.62946
+  yaw: 107.25391
+twitst_location:
+  ==: org.bukkit.Location
+  world: pluginjam
+  x: 520.8215224473486
+  y: 56.0625
+  z: 411.0215995004808
+  pitch: 13.8640175
+  yaw: -176.08127
+fight_spawn:
+  ==: org.bukkit.Location
+  world: pluginjam
+  x: 1425.5174696280255
+  y: 64.0
+  z: 4258.495335169608
+  pitch: 2.6811316
+  yaw: -179.13103
+end_firework_0:
+  ==: org.bukkit.Location
+  world: pluginjam
+  x: 48.5933712847223
+  y: 63.0
+  z: 334.63870414857973
+  pitch: 26.367144
+  yaw: -148.31888
+end_firework_1:
+  ==: org.bukkit.Location
+  world: pluginjam
+  x: 48.73850969986988
+  y: 63.0
+  z: 328.88096279892306
+  pitch: 17.57813
+  yaw: -54.537872
+end_firework_2:
+  ==: org.bukkit.Location
+  world: pluginjam
+  x: 60.36373833267521
+  y: 63.0
+  z: 336.631188977221
+  pitch: 34.31461
+  yaw: -160.75697
+end_firework_3:
+  ==: org.bukkit.Location
+  world: pluginjam
+  x: 66.99655877403434
+  y: 63.0
+  z: 333.70695963802825
+  pitch: 24.684141
+  yaw: 86.01517
+end_firework_4:
+  ==: org.bukkit.Location
+  world: pluginjam
+  x: 60.51838756992509
+  y: 63.0
+  z: 329.2164004702345
+  pitch: 39.17654
+  yaw: 25.80185
+fight_lava_sawn:
+  ==: org.bukkit.Location
+  world: pluginjam
+  x: 1431.537645953657
+  y: 72.0625
+  z: 4251.5188097283735
+  pitch: -0.9974911
+  yaw: -89.81092
+fight_lava_spawn:
+  ==: org.bukkit.Location
+  world: pluginjam
+  x: 1431.531499226313
+  y: 72.0625
+  z: 4251.478844660082
+  pitch: -0.6102981
+  yaw: -89.94004
+twist_location:
+  ==: org.bukkit.Location
+  world: pluginjam
+  x: 520.8801179688484
+  y: 56.0625
+  z: 411.40160397531736
+  pitch: 1.8780876
+  yaw: -178.85239
+twist_location_1:
+  ==: org.bukkit.Location
+  world: pluginjam
+  x: 525.5735971689967
+  y: 53.70618810423431
+  z: 418.3837889776802
+  pitch: -7.9503455
+  yaw: 174.90164
+twist_location_0:
+  ==: org.bukkit.Location
+  world: pluginjam
+  x: 510.0156095996289
+  y: 61.2
+  z: 370.02569963103116
+  pitch: 8.249662
+  yaw: -0.29846883
+twist_laser_0:
+  ==: org.bukkit.Location
+  world: pluginjam
+  x: 520.9856968906962
+  y: 55.75
+  z: 394.52873410401014
+  pitch: 59.719734
+  yaw: 90.47357
+twist_laser_1:
+  ==: org.bukkit.Location
+  world: pluginjam
+  x: 521.0024208357368
+  y: 54.1
+  z: 391.49702226803447
+  pitch: 87.07802
+  yaw: 178.29712
+twist_laser_2:
+  ==: org.bukkit.Location
+  world: pluginjam
+  x: 520.9042385298992
+  y: 56.25
+  z: 389.5282278785276
+  pitch: 5.6646404
+  yaw: -89.84741
+twist_laser_3:
+  ==: org.bukkit.Location
+  world: pluginjam
+  x: 520.9819610825189
+  y: 55.75
+  z: 386.47700341981204
+  pitch: 13.050726
+  yaw: -89.6604
+twist_laser_4:
+  ==: org.bukkit.Location
+  world: pluginjam
+  x: 520.7844003556773
+  y: 54.0625
+  z: 383.50442225662306
+  pitch: 8.538694
+  yaw: -85.57886
+fight_parkour_end:
+  ==: org.bukkit.Location
+  world: pluginjam
+  x: 1430.4888510148094
+  y: 75.5
+  z: 4206.510617358871
+  pitch: 1.8422718
+  yaw: 0.2990982
+twist_laser_5:
+  ==: org.bukkit.Location
+  world: pluginjam
+  x: 521.3044342260345
+  y: 55.75
+  z: 379.48703522282455
+  pitch: 14.265918
+  yaw: -89.99048
+twist_laser_6:
+  ==: org.bukkit.Location
+  world: pluginjam
+  x: 520.9735112375138
+  y: 54.1
+  z: 375.477946383505
+  pitch: 89.813
+  yaw: -90.50195
+fight_pillager_spawn:
+  ==: org.bukkit.Location
+  world: pluginjam
+  x: 1425.4706629570478
+  y: 72.0
+  z: 4215.52570946217
+  pitch: -1.4492825
+  yaw: -179.75081
+task_start:
+  ==: org.bukkit.Location
+  world: pluginjam
+  x: 557.8197176424205
+  y: 73.0
+  z: 625.8128418029728
+  pitch: 6.648196
+  yaw: 151.65067
+prison_pickaxes:
+  ==: org.bukkit.Location
+  world: pluginjam
+  x: 570.475266028789
+  y: 66.0
+  z: 590.5442428804117
+  pitch: 90.0
+  yaw: -2.145752
+prison_compasses:
+  ==: org.bukkit.Location
+  world: pluginjam
+  x: 576.5927416205601
+  y: 67.0
+  z: 601.611545743863
+  pitch: 89.93546
+  yaw: 136.7467
+fight_deliver_gamemaster:
+  ==: org.bukkit.Location
+  world: pluginjam
+  x: 572.0974542271821
+  y: 66.0
+  z: 599.0514127519152
+  pitch: 9.38709
+  yaw: 90.539215
+fight_deliver_location:
+  ==: org.bukkit.Location
+  world: pluginjam
+  x: 565.7256399244409
+  y: 66.0
+  z: 599.3259336380179
+  pitch: 3.5901392
+  yaw: -91.59725
+twist_amethyst_frame:
+  ==: org.bukkit.Location
+  world: pluginjam
+  x: 575.1934747832844
+  y: 67.0
+  z: 595.3839607074052
+  pitch: 40.165382
+  yaw: 86.97998
+task_gamemaster:
+  ==: org.bukkit.Location
+  world: pluginjam
+  x: 555.384364641048
+  y: 73.0
+  z: 621.3000000119209
+  pitch: 4.3357325
+  yaw: -33.29657
+prison_gamemaster_2:
+  ==: org.bukkit.Location
+  world: pluginjam
+  x: 572.2953290423746
+  y: 66.0
+  z: 598.8928468476414
+  pitch: 1.698203
+  yaw: 89.40625
+prison_spawn_2:
+  ==: org.bukkit.Location
+  world: pluginjam
+  x: 566.6143923267615
+  y: 66.0
+  z: 599.1097542917613
+  pitch: 4.2482195
+  yaw: -90.59277
+prison_pipe_0:
+  ==: org.bukkit.Location
+  world: pluginjam
+  x: 576.6999999880791
+  y: 71.0
+  z: 601.6999999880791
+  pitch: 80.76539
+  yaw: 169.41626
+prison_pipe_1:
+  ==: org.bukkit.Location
+  world: pluginjam
+  x: 564.6500384094917
+  y: 71.0
+  z: 591.6999999880791
+  pitch: 89.870926
+  yaw: 14.77832
+starting_door_0:
+  ==: org.bukkit.Location
+  world: pluginjam
+  x: 40.43693422071979
+  y: 63.0
+  z: 327.50988204420446
+  pitch: 87.98296
+  yaw: -1.8167114
+starting_door_1:
+  ==: org.bukkit.Location
+  world: pluginjam
+  x: 38.62892985091108
+  y: 63.0
+  z: 327.43203245987354
+  pitch: 86.86064
+  yaw: -1.2556763
+prison_1:
+  ==: org.bukkit.Location
+  world: pluginjam
+  x: 579.3304083988518
+  y: 71.66944753988962
+  z: 604.4016746732513
+  pitch: 5.1641755
+  yaw: 112.030945
+prison_0:
+  ==: org.bukkit.Location
+  world: pluginjam
+  x: 555.9203597053538
+  y: 59.67511576682657
+  z: 589.9792662516428
+  pitch: -17.185806
+  yaw: -49.81897
+guheugheg:
+  ==: org.bukkit.Location
+  world: pluginjam
+  x: 1430.4888510148094
+  y: 86.36933172999713
+  z: 4206.510617358871
+  pitch: 1.8422718
+  yaw: 0.2990982
+fight_door:
+  ==: org.bukkit.Location
+  world: pluginjam
+  x: 1425.487500011921
+  y: 72.0
+  z: 4223.397695156169
+  pitch: 88.79425
+  yaw: -2.110811
+prison_iron_bar:
+  ==: org.bukkit.Location
+  world: pluginjam
+  x: 568.496269806467
+  y: 66.0
+  z: 596.4290843188329
+  pitch: 87.92602
+  yaw: -0.7264587
+twist_location_crystal:
+  ==: org.bukkit.Location
+  world: pluginjam
+  x: 520.9740148415702
+  y: 54.0625
+  z: 374.30000001192093
+  pitch: 8.928097
+  yaw: 0.5488782
