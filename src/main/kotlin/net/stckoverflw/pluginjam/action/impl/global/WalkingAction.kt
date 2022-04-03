@@ -2,11 +2,11 @@ package net.stckoverflw.pluginjam.action.impl.global
 
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import net.axay.kspigot.extensions.bukkit.actionBar
-import net.axay.kspigot.extensions.onlinePlayers
 import net.stckoverflw.pluginjam.DevcordJamPlugin
 import net.stckoverflw.pluginjam.action.Action
 import net.stckoverflw.pluginjam.entities.GamemasterEntity
+import net.stckoverflw.pluginjam.util.deserializeMini
+import net.stckoverflw.pluginjam.util.pluginJamPlayers
 import org.bukkit.Location
 
 class WalkingAction(
@@ -19,8 +19,8 @@ class WalkingAction(
         val job = DevcordJamPlugin.instance.defaultScope.launch {
             while (true) {
                 delay(500)
-                onlinePlayers.forEach {
-                    it.actionBar("Folge dem Dorfbewohner!")
+                pluginJamPlayers.forEach {
+                    it.sendActionBar("<green>Folge dem Dorfbewohner!".deserializeMini())
                 }
             }
         }

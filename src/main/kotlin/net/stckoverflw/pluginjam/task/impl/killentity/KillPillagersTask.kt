@@ -1,9 +1,9 @@
 package net.stckoverflw.pluginjam.task.impl.killentity
 
-import net.axay.kspigot.extensions.onlinePlayers
 import net.stckoverflw.pluginjam.DevcordJamPlugin
 import net.stckoverflw.pluginjam.task.impl.KillEntityTask
 import net.stckoverflw.pluginjam.util.Conversation
+import net.stckoverflw.pluginjam.util.pluginJamPlayers
 import org.bukkit.entity.EntityType
 import kotlin.random.Random
 import kotlin.time.Duration.Companion.seconds
@@ -11,7 +11,7 @@ import kotlin.time.Duration.Companion.seconds
 class KillPillagersTask : KillEntityTask() {
 
     override fun start() {
-        entities[EntityType.PILLAGER] = Random.Default.nextInt(onlinePlayers.size * 4, onlinePlayers.size * 8)
+        entities[EntityType.PILLAGER] = Random.Default.nextInt(pluginJamPlayers.size * 4, pluginJamPlayers.size * 8)
 
         // TODO: spawn pillagers, give equiqment, etc.
 

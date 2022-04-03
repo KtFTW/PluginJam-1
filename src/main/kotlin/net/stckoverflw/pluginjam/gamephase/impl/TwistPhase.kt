@@ -5,7 +5,6 @@ import net.axay.kspigot.event.listen
 import net.axay.kspigot.extensions.geometry.LocationArea
 import net.axay.kspigot.extensions.geometry.blockLoc
 import net.axay.kspigot.extensions.geometry.vec
-import net.axay.kspigot.extensions.onlinePlayers
 import net.axay.kspigot.particles.particle
 import net.axay.kspigot.runnables.task
 import net.stckoverflw.pluginjam.DevcordJamPlugin
@@ -23,6 +22,7 @@ import net.stckoverflw.pluginjam.gamephase.GamePhaseManager
 import net.stckoverflw.pluginjam.util.ListenerHolder
 import net.stckoverflw.pluginjam.util.TaskHolder
 import net.stckoverflw.pluginjam.util.mini
+import net.stckoverflw.pluginjam.util.pluginJamPlayers
 import net.stckoverflw.pluginjam.util.sendMini
 import org.bukkit.Bukkit
 import org.bukkit.Color
@@ -106,7 +106,7 @@ object TwistPhase : GamePhase(DestroyPhase), TaskHolder, ListenerHolder {
         addTask(
             task(period = 20) {
                 if (state != State.FIND_GAMEMASTER) return@task
-                if (onlinePlayers.any { twistLocationArea.isInArea(it.location) }) {
+                if (pluginJamPlayers.any { twistLocationArea.isInArea(it.location) }) {
                     state = State.GET_AMETHYST
 
                     ActionPipeline().add(WaitAction(100)).add(TwistPhaseTwistLocationHelperAction()).start()
@@ -115,7 +115,7 @@ object TwistPhase : GamePhase(DestroyPhase), TaskHolder, ListenerHolder {
             }!!
         )
 
-        onlinePlayers.forEach {
+        pluginJamPlayers.forEach {
             it.compassTarget = positionConfig.getLocation("twist_location")
         }
 
@@ -128,7 +128,7 @@ object TwistPhase : GamePhase(DestroyPhase), TaskHolder, ListenerHolder {
                 }
 
                 if (message != null) {
-                    onlinePlayers.forEach { it.sendActionBar(mini(message)) }
+                    pluginJamPlayers.forEach { it.sendActionBar(mini(message)) }
                 }
             }!!
         )
@@ -151,7 +151,7 @@ object TwistPhase : GamePhase(DestroyPhase), TaskHolder, ListenerHolder {
 
         addTask(
             task(period = 3) {
-                onlinePlayers.forEach { player ->
+                pluginJamPlayers.forEach { player ->
                     if (player.gameMode == GameMode.CREATIVE) return@forEach
                     if (laserBoundingBoxes.any { it.overlaps(player.boundingBox) }) {
                         player.teleport(positionConfig.getLocation("twist_location"))

@@ -2,11 +2,10 @@ package net.stckoverflw.pluginjam.action.impl.global
 
 import net.axay.kspigot.event.listen
 import net.axay.kspigot.event.unregister
-import net.axay.kspigot.extensions.onlinePlayers
 import net.axay.kspigot.particles.particle
 import net.axay.kspigot.runnables.taskRunLater
 import net.stckoverflw.pluginjam.action.Action
-import org.bukkit.Bukkit
+import net.stckoverflw.pluginjam.util.pluginJamPlayers
 import org.bukkit.GameMode
 import org.bukkit.Location
 import org.bukkit.Particle
@@ -28,18 +27,17 @@ class FastGasPipelineAction(
             if (it.player.gameMode == GameMode.CREATIVE) return@listen
             it.isCancelled = true
         }
-        val world = Bukkit.getWorlds().first()
         var base = 40.toLong()
 
         taskRunLater(base) {
-            onlinePlayers.forEach {
+            pluginJamPlayers.forEach {
                 it.playSound(it.location, Sound.ENTITY_LIGHTNING_BOLT_IMPACT, 1f, 1f)
             }
         }
 
         base += 20
         taskRunLater(base) {
-            onlinePlayers.forEach {
+            pluginJamPlayers.forEach {
                 it.addPotionEffect(PotionEffect(PotionEffectType.BLINDNESS, 120, 10, false, false))
                 it.playSound(it.location, Sound.ENTITY_LIGHTNING_BOLT_THUNDER, 1f, 1f)
             }
@@ -47,7 +45,7 @@ class FastGasPipelineAction(
 
         base += 10
         taskRunLater(base) {
-            onlinePlayers.forEach {
+            pluginJamPlayers.forEach {
                 it.addPotionEffect(PotionEffect(PotionEffectType.CONFUSION, 100, 10, false, false))
             }
             pipelineLocation0.particle(Particle.CAMPFIRE_COSY_SMOKE) {

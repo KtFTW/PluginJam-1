@@ -1,10 +1,10 @@
 package net.stckoverflw.pluginjam.action.impl.twistphase
 
-import net.axay.kspigot.extensions.onlinePlayers
 import net.axay.kspigot.particles.particle
 import net.axay.kspigot.runnables.taskRunLater
 import net.stckoverflw.pluginjam.action.Action
 import net.stckoverflw.pluginjam.entities.GamemasterEntity
+import net.stckoverflw.pluginjam.util.pluginJamPlayers
 import org.bukkit.Particle
 import org.bukkit.Sound
 import org.bukkit.util.Vector
@@ -22,7 +22,7 @@ class TwistPhaseGamemasterDespawnAction(private val gamemaster: GamemasterEntity
                     offset = Vector(1.0, 1.0, 1.0)
                 }
 
-            onlinePlayers.forEach {
+            pluginJamPlayers.forEach {
                 it.playSound(it.location, Sound.ENTITY_EVOKER_PREPARE_ATTACK, 1.0f, 1.0f)
             }
             gamemaster.despawn()

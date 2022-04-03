@@ -2,7 +2,6 @@ package net.stckoverflw.pluginjam.gamephase.impl
 
 import net.axay.kspigot.event.listen
 import net.axay.kspigot.extensions.geometry.LocationArea
-import net.axay.kspigot.extensions.onlinePlayers
 import net.axay.kspigot.runnables.task
 import net.stckoverflw.pluginjam.DevcordJamPlugin.Companion.instance
 import net.stckoverflw.pluginjam.action.ActionPipeline
@@ -15,6 +14,7 @@ import net.stckoverflw.pluginjam.gamephase.GamePhaseManager
 import net.stckoverflw.pluginjam.listener.GamemasterVelocity
 import net.stckoverflw.pluginjam.util.ListenerHolder
 import net.stckoverflw.pluginjam.util.mini
+import net.stckoverflw.pluginjam.util.pluginJamPlayers
 import net.stckoverflw.pluginjam.util.reset
 import net.stckoverflw.pluginjam.util.setOpenIfDoor
 import org.bukkit.Bukkit
@@ -34,7 +34,10 @@ object StartingPhase : GamePhase(PrisonPhase), ListenerHolder {
         gamemaster.interactCallback = interactCallback@{
             if (blocked) return@interactCallback
             blocked = true
-            onlinePlayers.reset()
+            pluginJamPlayers.forEach {
+                it.reset()
+            }
+            instance.allowWorldJoin = false
 
             ActionPipeline()
                 .add(StartingPhaseWelcomeAction())
@@ -46,8 +49,8 @@ object StartingPhase : GamePhase(PrisonPhase), ListenerHolder {
                         postionsConfig.getLocation("starting_gamemaster_house_1")
                     )
                     task(period = 5) {
-                        onlinePlayers.forEach { player -> player.sendActionBar(mini("Gehe in das Haus")) }
-                        if (onlinePlayers.all { player -> area.isInArea(player.location) }) {
+                        pluginJamPlayers.forEach { player -> player.sendActionBar(mini("Gehe in das Haus")) }
+                        if (pluginJamPlayers.all { player -> area.isInArea(player.location) }) {
 
                             val door0 = postionsConfig.getLocation("starting_door_0").add(0.0, 1.0, 0.0).block
                             val door1 = postionsConfig.getLocation("starting_door_1").add(0.0, 1.0, 0.0).block
@@ -95,7 +98,7 @@ object StartingPhase : GamePhase(PrisonPhase), ListenerHolder {
     override fun end() {
         unregisterAllListeners()
         gamemaster.despawn()
-        Bukkit.getWorlds().first()
+        Bukkit.getWorld("pluginjam")!!
             .apply {
                 time = 0
             }

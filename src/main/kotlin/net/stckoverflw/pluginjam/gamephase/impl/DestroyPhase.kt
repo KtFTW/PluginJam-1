@@ -4,8 +4,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import net.axay.kspigot.event.listen
 import net.axay.kspigot.event.unregister
-import net.axay.kspigot.extensions.broadcast
-import net.axay.kspigot.extensions.onlinePlayers
 import net.axay.kspigot.extensions.worlds
 import net.axay.kspigot.particles.particle
 import net.axay.kspigot.sound.sound
@@ -15,6 +13,7 @@ import net.stckoverflw.pluginjam.gamephase.GamePhase
 import net.stckoverflw.pluginjam.gamephase.GamePhaseManager
 import net.stckoverflw.pluginjam.util.Conversation
 import net.stckoverflw.pluginjam.util.ListenerHolder
+import net.stckoverflw.pluginjam.util.pluginJamPlayers
 import net.stckoverflw.pluginjam.util.reset
 import org.bukkit.Material
 import org.bukkit.Particle
@@ -36,7 +35,6 @@ object DestroyPhase : GamePhase(EndPhase), ListenerHolder {
         DestroyPhaseWelcomeAction()
             .execute()
             .whenComplete {
-                broadcast("")
             }
 
         addListener(
@@ -97,7 +95,7 @@ object DestroyPhase : GamePhase(EndPhase), ListenerHolder {
     }
 
     override fun end() {
-        onlinePlayers.forEach {
+        pluginJamPlayers.forEach {
             it.reset()
         }
         listeners.forEach {

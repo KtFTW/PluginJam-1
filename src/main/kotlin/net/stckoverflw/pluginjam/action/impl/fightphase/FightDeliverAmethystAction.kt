@@ -3,13 +3,13 @@ package net.stckoverflw.pluginjam.action.impl.fightphase
 import net.axay.kspigot.event.SingleListener
 import net.axay.kspigot.event.listen
 import net.axay.kspigot.event.unregister
-import net.axay.kspigot.extensions.onlinePlayers
 import net.axay.kspigot.runnables.sync
 import net.stckoverflw.pluginjam.DevcordJamPlugin
 import net.stckoverflw.pluginjam.action.Action
 import net.stckoverflw.pluginjam.entities.GamemasterEntity
 import net.stckoverflw.pluginjam.util.Conversation
 import net.stckoverflw.pluginjam.util.broadcastMini
+import net.stckoverflw.pluginjam.util.pluginJamPlayers
 import net.stckoverflw.pluginjam.util.reset
 import org.bukkit.Bukkit
 import org.bukkit.Material
@@ -32,7 +32,7 @@ class FightDeliverAmethystAction : Action() {
 
         gamemaster.spawnEntity(positionsConfig.getLocation("prison_gamemaster_2"))
 
-        onlinePlayers.forEach {
+        pluginJamPlayers.forEach {
             it.teleportAsync(positionsConfig.getLocation("prison_spawn_2"))
         }
 
@@ -50,7 +50,7 @@ class FightDeliverAmethystAction : Action() {
                 )
                 .start()
                 .whenComplete { _, _ ->
-                    onlinePlayers.forEach { player ->
+                    pluginJamPlayers.forEach { player ->
                         player.reset()
                     }
                     complete()

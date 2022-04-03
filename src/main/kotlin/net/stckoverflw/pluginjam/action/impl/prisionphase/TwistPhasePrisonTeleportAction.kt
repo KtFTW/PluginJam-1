@@ -1,8 +1,8 @@
 package net.stckoverflw.pluginjam.action.impl.prisionphase
 
-import net.axay.kspigot.extensions.onlinePlayers
 import net.stckoverflw.pluginjam.action.Action
 import net.stckoverflw.pluginjam.entities.GamemasterEntity
+import net.stckoverflw.pluginjam.util.pluginJamPlayers
 import org.bukkit.Location
 
 class TwistPhasePrisonTeleportAction(
@@ -13,7 +13,7 @@ class TwistPhasePrisonTeleportAction(
 
     override fun execute(): Action {
         println("prison teleport")
-        onlinePlayers.forEach { it.teleport(location) }
+        pluginJamPlayers.forEach { it.teleport(location) }
         println("teleported")
         gamemaster.walkTo(gamemasterLocation) {
             println("walked")

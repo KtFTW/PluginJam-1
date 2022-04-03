@@ -1,7 +1,6 @@
 package net.stckoverflw.pluginjam.action.impl.fightphase
 
 import net.axay.kspigot.event.listen
-import net.axay.kspigot.extensions.onlinePlayers
 import net.axay.kspigot.items.itemStack
 import net.axay.kspigot.items.meta
 import net.axay.kspigot.main.KSpigotMainInstance
@@ -9,6 +8,7 @@ import net.axay.kspigot.runnables.sync
 import net.stckoverflw.pluginjam.DevcordJamPlugin
 import net.stckoverflw.pluginjam.action.Action
 import net.stckoverflw.pluginjam.util.ListenerHolder
+import net.stckoverflw.pluginjam.util.pluginJamPlayers
 import net.stckoverflw.pluginjam.util.reset
 import net.stckoverflw.pluginjam.util.setOpenIfDoor
 import org.bukkit.Difficulty
@@ -37,7 +37,7 @@ class FightPhaseWavesAction : Action(), ListenerHolder {
     override fun execute(): Action {
         positionsConfig.getLocation("fight_door").block.setOpenIfDoor(false)
         val spawnPosition = positionsConfig.getLocation("fight_pillager_spawn")
-        onlinePlayers.forEach { giveItems(it) }
+        pluginJamPlayers.forEach { giveItems(it) }
         sync {
             KSpigotMainInstance.server.worlds.forEach {
                 it.difficulty = Difficulty.EASY
@@ -146,7 +146,7 @@ class FightPhaseWavesAction : Action(), ListenerHolder {
 
     override fun complete() {
         unregisterAllListeners()
-        KSpigotMainInstance.server.onlinePlayers.forEach {
+        pluginJamPlayers.forEach {
             it.inventory.clear()
             it.reset()
         }

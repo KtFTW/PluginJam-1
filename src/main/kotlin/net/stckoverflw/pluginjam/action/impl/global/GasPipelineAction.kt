@@ -2,12 +2,12 @@ package net.stckoverflw.pluginjam.action.impl.global
 
 import net.axay.kspigot.event.listen
 import net.axay.kspigot.event.unregister
-import net.axay.kspigot.extensions.onlinePlayers
 import net.axay.kspigot.particles.particle
 import net.axay.kspigot.runnables.task
 import net.axay.kspigot.runnables.taskRunLater
 import net.stckoverflw.pluginjam.action.Action
 import net.stckoverflw.pluginjam.entities.GamemasterEntity
+import net.stckoverflw.pluginjam.util.pluginJamPlayers
 import org.bukkit.Bukkit
 import org.bukkit.GameMode
 import org.bukkit.Location
@@ -32,21 +32,20 @@ class GasPipelineAction(
             if (it.player.gameMode == GameMode.CREATIVE) return@listen
             it.isCancelled = true
         }
-        val world = Bukkit.getWorlds().first()
         var base = 70.toLong()
 
         task(howOften = 20, period = 4) {
-            world.time += 900
+            Bukkit.getWorld("pluginjam")!!.time += 900
         }
 
         taskRunLater(50) {
-            onlinePlayers.forEach {
+            pluginJamPlayers.forEach {
                 it.playSound(it.location, Sound.ENTITY_LIGHTNING_BOLT_IMPACT, 1f, 1f)
             }
         }
 
         taskRunLater(base) {
-            onlinePlayers.forEach {
+            pluginJamPlayers.forEach {
                 it.addPotionEffect(PotionEffect(PotionEffectType.BLINDNESS, 200, 10, false, false))
                 it.playSound(it.location, Sound.ENTITY_LIGHTNING_BOLT_THUNDER, 1f, 1f)
             }
@@ -54,7 +53,7 @@ class GasPipelineAction(
 
         base += 40
         taskRunLater(base) {
-            onlinePlayers.forEach {
+            pluginJamPlayers.forEach {
                 it.addPotionEffect(PotionEffect(PotionEffectType.CONFUSION, 200, 10, false, false))
             }
             pipelineLocation0.particle(Particle.CAMPFIRE_COSY_SMOKE) {

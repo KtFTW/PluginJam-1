@@ -1,9 +1,9 @@
 package net.stckoverflw.pluginjam.task.impl.findmaterial
 
-import net.axay.kspigot.extensions.onlinePlayers
 import net.stckoverflw.pluginjam.DevcordJamPlugin
 import net.stckoverflw.pluginjam.task.impl.FindMaterialTask
 import net.stckoverflw.pluginjam.util.Conversation
+import net.stckoverflw.pluginjam.util.pluginJamPlayers
 import org.bukkit.Material
 import kotlin.random.Random
 import kotlin.time.Duration.Companion.seconds
@@ -23,7 +23,7 @@ class FindFoodTask : FindMaterialTask() {
     }
 
     override fun introduce() {
-        count = Random.Default.nextInt(onlinePlayers.size * 4, onlinePlayers.size * 8)
+        count = Random.Default.nextInt(pluginJamPlayers.size * 4, pluginJamPlayers.size * 8)
         Conversation(DevcordJamPlugin.instance)
             .addMessage("Wir brauchen auch noch etwas essbares.", "<blue>Dorfbewohner</blue>", 3.seconds)
             .addMessage("Sucht nach $count Brot und bringt es zu mir!", "<blue>Dorfbewohner</blue>", 3.seconds)

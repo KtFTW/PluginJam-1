@@ -1,10 +1,10 @@
 package net.stckoverflw.pluginjam.task.impl.findmaterial
 
 import net.axay.kspigot.event.listen
-import net.axay.kspigot.extensions.onlinePlayers
 import net.stckoverflw.pluginjam.DevcordJamPlugin
 import net.stckoverflw.pluginjam.task.impl.FindMaterialTask
 import net.stckoverflw.pluginjam.util.Conversation
+import net.stckoverflw.pluginjam.util.pluginJamPlayers
 import net.stckoverflw.pluginjam.util.smeltItemInHand
 import org.bukkit.Material
 import org.bukkit.event.player.PlayerInteractEvent
@@ -41,8 +41,8 @@ class FindOresTask : FindMaterialTask() {
     }
 
     override fun introduce() {
-        ironCount = Random.nextInt(onlinePlayers.size * 2, onlinePlayers.size * 4) // 2
-        goldCount = Random.nextInt(onlinePlayers.size / 2 + 2, onlinePlayers.size + 4) // 2
+        ironCount = Random.nextInt(pluginJamPlayers.size * 2, pluginJamPlayers.size * 4) // 2
+        goldCount = Random.nextInt(pluginJamPlayers.size / 2 + 2, pluginJamPlayers.size + 4) // 2
         coalCount = Random.nextInt(
             (ironCount + goldCount) / 12 + 1,
             ((ironCount + goldCount) / 6) + 2

@@ -2,7 +2,6 @@ package net.stckoverflw.pluginjam.gamephase.impl
 
 import net.axay.kspigot.event.listen
 import net.axay.kspigot.extensions.geometry.LocationArea
-import net.axay.kspigot.extensions.onlinePlayers
 import net.stckoverflw.pluginjam.DevcordJamPlugin
 import net.stckoverflw.pluginjam.action.ActionPipeline
 import net.stckoverflw.pluginjam.action.impl.global.WalkingAction
@@ -12,10 +11,10 @@ import net.stckoverflw.pluginjam.gamephase.GamePhase
 import net.stckoverflw.pluginjam.gamephase.GamePhaseManager
 import net.stckoverflw.pluginjam.task.Task
 import net.stckoverflw.pluginjam.task.TaskResult
-import net.stckoverflw.pluginjam.task.impl.findmaterial.FindFoodTask
 import net.stckoverflw.pluginjam.task.impl.findmaterial.FindOresTask
 import net.stckoverflw.pluginjam.task.impl.findmaterial.FindWoodTask
 import net.stckoverflw.pluginjam.util.ListenerHolder
+import net.stckoverflw.pluginjam.util.pluginJamPlayers
 import net.stckoverflw.pluginjam.util.reset
 import org.bukkit.GameMode
 import org.bukkit.Material
@@ -37,8 +36,8 @@ object TaskPhase : GamePhase(FightPhase), ListenerHolder {
     private val tasks = listOf<Task>(
         FindWoodTask(),
         FindOresTask(),
-        FindFoodTask(),
-        //  KillPillagersTask(),
+//        FindFoodTask(),
+//        KillPillagersTask(),
     )
 
     override fun start() {
@@ -83,7 +82,7 @@ object TaskPhase : GamePhase(FightPhase), ListenerHolder {
     }
 
     override fun end() {
-        onlinePlayers.forEach {
+        pluginJamPlayers.forEach {
             it.reset()
         }
         gamemaster.despawn()

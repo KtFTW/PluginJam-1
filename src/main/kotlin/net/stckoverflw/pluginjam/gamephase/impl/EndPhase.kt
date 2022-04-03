@@ -3,7 +3,6 @@ package net.stckoverflw.pluginjam.gamephase.impl
 import net.axay.kspigot.extensions.geometry.plus
 import net.axay.kspigot.extensions.geometry.vecY
 import net.axay.kspigot.extensions.geometry.withWorld
-import net.axay.kspigot.extensions.onlinePlayers
 import net.axay.kspigot.runnables.task
 import net.axay.kspigot.structures.MaterialCircle
 import net.axay.kspigot.utils.editMeta
@@ -12,7 +11,9 @@ import net.stckoverflw.pluginjam.gamephase.GamePhase
 import net.stckoverflw.pluginjam.gamephase.GamePhaseManager
 import net.stckoverflw.pluginjam.util.ListenerHolder
 import net.stckoverflw.pluginjam.util.broadcastMini
+import net.stckoverflw.pluginjam.util.pluginJamPlayers
 import net.stckoverflw.pluginjam.util.teleportAsyncBlind
+import org.bukkit.Bukkit
 import org.bukkit.Color
 import org.bukkit.FireworkEffect
 import org.bukkit.Location
@@ -29,8 +30,8 @@ object EndPhase : GamePhase(null), ListenerHolder {
     private val fireworkLocations = mutableListOf<Location>()
 
     override fun start() {
-        val world = onlinePlayers.first().world
-        onlinePlayers.forEach {
+        val world = Bukkit.getWorld("pluginjam")!!
+        pluginJamPlayers.forEach {
             it.teleportAsyncBlind(world.spawnLocation.plus(vecY(1)))
             it.playSound(it.location, Sound.UI_TOAST_CHALLENGE_COMPLETE, 1f, 1f)
             // TODO: Timer
@@ -56,7 +57,7 @@ object EndPhase : GamePhase(null), ListenerHolder {
             it.block.type = Material.LIGHTNING_ROD
         }
 
-        val howOften = 100L
+        val howOften = 25L
 
         task(
             sync = false,

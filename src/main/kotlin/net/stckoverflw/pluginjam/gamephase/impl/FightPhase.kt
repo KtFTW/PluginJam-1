@@ -1,6 +1,5 @@
 package net.stckoverflw.pluginjam.gamephase.impl
 
-import net.axay.kspigot.extensions.onlinePlayers
 import net.axay.kspigot.extensions.worlds
 import net.stckoverflw.pluginjam.DevcordJamPlugin
 import net.stckoverflw.pluginjam.action.ActionPipeline
@@ -13,6 +12,7 @@ import net.stckoverflw.pluginjam.action.impl.fightphase.FightPhaseWelcomeAction
 import net.stckoverflw.pluginjam.gamephase.GamePhase
 import net.stckoverflw.pluginjam.gamephase.GamePhaseManager
 import net.stckoverflw.pluginjam.util.ListenerHolder
+import net.stckoverflw.pluginjam.util.pluginJamPlayers
 import net.stckoverflw.pluginjam.util.reset
 import net.stckoverflw.pluginjam.util.teleportAsyncBlind
 import org.bukkit.GameRule
@@ -28,7 +28,7 @@ object FightPhase : GamePhase(TwistPhase), ListenerHolder {
             type = Material.IRON_BARS
         }
 
-        onlinePlayers.forEach {
+        pluginJamPlayers.forEach {
             it.teleportAsyncBlind(positionsConfig.getLocation("fight_spawn"))
         }
 
@@ -50,7 +50,7 @@ object FightPhase : GamePhase(TwistPhase), ListenerHolder {
     }
 
     override fun end() {
-        onlinePlayers.forEach {
+        pluginJamPlayers.forEach {
             it.reset()
         }
     }

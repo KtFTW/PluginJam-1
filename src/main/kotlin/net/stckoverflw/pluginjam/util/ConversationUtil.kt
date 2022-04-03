@@ -2,7 +2,6 @@ package net.stckoverflw.pluginjam.util
 
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import net.axay.kspigot.extensions.onlinePlayers
 import net.stckoverflw.pluginjam.DevcordJamPlugin
 import org.bukkit.Sound
 import java.util.concurrent.CompletableFuture
@@ -48,7 +47,7 @@ class Conversation(private val plugin: DevcordJamPlugin) {
                     broadcastMini(current.message)
                 }
                 if (current.makeSound) {
-                    onlinePlayers.forEach {
+                    pluginJamPlayers.forEach {
                         it.playSound(it.location, Sound.ENTITY_VILLAGER_YES, 1f, 1f)
                     }
                 }

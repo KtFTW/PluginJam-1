@@ -4,10 +4,11 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import net.axay.kspigot.event.listen
 import net.axay.kspigot.event.unregister
-import net.axay.kspigot.extensions.broadcast
+import net.axay.kspigot.extensions.onlinePlayers
 import net.axay.kspigot.extensions.server
 import net.axay.kspigot.main.KSpigotMainInstance
 import net.axay.kspigot.runnables.sync
+import net.kyori.adventure.text.Component
 import net.stckoverflw.pluginjam.DevcordJamPlugin
 import org.bukkit.Bukkit
 import org.bukkit.WorldCreator
@@ -16,10 +17,16 @@ import org.bukkit.block.data.type.Door
 import org.bukkit.entity.Player
 import org.bukkit.event.player.PlayerLoginEvent
 import java.nio.file.Files
-import java.util.UUID
 import kotlin.io.path.div
 
-fun broadcastMini(message: String) = broadcast(message.deserializeMini())
+val pluginJamPlayers: List<Player>
+    get() = onlinePlayers.filter { it.world.name == "pluginjam" }
+
+fun broadcastToPluginJamPlayers(message: Component) {
+    pluginJamPlayers.forEach { it.sendMessage(message) }
+}
+
+fun broadcastMini(message: String) = broadcastToPluginJamPlayers(message.deserializeMini())
 
 fun resetWorld(worldName: String) {
     DevcordJamPlugin.instance.ioScope.launch {
@@ -29,9 +36,8 @@ fun resetWorld(worldName: String) {
             it.disallow(PlayerLoginEvent.Result.KICK_OTHER, "<red>World is resetting".deserializeMini())
         }
         println("Depopulating $worldName")
-        var players = mutableListOf<UUID>()
         sync {
-            players = depopulateWorld(worldName)
+            depopulateWorld(worldName)
         }
         delay(5000)
         println("Unloading $worldName")
@@ -39,7 +45,6 @@ fun resetWorld(worldName: String) {
         sync { isUnloaded = unloadWorld(worldName) }
         while (!isUnloaded) {
             println("Could not unload $worldName, trying again in 3 second")
-//            System.gc()
             delay(3000)
             println("Unloading $worldName")
             sync { isUnloaded = unloadWorld(worldName) }
@@ -60,7 +65,7 @@ fun resetWorld(worldName: String) {
         listener.unregister()
         println("Repopulating $worldName")
         sync {
-            repopulateWorld(worldName, players)
+            repopulateWorld(worldName)
         }
         delay(5000)
         println("Reloading server")
@@ -70,20 +75,20 @@ fun resetWorld(worldName: String) {
     }
 }
 
-fun repopulateWorld(worldName: String, players: List<UUID>) {
-    players.mapNotNull { Bukkit.getPlayer(it) }.forEach {
-        Bukkit.getWorld(worldName)?.let { it1 -> it.teleportAsync(it1.spawnLocation) }
+fun repopulateWorld(worldName: String) {
+    val pluginJamWworld = Bukkit.getWorld(worldName) ?: return
+    onlinePlayers.forEach {
+        it.teleportAsync(pluginJamWworld.spawnLocation)
     }
 }
 
-fun depopulateWorld(worldName: String): MutableList<UUID> {
-    val players = mutableListOf<UUID>()
-    Bukkit.getWorld(worldName)?.entities?.filterIsInstance<Player>()?.forEach {
+fun depopulateWorld(worldName: String) {
+    val world = Bukkit.getWorld("world") ?: return
+    val pluginJamWorld = Bukkit.getWorld(worldName) ?: return
+    pluginJamWorld.entities.filterIsInstance<Player>().forEach {
         it.reset()
-        players.add(it.uniqueId)
-        Bukkit.getWorld("world")?.spawnLocation?.let { it1 -> it.teleportAsync(it1) }
+        it.teleportAsync(world.spawnLocation)
     }
-    return players
 }
 
 fun unloadWorld(worldName: String): Boolean {

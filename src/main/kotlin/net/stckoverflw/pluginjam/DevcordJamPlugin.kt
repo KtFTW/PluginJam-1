@@ -1,24 +1,36 @@
 package net.stckoverflw.pluginjam
 
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import net.axay.kspigot.event.listen
+import net.axay.kspigot.extensions.onlinePlayers
 import net.axay.kspigot.main.KSpigot
+import net.axay.kspigot.runnables.sync
 import net.stckoverflw.pluginjam.command.PositionCommand
 import net.stckoverflw.pluginjam.command.PositionTpCommand
 import net.stckoverflw.pluginjam.command.ReloadCommands
 import net.stckoverflw.pluginjam.command.ResetCommand
 import net.stckoverflw.pluginjam.command.SkipPhaseCommand
+import net.stckoverflw.pluginjam.command.SpectateCommand
 import net.stckoverflw.pluginjam.config.ConfigManager
 import net.stckoverflw.pluginjam.gamephase.GamePhaseManager
 import net.stckoverflw.pluginjam.i18n.TranslationsProvider
 import net.stckoverflw.pluginjam.listener.protectionListener
+import net.stckoverflw.pluginjam.util.deserializeMini
+import net.stckoverflw.pluginjam.util.loadSavedWorld
+import net.stckoverflw.pluginjam.util.repopulateWorld
 import org.bukkit.Bukkit
 import org.bukkit.Difficulty
+import org.bukkit.GameMode
 import org.bukkit.GameRule
 import org.bukkit.WorldCreator
 import org.bukkit.entity.Villager
 import org.bukkit.event.player.PlayerJoinEvent
+import kotlin.io.path.div
 
 class DevcordJamPlugin : KSpigot() {
 
@@ -30,11 +42,64 @@ class DevcordJamPlugin : KSpigot() {
     val defaultScope = CoroutineScope(Dispatchers.Default)
     val mainScope = CoroutineScope(Dispatchers.Main)
 
+    var allowWorldJoin = true
+
     private lateinit var translationsProvider: TranslationsProvider
     lateinit var configManager: ConfigManager
 
     override fun startup() {
-        Bukkit.createWorld(WorldCreator("pluginjam"))
+        val worldName = "pluginjam"
+        val path = Bukkit.getWorldContainer().toPath() / worldName
+        if (!path.toFile().exists()) {
+            ioScope.launch {
+                loadSavedWorld(worldName)
+                delay(10000)
+                println("Creating $worldName from templates")
+                sync {
+                    Bukkit.createWorld(WorldCreator(worldName))
+                }
+                delay(10000)
+                println("Repopulating $worldName")
+                sync {
+                    repopulateWorld(worldName)
+                }
+            }.invokeOnCompletion {
+                if (it == null || it is CancellationException) {
+                    sync {
+                        Bukkit.getWorld("pluginjam")?.apply {
+                            difficulty = Difficulty.PEACEFUL
+                            time = 0
+                            setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false)
+                            setGameRule(GameRule.DO_WEATHER_CYCLE, false)
+                            setGameRule(GameRule.DO_MOB_SPAWNING, false)
+                            setGameRule(GameRule.KEEP_INVENTORY, true)
+                        }
+                        onlinePlayers.forEach { it.gameMode = GameMode.SURVIVAL }
+                        onlinePlayers.filter { it.world.name != "pluginjam" }.forEach {
+                            it.teleport(Bukkit.getWorld("pluginjam")!!.spawnLocation)
+                            it.sendMessage("<green>A new game started. You are in the lobby now.".deserializeMini())
+                        }
+                    }
+                }
+            }
+        } else {
+            Bukkit.createWorld(WorldCreator("pluginjam"))
+            Bukkit.getWorld("pluginjam")?.apply {
+                difficulty = Difficulty.PEACEFUL
+                time = 0
+                setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false)
+                setGameRule(GameRule.DO_WEATHER_CYCLE, false)
+                setGameRule(GameRule.DO_MOB_SPAWNING, false)
+                setGameRule(GameRule.KEEP_INVENTORY, true)
+            }
+
+            onlinePlayers.forEach { it.gameMode = GameMode.SURVIVAL }
+            onlinePlayers.filter { it.world.name != "pluginjam" }.forEach {
+                it.teleport(Bukkit.getWorld("pluginjam")!!.spawnLocation)
+                it.sendMessage("<green>A new game started. You are in the lobby now.".deserializeMini())
+            }
+        }
+
         instance = this
         configManager = ConfigManager(this)
 
@@ -45,32 +110,36 @@ class DevcordJamPlugin : KSpigot() {
         PositionTpCommand(configManager.postionsConfig)
         SkipPhaseCommand()
         ResetCommand()
+        SpectateCommand()
 
         translationsProvider = TranslationsProvider(this)
 
         protectionListener()
 
-        Bukkit.getWorld("pluginjam")?.apply {
-            difficulty = Difficulty.PEACEFUL
-            time = 0
-            setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false)
-            setGameRule(GameRule.DO_WEATHER_CYCLE, false)
-            setGameRule(GameRule.DO_MOB_SPAWNING, false)
-            setGameRule(GameRule.KEEP_INVENTORY, true)
-        }
-
         listen<PlayerJoinEvent> {
-            val pluginjamWorld = Bukkit.createWorld(WorldCreator("pluginjam"))
-            it.player.sendMessage("§aWelcome to the §bPluginJam§a!")
-            it.player.sendMessage("pluginjam world is ${if (pluginjamWorld == null) "not" else ""} loaded")
-            pluginjamWorld?.spawnLocation?.let { it1 -> it.player.teleportAsync(it1) }
+            val world = if (allowWorldJoin) {
+                Bukkit.createWorld(WorldCreator("pluginjam")) ?: Bukkit.getWorld("world")
+            } else {
+                it.player.sendMessage(
+                    "<red>The game is already in progress, </red>" +
+                        "<click:run_command:/spectate-game><blue><u>click here to spectate</u></blue></click>" +
+                        "<red> or wait for the next round (you'll get teleported automatically).".deserializeMini()
+                )
+                Bukkit.getWorld("world")
+            }
+            world?.spawnLocation?.let { it1 -> it.player.teleportAsync(it1) }
         }
     }
 
     override fun shutdown() {
-        for (world in Bukkit.getWorlds()) {
-            world.entities.filterIsInstance<Villager>().forEach { it.remove() }
+        Bukkit.getWorlds().forEach { world ->
+            world.entities.filterIsInstance<Villager>().forEach {
+                it.remove()
+            }
         }
         GamePhaseManager.activeGamePhase?.end()
+        ioScope.cancel()
+        defaultScope.cancel()
+        mainScope.cancel()
     }
 }

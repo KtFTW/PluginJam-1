@@ -1,7 +1,6 @@
 package net.stckoverflw.pluginjam.task.impl
 
 import net.axay.kspigot.event.listen
-import net.axay.kspigot.extensions.onlinePlayers
 import net.stckoverflw.pluginjam.DevcordJamPlugin
 import net.stckoverflw.pluginjam.gamephase.GamePhaseManager
 import net.stckoverflw.pluginjam.gamephase.impl.TaskPhase
@@ -9,6 +8,7 @@ import net.stckoverflw.pluginjam.task.Task
 import net.stckoverflw.pluginjam.task.TaskResult
 import net.stckoverflw.pluginjam.util.Conversation
 import net.stckoverflw.pluginjam.util.ListenerHolder
+import net.stckoverflw.pluginjam.util.pluginJamPlayers
 import net.stckoverflw.pluginjam.util.reset
 import org.bukkit.Material
 import org.bukkit.entity.Player
@@ -39,7 +39,7 @@ abstract class FindMaterialTask : Task(), ListenerHolder {
             materials.remove(material)
         }
         if (materials.isEmpty()) {
-            onlinePlayers.forEach {
+            pluginJamPlayers.forEach {
                 it.reset()
             }
         }
@@ -65,7 +65,7 @@ abstract class FindMaterialTask : Task(), ListenerHolder {
     }
 
     override fun start() {
-        onlinePlayers.forEach {
+        pluginJamPlayers.forEach {
             it.giveItems()
         }
         addListener(
